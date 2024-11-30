@@ -13,13 +13,6 @@
         <button type="submit">Отправить</button>
     </form>
 
-    <form id="myForm2" th:object="${user}" th:action="@{/saveUser}" method="post">
-        <label for="fullName">Полное имя:</label>
-        <input type="text" th:field="*{fullName}" />  <br>
-        <label for="email">Email:</label>
-        <input id="email" th:field="*{email}" />  <br>
-        <button type="submit">Отправить</button>
-    </form>
 
 </body>
 <script th:inline="javascript">
