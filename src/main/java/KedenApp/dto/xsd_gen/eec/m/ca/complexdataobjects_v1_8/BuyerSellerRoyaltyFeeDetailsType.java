@@ -39,17 +39,17 @@ import jakarta.xml.bind.annotation.XmlType;
 public class BuyerSellerRoyaltyFeeDetailsType {
 
     @XmlElement(name = "RoyaltyContractIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean royaltyContractIndicator;
+    protected Boolean royaltyContractIndicator;
     @XmlElement(name = "RoyaltyFeeIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean royaltyFeeIndicator;
+    protected Boolean royaltyFeeIndicator;
     @XmlElement(name = "SubsequentResaleIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean subsequentResaleIndicator;
+    protected Boolean subsequentResaleIndicator;
 
     /**
      * Gets the value of the royaltyContractIndicator property.
      * 
      */
-    public boolean isRoyaltyContractIndicator() {
+    public Boolean isRoyaltyContractIndicator() {
         return royaltyContractIndicator;
     }
 
@@ -57,7 +57,7 @@ public class BuyerSellerRoyaltyFeeDetailsType {
      * Sets the value of the royaltyContractIndicator property.
      * 
      */
-    public void setRoyaltyContractIndicator(boolean value) {
+    public void setRoyaltyContractIndicator(Boolean value) {
         this.royaltyContractIndicator = value;
     }
 
@@ -65,7 +65,7 @@ public class BuyerSellerRoyaltyFeeDetailsType {
      * Gets the value of the royaltyFeeIndicator property.
      * 
      */
-    public boolean isRoyaltyFeeIndicator() {
+    public Boolean isRoyaltyFeeIndicator() {
         return royaltyFeeIndicator;
     }
 
@@ -73,7 +73,7 @@ public class BuyerSellerRoyaltyFeeDetailsType {
      * Sets the value of the royaltyFeeIndicator property.
      * 
      */
-    public void setRoyaltyFeeIndicator(boolean value) {
+    public void setRoyaltyFeeIndicator(Boolean value) {
         this.royaltyFeeIndicator = value;
     }
 
@@ -81,7 +81,7 @@ public class BuyerSellerRoyaltyFeeDetailsType {
      * признак наличия условий, в соответствии с которыми часть дохода (выручки), полученного в результате последующей продажи, распоряжения иным способом или использования ввозимых товаров, прямо или косвенно причитается продавцу
      * 
      */
-    public boolean isSubsequentResaleIndicator() {
+    public Boolean isSubsequentResaleIndicator() {
         return subsequentResaleIndicator;
     }
 
@@ -89,7 +89,7 @@ public class BuyerSellerRoyaltyFeeDetailsType {
      * Sets the value of the subsequentResaleIndicator property.
      * 
      */
-    public void setSubsequentResaleIndicator(boolean value) {
+    public void setSubsequentResaleIndicator(Boolean value) {
         this.subsequentResaleIndicator = value;
     }
 

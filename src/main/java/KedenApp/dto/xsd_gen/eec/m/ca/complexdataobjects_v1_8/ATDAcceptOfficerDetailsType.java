@@ -44,7 +44,7 @@ public class ATDAcceptOfficerDetailsType {
     @XmlElement(name = "OfficerDetails", required = true)
     protected OfficerDetailsType officerDetails;
     @XmlElement(name = "SignIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean signIndicator;
+    protected Boolean signIndicator;
     @XmlElement(name = "SigningDate", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar signingDate;
@@ -77,7 +77,7 @@ public class ATDAcceptOfficerDetailsType {
      * Gets the value of the signIndicator property.
      * 
      */
-    public boolean isSignIndicator() {
+    public Boolean isSignIndicator() {
         return signIndicator;
     }
 
@@ -85,7 +85,7 @@ public class ATDAcceptOfficerDetailsType {
      * Sets the value of the signIndicator property.
      * 
      */
-    public void setSignIndicator(boolean value) {
+    public void setSignIndicator(Boolean value) {
         this.signIndicator = value;
     }
 

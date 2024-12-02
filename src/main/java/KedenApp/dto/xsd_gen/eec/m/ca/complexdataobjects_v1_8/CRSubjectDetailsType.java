@@ -78,9 +78,9 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class CRSubjectDetailsType {
 
     @XmlElement(name = "PersonIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean personIndicator;
+    protected Boolean personIndicator;
     @XmlElement(name = "CRFactPayerIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean crFactPayerIndicator;
+    protected Boolean crFactPayerIndicator;
     @XmlElement(name = "UnifiedCountryCode", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14", required = true)
     protected UnifiedCountryCodeType unifiedCountryCode;
     @XmlElement(name = "FullNameDetails", namespace = "urn:EEC:M:ComplexDataObjects:v0.4.14")
@@ -124,7 +124,7 @@ public class CRSubjectDetailsType {
      * Gets the value of the personIndicator property.
      * 
      */
-    public boolean isPersonIndicator() {
+    public Boolean isPersonIndicator() {
         return personIndicator;
     }
 
@@ -132,7 +132,7 @@ public class CRSubjectDetailsType {
      * Sets the value of the personIndicator property.
      * 
      */
-    public void setPersonIndicator(boolean value) {
+    public void setPersonIndicator(Boolean value) {
         this.personIndicator = value;
     }
 
@@ -140,7 +140,7 @@ public class CRSubjectDetailsType {
      * Gets the value of the crFactPayerIndicator property.
      * 
      */
-    public boolean isCRFactPayerIndicator() {
+    public Boolean isCRFactPayerIndicator() {
         return crFactPayerIndicator;
     }
 
@@ -148,7 +148,7 @@ public class CRSubjectDetailsType {
      * Sets the value of the crFactPayerIndicator property.
      * 
      */
-    public void setCRFactPayerIndicator(boolean value) {
+    public void setCRFactPayerIndicator(Boolean value) {
         this.crFactPayerIndicator = value;
     }
 

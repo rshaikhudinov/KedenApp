@@ -97,7 +97,7 @@ public class PIVDiseasedPersonDetailsType {
     @XmlElement(name = "TreatmentDescriptionText", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1", required = true)
     protected String treatmentDescriptionText;
     @XmlElement(name = "InformationIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean informationIndicator;
+    protected Boolean informationIndicator;
     @XmlElement(name = "DiseaseOutcomeCode", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -375,7 +375,7 @@ public class PIVDiseasedPersonDetailsType {
      * Признак информирования врача в порту
      * 
      */
-    public boolean isInformationIndicator() {
+    public Boolean isInformationIndicator() {
         return informationIndicator;
     }
 
@@ -383,7 +383,7 @@ public class PIVDiseasedPersonDetailsType {
      * Sets the value of the informationIndicator property.
      * 
      */
-    public void setInformationIndicator(boolean value) {
+    public void setInformationIndicator(Boolean value) {
         this.informationIndicator = value;
     }
 

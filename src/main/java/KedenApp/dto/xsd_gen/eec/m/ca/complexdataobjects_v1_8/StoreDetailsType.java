@@ -39,7 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class StoreDetailsType {
 
     @XmlElement(name = "StoreIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean storeIndicator;
+    protected Boolean storeIndicator;
     @XmlElement(name = "StoreItemDetails")
     protected List<StoreItemDetailsType> storeItemDetails;
 
@@ -47,7 +47,7 @@ public class StoreDetailsType {
      * признак наличия припасов на борту транспортного средства
      * 
      */
-    public boolean isStoreIndicator() {
+    public Boolean isStoreIndicator() {
         return storeIndicator;
     }
 
@@ -55,7 +55,7 @@ public class StoreDetailsType {
      * Sets the value of the storeIndicator property.
      * 
      */
-    public void setStoreIndicator(boolean value) {
+    public void setStoreIndicator(Boolean value) {
         this.storeIndicator = value;
     }
 

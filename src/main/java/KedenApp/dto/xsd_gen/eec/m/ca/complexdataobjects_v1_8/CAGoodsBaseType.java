@@ -2,7 +2,6 @@
 package KedenApp.dto.xsd_gen.eec.m.ca.complexdataobjects_v1_8;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -12,6 +11,8 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -47,6 +48,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     TMPAGoodsItemDetailsType.class,
     CADTGoodsBaseDetailsType.class
 })
+@Data
+@Accessors(chain = true)
 public class CAGoodsBaseType {
 
     @XmlElement(name = "ConsignmentItemOrdinal", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1", required = true)
@@ -58,82 +61,4 @@ public class CAGoodsBaseType {
     protected String commodityCode;
     @XmlElement(name = "GoodsDescriptionText", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     protected List<String> goodsDescriptionText;
-
-    /**
-     * Порядковый номер товара
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *     
-     */
-    public BigInteger getConsignmentItemOrdinal() {
-        return consignmentItemOrdinal;
-    }
-
-    /**
-     * Sets the value of the consignmentItemOrdinal property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *     
-     */
-    public void setConsignmentItemOrdinal(BigInteger value) {
-        this.consignmentItemOrdinal = value;
-    }
-
-    /**
-     * Кодовое обозначение товара в соответствии с ТН ВЭД ЕАЭС
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCommodityCode() {
-        return commodityCode;
-    }
-
-    /**
-     * Sets the value of the commodityCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCommodityCode(String value) {
-        this.commodityCode = value;
-    }
-
-    /**
-     * описание товара, включая коммерческое, фирменное или иное традиционное наименование товара Gets the value of the goodsDescriptionText property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a <CODE>set</CODE> method for the goodsDescriptionText property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getGoodsDescriptionText().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getGoodsDescriptionText() {
-        if (goodsDescriptionText == null) {
-            goodsDescriptionText = new ArrayList<String>();
-        }
-        return this.goodsDescriptionText;
-    }
-
 }

@@ -39,7 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class PestControlDetailsType {
 
     @XmlElement(name = "DisinfestationIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean disinfestationIndicator;
+    protected Boolean disinfestationIndicator;
     @XmlElement(name = "DisinfestationDetails")
     protected List<DisinfestationDetailsType> disinfestationDetails;
 
@@ -47,7 +47,7 @@ public class PestControlDetailsType {
      * Gets the value of the disinfestationIndicator property.
      * 
      */
-    public boolean isDisinfestationIndicator() {
+    public Boolean isDisinfestationIndicator() {
         return disinfestationIndicator;
     }
 
@@ -55,7 +55,7 @@ public class PestControlDetailsType {
      * Sets the value of the disinfestationIndicator property.
      * 
      */
-    public void setDisinfestationIndicator(boolean value) {
+    public void setDisinfestationIndicator(Boolean value) {
         this.disinfestationIndicator = value;
     }
 

@@ -65,7 +65,7 @@ public class CABinaryDataDetailsType {
     @XmlElement(name = "CryptoIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     protected Boolean cryptoIndicator;
     @XmlElement(name = "LoadingIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean loadingIndicator;
+    protected Boolean loadingIndicator;
     @XmlElement(name = "DescriptionText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
     protected String descriptionText;
 
@@ -193,7 +193,7 @@ public class CABinaryDataDetailsType {
      * признак загрузки бинарных данных на материальный носитель
      * 
      */
-    public boolean isLoadingIndicator() {
+    public Boolean isLoadingIndicator() {
         return loadingIndicator;
     }
 
@@ -201,7 +201,7 @@ public class CABinaryDataDetailsType {
      * Sets the value of the loadingIndicator property.
      * 
      */
-    public void setLoadingIndicator(boolean value) {
+    public void setLoadingIndicator(Boolean value) {
         this.loadingIndicator = value;
     }
 

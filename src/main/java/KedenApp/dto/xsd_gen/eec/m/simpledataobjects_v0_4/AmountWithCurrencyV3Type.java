@@ -11,6 +11,8 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -41,6 +43,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     PaymentAmountWithCurrencyType.class,
     AccountingAmountV3Type.class
 })
+@Data
+@Accessors(chain = true)
 public class AmountWithCurrencyV3Type {
 
     @XmlValue
@@ -51,77 +55,4 @@ public class AmountWithCurrencyV3Type {
     @XmlAttribute(name = "currencyCodeListId", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     protected String currencyCodeListId;
-
-    /**
-     * Количество денежных единиц в заданной валюте
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    /**
-     * Gets the value of the currencyCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    /**
-     * Sets the value of the currencyCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCurrencyCode(String value) {
-        this.currencyCode = value;
-    }
-
-    /**
-     * Gets the value of the currencyCodeListId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getCurrencyCodeListId() {
-        return currencyCodeListId;
-    }
-
-    /**
-     * Sets the value of the currencyCodeListId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setCurrencyCodeListId(String value) {
-        this.currencyCodeListId = value;
-    }
-
 }

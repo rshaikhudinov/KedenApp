@@ -37,7 +37,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class CrewTrainingDetailsType {
 
     @XmlElement(name = "TrainingIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean trainingIndicator;
+    protected Boolean trainingIndicator;
     @XmlElement(name = "DescriptionText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
     protected String descriptionText;
 
@@ -45,7 +45,7 @@ public class CrewTrainingDetailsType {
      * Признак проведения подготовки экипажа
      * 
      */
-    public boolean isTrainingIndicator() {
+    public Boolean isTrainingIndicator() {
         return trainingIndicator;
     }
 
@@ -53,7 +53,7 @@ public class CrewTrainingDetailsType {
      * Sets the value of the trainingIndicator property.
      * 
      */
-    public void setTrainingIndicator(boolean value) {
+    public void setTrainingIndicator(Boolean value) {
         this.trainingIndicator = value;
     }
 

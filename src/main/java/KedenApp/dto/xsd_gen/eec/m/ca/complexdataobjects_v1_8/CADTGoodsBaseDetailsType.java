@@ -7,6 +7,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -60,6 +62,8 @@ import jakarta.xml.bind.annotation.XmlType;
     TIRGoodsItemDetailsType.class,
     TransitGoodsItemDetailsType.class
 })
+@Data
+@Accessors(chain = true)
 public class CADTGoodsBaseDetailsType
     extends CAGoodsBaseType
 {
@@ -70,77 +74,4 @@ public class CADTGoodsBaseDetailsType
     protected UnifiedPhysicalMeasureType unifiedNetMassMeasure;
     @XmlElement(name = "GoodsMeasureDetails")
     protected GoodsMeasureDetailsType goodsMeasureDetails;
-
-    /**
-     * Вес товара, брутто
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnifiedPhysicalMeasureType }
-     *     
-     */
-    public UnifiedPhysicalMeasureType getUnifiedGrossMassMeasure() {
-        return unifiedGrossMassMeasure;
-    }
-
-    /**
-     * Sets the value of the unifiedGrossMassMeasure property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnifiedPhysicalMeasureType }
-     *     
-     */
-    public void setUnifiedGrossMassMeasure(UnifiedPhysicalMeasureType value) {
-        this.unifiedGrossMassMeasure = value;
-    }
-
-    /**
-     * Вес товара, нетто
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnifiedPhysicalMeasureType }
-     *     
-     */
-    public UnifiedPhysicalMeasureType getUnifiedNetMassMeasure() {
-        return unifiedNetMassMeasure;
-    }
-
-    /**
-     * Sets the value of the unifiedNetMassMeasure property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnifiedPhysicalMeasureType }
-     *     
-     */
-    public void setUnifiedNetMassMeasure(UnifiedPhysicalMeasureType value) {
-        this.unifiedNetMassMeasure = value;
-    }
-
-    /**
-     * Количество товара с указанием дополнительной единицы измерения
-     * 
-     * @return
-     *     possible object is
-     *     {@link GoodsMeasureDetailsType }
-     *     
-     */
-    public GoodsMeasureDetailsType getGoodsMeasureDetails() {
-        return goodsMeasureDetails;
-    }
-
-    /**
-     * Sets the value of the goodsMeasureDetails property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link GoodsMeasureDetailsType }
-     *     
-     */
-    public void setGoodsMeasureDetails(GoodsMeasureDetailsType value) {
-        this.goodsMeasureDetails = value;
-    }
-
 }

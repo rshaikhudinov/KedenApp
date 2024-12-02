@@ -58,7 +58,7 @@ public class TDTranshipmentOperationDetailsType {
     @XmlElement(name = "TranshipmentDetails")
     protected List<TranshipmentDetailsType> transhipmentDetails;
     @XmlElement(name = "CarrierReplacementIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean carrierReplacementIndicator;
+    protected Boolean carrierReplacementIndicator;
     @XmlElement(name = "CarrierDetails")
     protected CarrierDetailsType carrierDetails;
 
@@ -177,7 +177,7 @@ public class TDTranshipmentOperationDetailsType {
      * Gets the value of the carrierReplacementIndicator property.
      * 
      */
-    public boolean isCarrierReplacementIndicator() {
+    public Boolean isCarrierReplacementIndicator() {
         return carrierReplacementIndicator;
     }
 
@@ -185,7 +185,7 @@ public class TDTranshipmentOperationDetailsType {
      * Sets the value of the carrierReplacementIndicator property.
      * 
      */
-    public void setCarrierReplacementIndicator(boolean value) {
+    public void setCarrierReplacementIndicator(Boolean value) {
         this.carrierReplacementIndicator = value;
     }
 

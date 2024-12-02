@@ -37,15 +37,15 @@ import jakarta.xml.bind.annotation.XmlType;
 public class GoodsUseRestrictionDetailsType {
 
     @XmlElement(name = "RestrictionIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean restrictionIndicator;
+    protected Boolean restrictionIndicator;
     @XmlElement(name = "ValueConditionIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean valueConditionIndicator;
+    protected Boolean valueConditionIndicator;
 
     /**
      * признак наличия ограничений в отношении прав покупателя на пользование и распоряжение ввозимыми товарами
      * 
      */
-    public boolean isRestrictionIndicator() {
+    public Boolean isRestrictionIndicator() {
         return restrictionIndicator;
     }
 
@@ -53,7 +53,7 @@ public class GoodsUseRestrictionDetailsType {
      * Sets the value of the restrictionIndicator property.
      * 
      */
-    public void setRestrictionIndicator(boolean value) {
+    public void setRestrictionIndicator(Boolean value) {
         this.restrictionIndicator = value;
     }
 
@@ -61,7 +61,7 @@ public class GoodsUseRestrictionDetailsType {
      * Признак наличия условий или обстоятельств, оказывающих влияние на цену ввозимых товаров
      * 
      */
-    public boolean isValueConditionIndicator() {
+    public Boolean isValueConditionIndicator() {
         return valueConditionIndicator;
     }
 
@@ -69,7 +69,7 @@ public class GoodsUseRestrictionDetailsType {
      * Sets the value of the valueConditionIndicator property.
      * 
      */
-    public void setValueConditionIndicator(boolean value) {
+    public void setValueConditionIndicator(Boolean value) {
         this.valueConditionIndicator = value;
     }
 

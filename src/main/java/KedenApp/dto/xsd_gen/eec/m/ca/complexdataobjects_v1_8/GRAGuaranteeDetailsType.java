@@ -41,7 +41,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class GRAGuaranteeDetailsType {
 
     @XmlElement(name = "GuaranteeIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean guaranteeIndicator;
+    protected Boolean guaranteeIndicator;
     @XmlElement(name = "PaymentGuaranteeDetails")
     protected List<PaymentGuaranteeDetailsType> paymentGuaranteeDetails;
     @XmlElement(name = "AdditionalInfoText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
@@ -51,7 +51,7 @@ public class GRAGuaranteeDetailsType {
      * Gets the value of the guaranteeIndicator property.
      * 
      */
-    public boolean isGuaranteeIndicator() {
+    public Boolean isGuaranteeIndicator() {
         return guaranteeIndicator;
     }
 
@@ -59,7 +59,7 @@ public class GRAGuaranteeDetailsType {
      * Sets the value of the guaranteeIndicator property.
      * 
      */
-    public void setGuaranteeIndicator(boolean value) {
+    public void setGuaranteeIndicator(Boolean value) {
         this.guaranteeIndicator = value;
     }
 

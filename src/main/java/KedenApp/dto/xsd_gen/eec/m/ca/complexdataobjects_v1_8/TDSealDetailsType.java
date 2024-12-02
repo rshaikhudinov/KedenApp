@@ -46,7 +46,7 @@ public class TDSealDetailsType {
     @XmlSchemaType(name = "token")
     protected List<String> sealId;
     @XmlElement(name = "ForeignCustomsIdentificationMeansIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean foreignCustomsIdentificationMeansIndicator;
+    protected Boolean foreignCustomsIdentificationMeansIndicator;
 
     /**
      * Gets the value of the sealId property.
@@ -81,7 +81,7 @@ public class TDSealDetailsType {
      * Gets the value of the foreignCustomsIdentificationMeansIndicator property.
      * 
      */
-    public boolean isForeignCustomsIdentificationMeansIndicator() {
+    public Boolean isForeignCustomsIdentificationMeansIndicator() {
         return foreignCustomsIdentificationMeansIndicator;
     }
 
@@ -89,7 +89,7 @@ public class TDSealDetailsType {
      * Sets the value of the foreignCustomsIdentificationMeansIndicator property.
      * 
      */
-    public void setForeignCustomsIdentificationMeansIndicator(boolean value) {
+    public void setForeignCustomsIdentificationMeansIndicator(Boolean value) {
         this.foreignCustomsIdentificationMeansIndicator = value;
     }
 

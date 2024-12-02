@@ -47,7 +47,7 @@ public class ATDGoodsReturnDetailsType {
     @XmlElement(name = "ATDCustomsOfficeContactsDetails", required = true)
     protected ATDReturnLocationDetailsType atdCustomsOfficeContactsDetails;
     @XmlElement(name = "DefectCustomsIdentificationMeansIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean defectCustomsIdentificationMeansIndicator;
+    protected Boolean defectCustomsIdentificationMeansIndicator;
     @XmlElement(name = "DescriptionText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
     protected List<String> descriptionText;
     @XmlElement(name = "ATDReturnReasonDetails")
@@ -83,7 +83,7 @@ public class ATDGoodsReturnDetailsType {
      * признак повреждения средств идентификации на товарах, подлежащих возврату
      * 
      */
-    public boolean isDefectCustomsIdentificationMeansIndicator() {
+    public Boolean isDefectCustomsIdentificationMeansIndicator() {
         return defectCustomsIdentificationMeansIndicator;
     }
 
@@ -91,7 +91,7 @@ public class ATDGoodsReturnDetailsType {
      * Sets the value of the defectCustomsIdentificationMeansIndicator property.
      * 
      */
-    public void setDefectCustomsIdentificationMeansIndicator(boolean value) {
+    public void setDefectCustomsIdentificationMeansIndicator(Boolean value) {
         this.defectCustomsIdentificationMeansIndicator = value;
     }
 

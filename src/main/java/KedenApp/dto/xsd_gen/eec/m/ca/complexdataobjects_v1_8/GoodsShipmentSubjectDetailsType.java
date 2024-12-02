@@ -8,6 +8,8 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -41,6 +43,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "exchangePostOfficeCode",
     "subjectAdditionalCode"
 })
+@Data
+@Accessors(chain = true)
 public class GoodsShipmentSubjectDetailsType
     extends CASubjectBranchDetailsType
 {
@@ -57,101 +61,4 @@ public class GoodsShipmentSubjectDetailsType
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String subjectAdditionalCode;
-
-    /**
-     * Gets the value of the registerDocumentIdDetails property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RegisterDocumentIdDetailsType }
-     *     
-     */
-    public RegisterDocumentIdDetailsType getRegisterDocumentIdDetails() {
-        return registerDocumentIdDetails;
-    }
-
-    /**
-     * Sets the value of the registerDocumentIdDetails property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RegisterDocumentIdDetailsType }
-     *     
-     */
-    public void setRegisterDocumentIdDetails(RegisterDocumentIdDetailsType value) {
-        this.registerDocumentIdDetails = value;
-    }
-
-    /**
-     * Признак совпадения (несовпадения) сведений со сведениями о декларанте (заявителе)
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isEqualIndicator() {
-        return equalIndicator;
-    }
-
-    /**
-     * Sets the value of the equalIndicator property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setEqualIndicator(Boolean value) {
-        this.equalIndicator = value;
-    }
-
-    /**
-     * Gets the value of the exchangePostOfficeCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getExchangePostOfficeCode() {
-        return exchangePostOfficeCode;
-    }
-
-    /**
-     * Sets the value of the exchangePostOfficeCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setExchangePostOfficeCode(String value) {
-        this.exchangePostOfficeCode = value;
-    }
-
-    /**
-     * Gets the value of the subjectAdditionalCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getSubjectAdditionalCode() {
-        return subjectAdditionalCode;
-    }
-
-    /**
-     * Sets the value of the subjectAdditionalCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSubjectAdditionalCode(String value) {
-        this.subjectAdditionalCode = value;
-    }
-
 }

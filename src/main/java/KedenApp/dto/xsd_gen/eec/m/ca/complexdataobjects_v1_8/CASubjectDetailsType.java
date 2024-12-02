@@ -14,6 +14,8 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -54,6 +56,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     GuaranteeCertificateAgentDetailsType.class,
     CASubjectBranchDetailsType.class
 })
+@Data
+@Accessors(chain = true)
 public class CASubjectDetailsType
     extends CASubjectBaseDetailsType
 {
@@ -68,111 +72,4 @@ public class CASubjectDetailsType
     protected List<SubjectAddressDetailsType> subjectAddressDetails;
     @XmlElement(name = "CommunicationDetails", namespace = "urn:EEC:M:ComplexDataObjects:v0.4.14")
     protected List<CommunicationDetailsType> communicationDetails;
-
-    /**
-     * Gets the value of the personId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPersonId() {
-        return personId;
-    }
-
-    /**
-     * Sets the value of the personId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPersonId(String value) {
-        this.personId = value;
-    }
-
-    /**
-     * Gets the value of the identityDocV3Details property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link IdentityDocDetailsV3Type }
-     *     
-     */
-    public IdentityDocDetailsV3Type getIdentityDocV3Details() {
-        return identityDocV3Details;
-    }
-
-    /**
-     * Sets the value of the identityDocV3Details property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link IdentityDocDetailsV3Type }
-     *     
-     */
-    public void setIdentityDocV3Details(IdentityDocDetailsV3Type value) {
-        this.identityDocV3Details = value;
-    }
-
-    /**
-     * Адрес Gets the value of the subjectAddressDetails property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a <CODE>set</CODE> method for the subjectAddressDetails property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSubjectAddressDetails().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link SubjectAddressDetailsType }
-     * 
-     * 
-     */
-    public List<SubjectAddressDetailsType> getSubjectAddressDetails() {
-        if (subjectAddressDetails == null) {
-            subjectAddressDetails = new ArrayList<SubjectAddressDetailsType>();
-        }
-        return this.subjectAddressDetails;
-    }
-
-    /**
-     * Контактный реквизит субъекта Gets the value of the communicationDetails property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the Jakarta XML Binding object.
-     * This is why there is not a <CODE>set</CODE> method for the communicationDetails property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCommunicationDetails().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link CommunicationDetailsType }
-     * 
-     * 
-     */
-    public List<CommunicationDetailsType> getCommunicationDetails() {
-        if (communicationDetails == null) {
-            communicationDetails = new ArrayList<CommunicationDetailsType>();
-        }
-        return this.communicationDetails;
-    }
-
 }

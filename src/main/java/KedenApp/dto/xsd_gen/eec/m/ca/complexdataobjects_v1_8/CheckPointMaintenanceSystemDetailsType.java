@@ -50,7 +50,7 @@ public class CheckPointMaintenanceSystemDetailsType {
     @XmlSchemaType(name = "token")
     protected String maintenanceSystemCode;
     @XmlElement(name = "OperabilityIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean operabilityIndicator;
+    protected Boolean operabilityIndicator;
     @XmlElement(name = "MainteanceEquipmentDetails")
     protected List<MainteanceEquipmentDetailsType> mainteanceEquipmentDetails;
     @XmlElement(name = "AdditionalInfoText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
@@ -84,7 +84,7 @@ public class CheckPointMaintenanceSystemDetailsType {
      * Gets the value of the operabilityIndicator property.
      * 
      */
-    public boolean isOperabilityIndicator() {
+    public Boolean isOperabilityIndicator() {
         return operabilityIndicator;
     }
 
@@ -92,7 +92,7 @@ public class CheckPointMaintenanceSystemDetailsType {
      * Sets the value of the operabilityIndicator property.
      * 
      */
-    public void setOperabilityIndicator(boolean value) {
+    public void setOperabilityIndicator(Boolean value) {
         this.operabilityIndicator = value;
     }
 

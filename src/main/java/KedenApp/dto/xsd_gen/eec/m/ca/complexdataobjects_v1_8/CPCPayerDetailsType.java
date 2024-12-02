@@ -37,13 +37,13 @@ public class CPCPayerDetailsType
 {
 
     @XmlElement(name = "InformationUnknownIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean informationUnknownIndicator;
+    protected Boolean informationUnknownIndicator;
 
     /**
      * Gets the value of the informationUnknownIndicator property.
      * 
      */
-    public boolean isInformationUnknownIndicator() {
+    public Boolean isInformationUnknownIndicator() {
         return informationUnknownIndicator;
     }
 
@@ -51,7 +51,7 @@ public class CPCPayerDetailsType
      * Sets the value of the informationUnknownIndicator property.
      * 
      */
-    public void setInformationUnknownIndicator(boolean value) {
+    public void setInformationUnknownIndicator(Boolean value) {
         this.informationUnknownIndicator = value;
     }
 

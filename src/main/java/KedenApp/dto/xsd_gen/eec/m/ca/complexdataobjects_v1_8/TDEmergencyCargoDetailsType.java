@@ -44,7 +44,7 @@ public class TDEmergencyCargoDetailsType {
     @XmlElement(name = "TransportDocumentDetails")
     protected DocDetailsV4Type transportDocumentDetails;
     @XmlElement(name = "DamagedCargoAreaIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean damagedCargoAreaIndicator;
+    protected Boolean damagedCargoAreaIndicator;
     @XmlElement(name = "TDLostGoodsItemDetails")
     protected List<TDGoodsItemInfoDetailsType> tdLostGoodsItemDetails;
 
@@ -76,7 +76,7 @@ public class TDEmergencyCargoDetailsType {
      * Gets the value of the damagedCargoAreaIndicator property.
      * 
      */
-    public boolean isDamagedCargoAreaIndicator() {
+    public Boolean isDamagedCargoAreaIndicator() {
         return damagedCargoAreaIndicator;
     }
 
@@ -84,7 +84,7 @@ public class TDEmergencyCargoDetailsType {
      * Sets the value of the damagedCargoAreaIndicator property.
      * 
      */
-    public void setDamagedCargoAreaIndicator(boolean value) {
+    public void setDamagedCargoAreaIndicator(Boolean value) {
         this.damagedCargoAreaIndicator = value;
     }
 

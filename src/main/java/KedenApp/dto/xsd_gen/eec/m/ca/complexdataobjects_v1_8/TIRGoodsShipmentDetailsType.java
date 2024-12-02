@@ -68,7 +68,7 @@ public class TIRGoodsShipmentDetailsType {
     @XmlSchemaType(name = "token")
     protected String lineId;
     @XmlElement(name = "ContainerIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean containerIndicator;
+    protected Boolean containerIndicator;
     @XmlElement(name = "ContainerId", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -121,7 +121,7 @@ public class TIRGoodsShipmentDetailsType {
      * Gets the value of the containerIndicator property.
      * 
      */
-    public boolean isContainerIndicator() {
+    public Boolean isContainerIndicator() {
         return containerIndicator;
     }
 
@@ -129,7 +129,7 @@ public class TIRGoodsShipmentDetailsType {
      * Sets the value of the containerIndicator property.
      * 
      */
-    public void setContainerIndicator(boolean value) {
+    public void setContainerIndicator(Boolean value) {
         this.containerIndicator = value;
     }
 

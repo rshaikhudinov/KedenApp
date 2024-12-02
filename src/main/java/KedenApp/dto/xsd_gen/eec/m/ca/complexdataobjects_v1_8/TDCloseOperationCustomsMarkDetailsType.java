@@ -47,11 +47,11 @@ import jakarta.xml.bind.annotation.XmlType;
 public class TDCloseOperationCustomsMarkDetailsType {
 
     @XmlElement(name = "DefectCustomsIdentificationMeansIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean defectCustomsIdentificationMeansIndicator;
+    protected Boolean defectCustomsIdentificationMeansIndicator;
     @XmlElement(name = "DamagedCargoAreaIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean damagedCargoAreaIndicator;
+    protected Boolean damagedCargoAreaIndicator;
     @XmlElement(name = "OffenceIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean offenceIndicator;
+    protected Boolean offenceIndicator;
     @XmlElement(name = "OffenceDesctiptionText", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     protected List<String> offenceDesctiptionText;
     @XmlElement(name = "TransitReservationDetails")
@@ -63,7 +63,7 @@ public class TDCloseOperationCustomsMarkDetailsType {
      * Gets the value of the defectCustomsIdentificationMeansIndicator property.
      * 
      */
-    public boolean isDefectCustomsIdentificationMeansIndicator() {
+    public Boolean isDefectCustomsIdentificationMeansIndicator() {
         return defectCustomsIdentificationMeansIndicator;
     }
 
@@ -71,7 +71,7 @@ public class TDCloseOperationCustomsMarkDetailsType {
      * Sets the value of the defectCustomsIdentificationMeansIndicator property.
      * 
      */
-    public void setDefectCustomsIdentificationMeansIndicator(boolean value) {
+    public void setDefectCustomsIdentificationMeansIndicator(Boolean value) {
         this.defectCustomsIdentificationMeansIndicator = value;
     }
 
@@ -79,7 +79,7 @@ public class TDCloseOperationCustomsMarkDetailsType {
      * Gets the value of the damagedCargoAreaIndicator property.
      * 
      */
-    public boolean isDamagedCargoAreaIndicator() {
+    public Boolean isDamagedCargoAreaIndicator() {
         return damagedCargoAreaIndicator;
     }
 
@@ -87,7 +87,7 @@ public class TDCloseOperationCustomsMarkDetailsType {
      * Sets the value of the damagedCargoAreaIndicator property.
      * 
      */
-    public void setDamagedCargoAreaIndicator(boolean value) {
+    public void setDamagedCargoAreaIndicator(Boolean value) {
         this.damagedCargoAreaIndicator = value;
     }
 
@@ -95,7 +95,7 @@ public class TDCloseOperationCustomsMarkDetailsType {
      * Gets the value of the offenceIndicator property.
      * 
      */
-    public boolean isOffenceIndicator() {
+    public Boolean isOffenceIndicator() {
         return offenceIndicator;
     }
 
@@ -103,7 +103,7 @@ public class TDCloseOperationCustomsMarkDetailsType {
      * Sets the value of the offenceIndicator property.
      * 
      */
-    public void setOffenceIndicator(boolean value) {
+    public void setOffenceIndicator(Boolean value) {
         this.offenceIndicator = value;
     }
 

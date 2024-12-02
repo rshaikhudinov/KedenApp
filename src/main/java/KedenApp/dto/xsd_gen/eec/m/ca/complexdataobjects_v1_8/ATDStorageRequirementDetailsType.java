@@ -45,11 +45,11 @@ import jakarta.xml.bind.annotation.XmlType;
 public class ATDStorageRequirementDetailsType {
 
     @XmlElement(name = "DangerIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean dangerIndicator;
+    protected Boolean dangerIndicator;
     @XmlElement(name = "GoodsDangerText", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     protected String goodsDangerText;
     @XmlElement(name = "PerishableIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean perishableIndicator;
+    protected Boolean perishableIndicator;
     @XmlElement(name = "EventDate", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14", required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar eventDate;
@@ -60,7 +60,7 @@ public class ATDStorageRequirementDetailsType {
      * Gets the value of the dangerIndicator property.
      * 
      */
-    public boolean isDangerIndicator() {
+    public Boolean isDangerIndicator() {
         return dangerIndicator;
     }
 
@@ -68,7 +68,7 @@ public class ATDStorageRequirementDetailsType {
      * Sets the value of the dangerIndicator property.
      * 
      */
-    public void setDangerIndicator(boolean value) {
+    public void setDangerIndicator(Boolean value) {
         this.dangerIndicator = value;
     }
 
@@ -100,7 +100,7 @@ public class ATDStorageRequirementDetailsType {
      * Gets the value of the perishableIndicator property.
      * 
      */
-    public boolean isPerishableIndicator() {
+    public Boolean isPerishableIndicator() {
         return perishableIndicator;
     }
 
@@ -108,7 +108,7 @@ public class ATDStorageRequirementDetailsType {
      * Sets the value of the perishableIndicator property.
      * 
      */
-    public void setPerishableIndicator(boolean value) {
+    public void setPerishableIndicator(Boolean value) {
         this.perishableIndicator = value;
     }
 

@@ -74,24 +74,24 @@ import jakarta.xml.bind.annotation.XmlType;
 public class MaritimeHealthDeclarationDetailsType {
 
     @XmlElement(name = "SanitaryControlFreeIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean sanitaryControlFreeIndicator;
+    protected Boolean sanitaryControlFreeIndicator;
     @XmlElement(name = "SanitaryControlDocDetails", required = true)
     protected SanitaryControlDocDetailsType sanitaryControlDocDetails;
     @XmlElement(name = "ReInspectionIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean reInspectionIndicator;
+    protected Boolean reInspectionIndicator;
     @XmlElement(name = "AffectedAreaVisitIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean affectedAreaVisitIndicator;
+    protected Boolean affectedAreaVisitIndicator;
     @XmlElement(name = "AffectedPortDetails")
     protected List<PIVPortDetailsType> affectedPortDetails;
     @XmlElement(name = "DeadIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean deadIndicator;
+    protected Boolean deadIndicator;
     @XmlElement(name = "DeadQuantity", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger deadQuantity;
     @XmlElement(name = "AbnormalDiseasePersonIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean abnormalDiseasePersonIndicator;
+    protected Boolean abnormalDiseasePersonIndicator;
     @XmlElement(name = "OnBoardDiseasePersonIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean onBoardDiseasePersonIndicator;
+    protected Boolean onBoardDiseasePersonIndicator;
     @XmlElement(name = "DiseasePersonQuantity", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger diseasePersonQuantity;
@@ -102,22 +102,22 @@ public class MaritimeHealthDeclarationDetailsType {
     @XmlElement(name = "DiseaseSpreadText", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     protected String diseaseSpreadText;
     @XmlElement(name = "SanitaryMeasureIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean sanitaryMeasureIndicator;
+    protected Boolean sanitaryMeasureIndicator;
     @XmlElement(name = "SanitaryMeasureDetails")
     protected List<SanitaryMeasureDetailsType> sanitaryMeasureDetails;
     @XmlElement(name = "StowawaysIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean stowawaysIndicator;
+    protected Boolean stowawaysIndicator;
     @XmlElement(name = "EmbarkationDate", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar embarkationDate;
     @XmlElement(name = "SickAnimalIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean sickAnimalIndicator;
+    protected Boolean sickAnimalIndicator;
 
     /**
      * Gets the value of the sanitaryControlFreeIndicator property.
      * 
      */
-    public boolean isSanitaryControlFreeIndicator() {
+    public Boolean isSanitaryControlFreeIndicator() {
         return sanitaryControlFreeIndicator;
     }
 
@@ -125,7 +125,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the sanitaryControlFreeIndicator property.
      * 
      */
-    public void setSanitaryControlFreeIndicator(boolean value) {
+    public void setSanitaryControlFreeIndicator(Boolean value) {
         this.sanitaryControlFreeIndicator = value;
     }
 
@@ -157,7 +157,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Gets the value of the reInspectionIndicator property.
      * 
      */
-    public boolean isReInspectionIndicator() {
+    public Boolean isReInspectionIndicator() {
         return reInspectionIndicator;
     }
 
@@ -165,7 +165,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the reInspectionIndicator property.
      * 
      */
-    public void setReInspectionIndicator(boolean value) {
+    public void setReInspectionIndicator(Boolean value) {
         this.reInspectionIndicator = value;
     }
 
@@ -173,7 +173,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Gets the value of the affectedAreaVisitIndicator property.
      * 
      */
-    public boolean isAffectedAreaVisitIndicator() {
+    public Boolean isAffectedAreaVisitIndicator() {
         return affectedAreaVisitIndicator;
     }
 
@@ -181,7 +181,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the affectedAreaVisitIndicator property.
      * 
      */
-    public void setAffectedAreaVisitIndicator(boolean value) {
+    public void setAffectedAreaVisitIndicator(Boolean value) {
         this.affectedAreaVisitIndicator = value;
     }
 
@@ -218,7 +218,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Gets the value of the deadIndicator property.
      * 
      */
-    public boolean isDeadIndicator() {
+    public Boolean isDeadIndicator() {
         return deadIndicator;
     }
 
@@ -226,7 +226,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the deadIndicator property.
      * 
      */
-    public void setDeadIndicator(boolean value) {
+    public void setDeadIndicator(Boolean value) {
         this.deadIndicator = value;
     }
 
@@ -258,7 +258,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Gets the value of the abnormalDiseasePersonIndicator property.
      * 
      */
-    public boolean isAbnormalDiseasePersonIndicator() {
+    public Boolean isAbnormalDiseasePersonIndicator() {
         return abnormalDiseasePersonIndicator;
     }
 
@@ -266,7 +266,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the abnormalDiseasePersonIndicator property.
      * 
      */
-    public void setAbnormalDiseasePersonIndicator(boolean value) {
+    public void setAbnormalDiseasePersonIndicator(Boolean value) {
         this.abnormalDiseasePersonIndicator = value;
     }
 
@@ -274,7 +274,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Признак наличия случаев заболеваний или лиц с подозрениями на инфекционные заболевания
      * 
      */
-    public boolean isOnBoardDiseasePersonIndicator() {
+    public Boolean isOnBoardDiseasePersonIndicator() {
         return onBoardDiseasePersonIndicator;
     }
 
@@ -282,7 +282,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the onBoardDiseasePersonIndicator property.
      * 
      */
-    public void setOnBoardDiseasePersonIndicator(boolean value) {
+    public void setOnBoardDiseasePersonIndicator(Boolean value) {
         this.onBoardDiseasePersonIndicator = value;
     }
 
@@ -386,7 +386,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Gets the value of the sanitaryMeasureIndicator property.
      * 
      */
-    public boolean isSanitaryMeasureIndicator() {
+    public Boolean isSanitaryMeasureIndicator() {
         return sanitaryMeasureIndicator;
     }
 
@@ -394,7 +394,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the sanitaryMeasureIndicator property.
      * 
      */
-    public void setSanitaryMeasureIndicator(boolean value) {
+    public void setSanitaryMeasureIndicator(Boolean value) {
         this.sanitaryMeasureIndicator = value;
     }
 
@@ -431,7 +431,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Gets the value of the stowawaysIndicator property.
      * 
      */
-    public boolean isStowawaysIndicator() {
+    public Boolean isStowawaysIndicator() {
         return stowawaysIndicator;
     }
 
@@ -439,7 +439,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the stowawaysIndicator property.
      * 
      */
-    public void setStowawaysIndicator(boolean value) {
+    public void setStowawaysIndicator(Boolean value) {
         this.stowawaysIndicator = value;
     }
 
@@ -471,7 +471,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Gets the value of the sickAnimalIndicator property.
      * 
      */
-    public boolean isSickAnimalIndicator() {
+    public Boolean isSickAnimalIndicator() {
         return sickAnimalIndicator;
     }
 
@@ -479,7 +479,7 @@ public class MaritimeHealthDeclarationDetailsType {
      * Sets the value of the sickAnimalIndicator property.
      * 
      */
-    public void setSickAnimalIndicator(boolean value) {
+    public void setSickAnimalIndicator(Boolean value) {
         this.sickAnimalIndicator = value;
     }
 

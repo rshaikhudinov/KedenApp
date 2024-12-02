@@ -41,7 +41,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class PIAREpidemicControlDetailsType {
 
     @XmlElement(name = "OnBoardDiseasePersonIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean onBoardDiseasePersonIndicator;
+    protected Boolean onBoardDiseasePersonIndicator;
     @XmlElement(name = "DiseasePersonQuantity", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger diseasePersonQuantity;
@@ -52,7 +52,7 @@ public class PIAREpidemicControlDetailsType {
      * Gets the value of the onBoardDiseasePersonIndicator property.
      * 
      */
-    public boolean isOnBoardDiseasePersonIndicator() {
+    public Boolean isOnBoardDiseasePersonIndicator() {
         return onBoardDiseasePersonIndicator;
     }
 
@@ -60,7 +60,7 @@ public class PIAREpidemicControlDetailsType {
      * Sets the value of the onBoardDiseasePersonIndicator property.
      * 
      */
-    public void setOnBoardDiseasePersonIndicator(boolean value) {
+    public void setOnBoardDiseasePersonIndicator(Boolean value) {
         this.onBoardDiseasePersonIndicator = value;
     }
 

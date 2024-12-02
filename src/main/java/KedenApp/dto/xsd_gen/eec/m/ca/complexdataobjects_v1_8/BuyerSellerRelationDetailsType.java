@@ -39,7 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class BuyerSellerRelationDetailsType {
 
     @XmlElement(name = "RelationIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean relationIndicator;
+    protected Boolean relationIndicator;
     @XmlElement(name = "PriceInfluenceIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     protected Boolean priceInfluenceIndicator;
     @XmlElement(name = "ApproximateValueIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
@@ -49,7 +49,7 @@ public class BuyerSellerRelationDetailsType {
      * Признак наличия взаимосвязи между продавцом и покупателем
      * 
      */
-    public boolean isRelationIndicator() {
+    public Boolean isRelationIndicator() {
         return relationIndicator;
     }
 
@@ -57,7 +57,7 @@ public class BuyerSellerRelationDetailsType {
      * Sets the value of the relationIndicator property.
      * 
      */
-    public void setRelationIndicator(boolean value) {
+    public void setRelationIndicator(Boolean value) {
         this.relationIndicator = value;
     }
 

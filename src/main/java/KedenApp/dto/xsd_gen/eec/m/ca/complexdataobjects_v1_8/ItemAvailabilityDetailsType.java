@@ -39,7 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class ItemAvailabilityDetailsType {
 
     @XmlElement(name = "PresenceIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean presenceIndicator;
+    protected Boolean presenceIndicator;
     @XmlElement(name = "ItemDetails")
     protected List<ItemDetailsType> itemDetails;
 
@@ -47,7 +47,7 @@ public class ItemAvailabilityDetailsType {
      * признак наличия
      * 
      */
-    public boolean isPresenceIndicator() {
+    public Boolean isPresenceIndicator() {
         return presenceIndicator;
     }
 
@@ -55,7 +55,7 @@ public class ItemAvailabilityDetailsType {
      * Sets the value of the presenceIndicator property.
      * 
      */
-    public void setPresenceIndicator(boolean value) {
+    public void setPresenceIndicator(Boolean value) {
         this.presenceIndicator = value;
     }
 

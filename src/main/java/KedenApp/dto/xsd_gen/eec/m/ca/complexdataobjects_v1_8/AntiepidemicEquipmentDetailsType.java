@@ -37,7 +37,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class AntiepidemicEquipmentDetailsType {
 
     @XmlElement(name = "AntiepidemicEquipmentIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean antiepidemicEquipmentIndicator;
+    protected Boolean antiepidemicEquipmentIndicator;
     @XmlElement(name = "DescriptionText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
     protected String descriptionText;
 
@@ -45,7 +45,7 @@ public class AntiepidemicEquipmentDetailsType {
      * Gets the value of the antiepidemicEquipmentIndicator property.
      * 
      */
-    public boolean isAntiepidemicEquipmentIndicator() {
+    public Boolean isAntiepidemicEquipmentIndicator() {
         return antiepidemicEquipmentIndicator;
     }
 
@@ -53,7 +53,7 @@ public class AntiepidemicEquipmentDetailsType {
      * Sets the value of the antiepidemicEquipmentIndicator property.
      * 
      */
-    public void setAntiepidemicEquipmentIndicator(boolean value) {
+    public void setAntiepidemicEquipmentIndicator(Boolean value) {
         this.antiepidemicEquipmentIndicator = value;
     }
 

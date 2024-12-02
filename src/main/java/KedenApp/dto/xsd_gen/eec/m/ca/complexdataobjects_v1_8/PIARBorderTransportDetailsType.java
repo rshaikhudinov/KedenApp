@@ -85,7 +85,7 @@ public class PIARBorderTransportDetailsType {
     @XmlElement(name = "UnifiedTransportModeCode", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
     protected UnifiedCode20Type unifiedTransportModeCode;
     @XmlElement(name = "ContainerIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean containerIndicator;
+    protected Boolean containerIndicator;
     @XmlElement(name = "TransportMeansRegId", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
     protected TransportMeansRegIdType transportMeansRegId;
     @XmlElement(name = "FlightDetails")
@@ -178,7 +178,7 @@ public class PIARBorderTransportDetailsType {
      * Gets the value of the containerIndicator property.
      * 
      */
-    public boolean isContainerIndicator() {
+    public Boolean isContainerIndicator() {
         return containerIndicator;
     }
 
@@ -186,7 +186,7 @@ public class PIARBorderTransportDetailsType {
      * Sets the value of the containerIndicator property.
      * 
      */
-    public void setContainerIndicator(boolean value) {
+    public void setContainerIndicator(Boolean value) {
         this.containerIndicator = value;
     }
 

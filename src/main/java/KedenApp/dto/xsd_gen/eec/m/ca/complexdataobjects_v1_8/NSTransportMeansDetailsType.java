@@ -45,7 +45,7 @@ public class NSTransportMeansDetailsType {
     @XmlElement(name = "TransportMeansRegId", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14", required = true)
     protected TransportMeansRegIdType transportMeansRegId;
     @XmlElement(name = "SealIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean sealIndicator;
+    protected Boolean sealIndicator;
 
     /**
      * кодовое обозначение типа транспортного средства
@@ -99,7 +99,7 @@ public class NSTransportMeansDetailsType {
      * признак размещения навигационной пломбы на транспортном средстве
      * 
      */
-    public boolean isSealIndicator() {
+    public Boolean isSealIndicator() {
         return sealIndicator;
     }
 
@@ -107,7 +107,7 @@ public class NSTransportMeansDetailsType {
      * Sets the value of the sealIndicator property.
      * 
      */
-    public void setSealIndicator(boolean value) {
+    public void setSealIndicator(Boolean value) {
         this.sealIndicator = value;
     }
 

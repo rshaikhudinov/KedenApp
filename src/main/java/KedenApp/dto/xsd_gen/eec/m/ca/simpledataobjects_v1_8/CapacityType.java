@@ -44,7 +44,7 @@ public class CapacityType {
     @XmlValue
     protected BigDecimal value;
     @XmlAttribute(name = "CapacityPeriodIndicator", required = true)
-    protected boolean capacityPeriodIndicator;
+    protected Boolean capacityPeriodIndicator;
     @XmlAttribute(name = "measurementUnitCode", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     protected String measurementUnitCode;
@@ -77,7 +77,7 @@ public class CapacityType {
      * Gets the value of the capacityPeriodIndicator property.
      * 
      */
-    public boolean isCapacityPeriodIndicator() {
+    public Boolean isCapacityPeriodIndicator() {
         return capacityPeriodIndicator;
     }
 
@@ -85,7 +85,7 @@ public class CapacityType {
      * Sets the value of the capacityPeriodIndicator property.
      * 
      */
-    public void setCapacityPeriodIndicator(boolean value) {
+    public void setCapacityPeriodIndicator(Boolean value) {
         this.capacityPeriodIndicator = value;
     }
 

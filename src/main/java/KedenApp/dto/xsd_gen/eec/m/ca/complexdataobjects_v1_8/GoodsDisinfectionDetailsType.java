@@ -37,7 +37,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class GoodsDisinfectionDetailsType {
 
     @XmlElement(name = "DisinfectionIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean disinfectionIndicator;
+    protected Boolean disinfectionIndicator;
     @XmlElement(name = "DisinfectionDetails")
     protected DisinfectionDetailsType disinfectionDetails;
 
@@ -45,7 +45,7 @@ public class GoodsDisinfectionDetailsType {
      * Gets the value of the disinfectionIndicator property.
      * 
      */
-    public boolean isDisinfectionIndicator() {
+    public Boolean isDisinfectionIndicator() {
         return disinfectionIndicator;
     }
 
@@ -53,7 +53,7 @@ public class GoodsDisinfectionDetailsType {
      * Sets the value of the disinfectionIndicator property.
      * 
      */
-    public void setDisinfectionIndicator(boolean value) {
+    public void setDisinfectionIndicator(Boolean value) {
         this.disinfectionIndicator = value;
     }
 

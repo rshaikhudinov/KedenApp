@@ -45,23 +45,23 @@ import jakarta.xml.bind.annotation.XmlType;
 public class CustomsCheckCodeDetailsType {
 
     @XmlElement(name = "WeightCheckIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean weightCheckIndicator;
+    protected Boolean weightCheckIndicator;
     @XmlElement(name = "OriginalCheckIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean originalCheckIndicator;
+    protected Boolean originalCheckIndicator;
     @XmlElement(name = "CommodityCheckIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean commodityCheckIndicator;
+    protected Boolean commodityCheckIndicator;
     @XmlElement(name = "CustomsValueCheckIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean customsValueCheckIndicator;
+    protected Boolean customsValueCheckIndicator;
     @XmlElement(name = "DutyTaxFeeCheckIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean dutyTaxFeeCheckIndicator;
+    protected Boolean dutyTaxFeeCheckIndicator;
     @XmlElement(name = "FactPaymentCheckIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean factPaymentCheckIndicator;
+    protected Boolean factPaymentCheckIndicator;
 
     /**
      * Gets the value of the weightCheckIndicator property.
      * 
      */
-    public boolean isWeightCheckIndicator() {
+    public Boolean isWeightCheckIndicator() {
         return weightCheckIndicator;
     }
 
@@ -69,7 +69,7 @@ public class CustomsCheckCodeDetailsType {
      * Sets the value of the weightCheckIndicator property.
      * 
      */
-    public void setWeightCheckIndicator(boolean value) {
+    public void setWeightCheckIndicator(Boolean value) {
         this.weightCheckIndicator = value;
     }
 
@@ -77,7 +77,7 @@ public class CustomsCheckCodeDetailsType {
      * Gets the value of the originalCheckIndicator property.
      * 
      */
-    public boolean isOriginalCheckIndicator() {
+    public Boolean isOriginalCheckIndicator() {
         return originalCheckIndicator;
     }
 
@@ -85,7 +85,7 @@ public class CustomsCheckCodeDetailsType {
      * Sets the value of the originalCheckIndicator property.
      * 
      */
-    public void setOriginalCheckIndicator(boolean value) {
+    public void setOriginalCheckIndicator(Boolean value) {
         this.originalCheckIndicator = value;
     }
 
@@ -93,7 +93,7 @@ public class CustomsCheckCodeDetailsType {
      * Gets the value of the commodityCheckIndicator property.
      * 
      */
-    public boolean isCommodityCheckIndicator() {
+    public Boolean isCommodityCheckIndicator() {
         return commodityCheckIndicator;
     }
 
@@ -101,7 +101,7 @@ public class CustomsCheckCodeDetailsType {
      * Sets the value of the commodityCheckIndicator property.
      * 
      */
-    public void setCommodityCheckIndicator(boolean value) {
+    public void setCommodityCheckIndicator(Boolean value) {
         this.commodityCheckIndicator = value;
     }
 
@@ -109,7 +109,7 @@ public class CustomsCheckCodeDetailsType {
      * Gets the value of the customsValueCheckIndicator property.
      * 
      */
-    public boolean isCustomsValueCheckIndicator() {
+    public Boolean isCustomsValueCheckIndicator() {
         return customsValueCheckIndicator;
     }
 
@@ -117,7 +117,7 @@ public class CustomsCheckCodeDetailsType {
      * Sets the value of the customsValueCheckIndicator property.
      * 
      */
-    public void setCustomsValueCheckIndicator(boolean value) {
+    public void setCustomsValueCheckIndicator(Boolean value) {
         this.customsValueCheckIndicator = value;
     }
 
@@ -125,7 +125,7 @@ public class CustomsCheckCodeDetailsType {
      * Gets the value of the dutyTaxFeeCheckIndicator property.
      * 
      */
-    public boolean isDutyTaxFeeCheckIndicator() {
+    public Boolean isDutyTaxFeeCheckIndicator() {
         return dutyTaxFeeCheckIndicator;
     }
 
@@ -133,7 +133,7 @@ public class CustomsCheckCodeDetailsType {
      * Sets the value of the dutyTaxFeeCheckIndicator property.
      * 
      */
-    public void setDutyTaxFeeCheckIndicator(boolean value) {
+    public void setDutyTaxFeeCheckIndicator(Boolean value) {
         this.dutyTaxFeeCheckIndicator = value;
     }
 
@@ -141,7 +141,7 @@ public class CustomsCheckCodeDetailsType {
      * Gets the value of the factPaymentCheckIndicator property.
      * 
      */
-    public boolean isFactPaymentCheckIndicator() {
+    public Boolean isFactPaymentCheckIndicator() {
         return factPaymentCheckIndicator;
     }
 
@@ -149,7 +149,7 @@ public class CustomsCheckCodeDetailsType {
      * Sets the value of the factPaymentCheckIndicator property.
      * 
      */
-    public void setFactPaymentCheckIndicator(boolean value) {
+    public void setFactPaymentCheckIndicator(Boolean value) {
         this.factPaymentCheckIndicator = value;
     }
 

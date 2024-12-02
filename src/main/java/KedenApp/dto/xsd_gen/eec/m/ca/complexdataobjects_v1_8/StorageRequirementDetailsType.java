@@ -37,7 +37,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class StorageRequirementDetailsType {
 
     @XmlElement(name = "SpecialStorageRequirementIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean specialStorageRequirementIndicator;
+    protected Boolean specialStorageRequirementIndicator;
     @XmlElement(name = "DescriptionText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14")
     protected String descriptionText;
 
@@ -45,7 +45,7 @@ public class StorageRequirementDetailsType {
      * Gets the value of the specialStorageRequirementIndicator property.
      * 
      */
-    public boolean isSpecialStorageRequirementIndicator() {
+    public Boolean isSpecialStorageRequirementIndicator() {
         return specialStorageRequirementIndicator;
     }
 
@@ -53,7 +53,7 @@ public class StorageRequirementDetailsType {
      * Sets the value of the specialStorageRequirementIndicator property.
      * 
      */
-    public void setSpecialStorageRequirementIndicator(boolean value) {
+    public void setSpecialStorageRequirementIndicator(Boolean value) {
         this.specialStorageRequirementIndicator = value;
     }
 

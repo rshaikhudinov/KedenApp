@@ -39,7 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class SparePartsDetailsType {
 
     @XmlElement(name = "SparePartsIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean sparePartsIndicator;
+    protected Boolean sparePartsIndicator;
     @XmlElement(name = "SparePartsItemDetails")
     protected List<SparePartsItemDetailsType> sparePartsItemDetails;
 
@@ -47,7 +47,7 @@ public class SparePartsDetailsType {
      * Gets the value of the sparePartsIndicator property.
      * 
      */
-    public boolean isSparePartsIndicator() {
+    public Boolean isSparePartsIndicator() {
         return sparePartsIndicator;
     }
 
@@ -55,7 +55,7 @@ public class SparePartsDetailsType {
      * Sets the value of the sparePartsIndicator property.
      * 
      */
-    public void setSparePartsIndicator(boolean value) {
+    public void setSparePartsIndicator(Boolean value) {
         this.sparePartsIndicator = value;
     }
 

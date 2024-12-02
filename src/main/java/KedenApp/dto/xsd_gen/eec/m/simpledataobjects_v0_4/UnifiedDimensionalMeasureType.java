@@ -14,6 +14,8 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -47,6 +49,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     FractionNumber12MeasureType.class,
     FractionNumber9MeasureType.class
 })
+@Data
+@Accessors(chain = true)
 public class UnifiedDimensionalMeasureType {
 
     @XmlValue
@@ -57,77 +61,4 @@ public class UnifiedDimensionalMeasureType {
     @XmlAttribute(name = "measurementUnitCodeListId", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     protected String measurementUnitCodeListId;
-
-    /**
-     * Числовая величина, определенная в результате измерения объекта
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    /**
-     * Gets the value of the measurementUnitCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMeasurementUnitCode() {
-        return measurementUnitCode;
-    }
-
-    /**
-     * Sets the value of the measurementUnitCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMeasurementUnitCode(String value) {
-        this.measurementUnitCode = value;
-    }
-
-    /**
-     * Gets the value of the measurementUnitCodeListId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMeasurementUnitCodeListId() {
-        return measurementUnitCodeListId;
-    }
-
-    /**
-     * Sets the value of the measurementUnitCodeListId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMeasurementUnitCodeListId(String value) {
-        this.measurementUnitCodeListId = value;
-    }
-
 }

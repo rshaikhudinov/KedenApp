@@ -37,13 +37,13 @@ public class PITransitDeclarantDetailsType
 {
 
     @XmlElement(name = "EqualIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean equalIndicator;
+    protected Boolean equalIndicator;
 
     /**
      * признак совпадения декларанта таможенной процедуры таможенного транзита с перевозчиком, осуществляющим перевозку товаров в соответствии с таможенной процедурой таможенного транзита
      * 
      */
-    public boolean isEqualIndicator() {
+    public Boolean isEqualIndicator() {
         return equalIndicator;
     }
 
@@ -51,7 +51,7 @@ public class PITransitDeclarantDetailsType
      * Sets the value of the equalIndicator property.
      * 
      */
-    public void setEqualIndicator(boolean value) {
+    public void setEqualIndicator(Boolean value) {
         this.equalIndicator = value;
     }
 

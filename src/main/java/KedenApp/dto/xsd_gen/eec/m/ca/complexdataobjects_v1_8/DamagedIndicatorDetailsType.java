@@ -37,15 +37,15 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DamagedIndicatorDetailsType {
 
     @XmlElement(name = "DamagedCargoAreaIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean damagedCargoAreaIndicator;
+    protected Boolean damagedCargoAreaIndicator;
     @XmlElement(name = "DamagedSealIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean damagedSealIndicator;
+    protected Boolean damagedSealIndicator;
 
     /**
      * Gets the value of the damagedCargoAreaIndicator property.
      * 
      */
-    public boolean isDamagedCargoAreaIndicator() {
+    public Boolean isDamagedCargoAreaIndicator() {
         return damagedCargoAreaIndicator;
     }
 
@@ -53,7 +53,7 @@ public class DamagedIndicatorDetailsType {
      * Sets the value of the damagedCargoAreaIndicator property.
      * 
      */
-    public void setDamagedCargoAreaIndicator(boolean value) {
+    public void setDamagedCargoAreaIndicator(Boolean value) {
         this.damagedCargoAreaIndicator = value;
     }
 
@@ -61,7 +61,7 @@ public class DamagedIndicatorDetailsType {
      * Gets the value of the damagedSealIndicator property.
      * 
      */
-    public boolean isDamagedSealIndicator() {
+    public Boolean isDamagedSealIndicator() {
         return damagedSealIndicator;
     }
 
@@ -69,7 +69,7 @@ public class DamagedIndicatorDetailsType {
      * Sets the value of the damagedSealIndicator property.
      * 
      */
-    public void setDamagedSealIndicator(boolean value) {
+    public void setDamagedSealIndicator(Boolean value) {
         this.damagedSealIndicator = value;
     }
 

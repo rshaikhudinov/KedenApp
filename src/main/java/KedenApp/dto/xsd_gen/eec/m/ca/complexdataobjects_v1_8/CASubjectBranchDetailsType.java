@@ -6,6 +6,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -38,35 +40,12 @@ import jakarta.xml.bind.annotation.XmlType;
     CustomsDocumentSubjectDetailsType.class,
     DeclarantDetailsType.class
 })
+@Data
+@Accessors(chain = true)
 public class CASubjectBranchDetailsType
     extends CASubjectDetailsType
 {
 
     @XmlElement(name = "SubjectBranchDetails")
     protected CAOrganizationType subjectBranchDetails;
-
-    /**
-     * Gets the value of the subjectBranchDetails property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CAOrganizationType }
-     *     
-     */
-    public CAOrganizationType getSubjectBranchDetails() {
-        return subjectBranchDetails;
-    }
-
-    /**
-     * Sets the value of the subjectBranchDetails property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CAOrganizationType }
-     *     
-     */
-    public void setSubjectBranchDetails(CAOrganizationType value) {
-        this.subjectBranchDetails = value;
-    }
-
 }

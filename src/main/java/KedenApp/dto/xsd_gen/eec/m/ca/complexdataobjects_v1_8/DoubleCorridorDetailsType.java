@@ -41,7 +41,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class DoubleCorridorDetailsType {
 
     @XmlElement(name = "DoubleCorridorExistenceIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean doubleCorridorExistenceIndicator;
+    protected Boolean doubleCorridorExistenceIndicator;
     @XmlElement(name = "CountRedLinesQuantity", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlSchemaType(name = "nonNegativeInteger")
     protected BigInteger countRedLinesQuantity;
@@ -53,7 +53,7 @@ public class DoubleCorridorDetailsType {
      * Gets the value of the doubleCorridorExistenceIndicator property.
      * 
      */
-    public boolean isDoubleCorridorExistenceIndicator() {
+    public Boolean isDoubleCorridorExistenceIndicator() {
         return doubleCorridorExistenceIndicator;
     }
 
@@ -61,7 +61,7 @@ public class DoubleCorridorDetailsType {
      * Sets the value of the doubleCorridorExistenceIndicator property.
      * 
      */
-    public void setDoubleCorridorExistenceIndicator(boolean value) {
+    public void setDoubleCorridorExistenceIndicator(Boolean value) {
         this.doubleCorridorExistenceIndicator = value;
     }
 

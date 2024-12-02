@@ -38,7 +38,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class FreePracticeDetailsType {
 
     @XmlElement(name = "FreePracticeRestrictionIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean freePracticeRestrictionIndicator;
+    protected Boolean freePracticeRestrictionIndicator;
     @XmlElement(name = "DocV4Details", namespace = "urn:EEC:M:ComplexDataObjects:v0.4.14")
     protected DocDetailsV4Type docV4Details;
 
@@ -46,7 +46,7 @@ public class FreePracticeDetailsType {
      * Gets the value of the freePracticeRestrictionIndicator property.
      * 
      */
-    public boolean isFreePracticeRestrictionIndicator() {
+    public Boolean isFreePracticeRestrictionIndicator() {
         return freePracticeRestrictionIndicator;
     }
 
@@ -54,7 +54,7 @@ public class FreePracticeDetailsType {
      * Sets the value of the freePracticeRestrictionIndicator property.
      * 
      */
-    public void setFreePracticeRestrictionIndicator(boolean value) {
+    public void setFreePracticeRestrictionIndicator(Boolean value) {
         this.freePracticeRestrictionIndicator = value;
     }
 

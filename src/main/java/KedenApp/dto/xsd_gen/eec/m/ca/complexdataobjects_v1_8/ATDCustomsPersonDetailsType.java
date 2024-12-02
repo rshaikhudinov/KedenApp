@@ -49,7 +49,7 @@ public class ATDCustomsPersonDetailsType
     @XmlSchemaType(name = "token")
     protected String customsOfficeName;
     @XmlElement(name = "SignIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean signIndicator;
+    protected Boolean signIndicator;
     @XmlElement(name = "SigningDate", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar signingDate;
@@ -82,7 +82,7 @@ public class ATDCustomsPersonDetailsType
      * Gets the value of the signIndicator property.
      * 
      */
-    public boolean isSignIndicator() {
+    public Boolean isSignIndicator() {
         return signIndicator;
     }
 
@@ -90,7 +90,7 @@ public class ATDCustomsPersonDetailsType
      * Sets the value of the signIndicator property.
      * 
      */
-    public void setSignIndicator(boolean value) {
+    public void setSignIndicator(Boolean value) {
         this.signIndicator = value;
     }
 

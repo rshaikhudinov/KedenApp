@@ -65,7 +65,7 @@ public class TranshipmentDetailsType {
     @XmlSchemaType(name = "positiveInteger")
     protected BigInteger carrierOrdinal;
     @XmlElement(name = "GoodsTranshsipmentIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean goodsTranshsipmentIndicator;
+    protected Boolean goodsTranshsipmentIndicator;
     @XmlElement(name = "CACountryCode", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1", required = true)
     protected CACountryCodeType caCountryCode;
     @XmlElement(name = "PlaceName", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1", required = true)
@@ -137,7 +137,7 @@ public class TranshipmentDetailsType {
      * Признак перегрузки товаров из одного контейнера в другой
      * 
      */
-    public boolean isGoodsTranshsipmentIndicator() {
+    public Boolean isGoodsTranshsipmentIndicator() {
         return goodsTranshsipmentIndicator;
     }
 
@@ -145,7 +145,7 @@ public class TranshipmentDetailsType {
      * Sets the value of the goodsTranshsipmentIndicator property.
      * 
      */
-    public void setGoodsTranshsipmentIndicator(boolean value) {
+    public void setGoodsTranshsipmentIndicator(Boolean value) {
         this.goodsTranshsipmentIndicator = value;
     }
 

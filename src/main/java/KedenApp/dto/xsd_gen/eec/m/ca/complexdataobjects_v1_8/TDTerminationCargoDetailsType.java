@@ -50,7 +50,7 @@ public class TDTerminationCargoDetailsType {
     @XmlElement(name = "DescriptionText", namespace = "urn:EEC:M:SimpleDataObjects:v0.4.14", required = true)
     protected String descriptionText;
     @XmlElement(name = "PartialTerminationIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean partialTerminationIndicator;
+    protected Boolean partialTerminationIndicator;
     @XmlElement(name = "TDTerminationGoodsItemDetails", required = true)
     protected List<TDGoodsItemInfoDetailsType> tdTerminationGoodsItemDetails;
     @XmlElement(name = "TransportDocumentDetails")
@@ -108,7 +108,7 @@ public class TDTerminationCargoDetailsType {
      * Признак частичного прекращения таможенной процедуры таможенного транзита
      * 
      */
-    public boolean isPartialTerminationIndicator() {
+    public Boolean isPartialTerminationIndicator() {
         return partialTerminationIndicator;
     }
 
@@ -116,7 +116,7 @@ public class TDTerminationCargoDetailsType {
      * Sets the value of the partialTerminationIndicator property.
      * 
      */
-    public void setPartialTerminationIndicator(boolean value) {
+    public void setPartialTerminationIndicator(Boolean value) {
         this.partialTerminationIndicator = value;
     }
 

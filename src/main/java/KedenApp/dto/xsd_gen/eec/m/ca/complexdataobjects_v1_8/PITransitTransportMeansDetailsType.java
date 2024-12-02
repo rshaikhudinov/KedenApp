@@ -39,7 +39,7 @@ import jakarta.xml.bind.annotation.XmlType;
 public class PITransitTransportMeansDetailsType {
 
     @XmlElement(name = "EqualIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean equalIndicator;
+    protected Boolean equalIndicator;
     @XmlElement(name = "TransportMeansItemDetails")
     protected List<TransportMeansItemDetailsType> transportMeansItemDetails;
 
@@ -47,7 +47,7 @@ public class PITransitTransportMeansDetailsType {
      * признак совпадения транспортных средств, прибывающих на таможенную территорию Евразийского экономического союза, с транспортными средствами, осуществляющими перевозку товаров в соответствии с таможенной процедурой таможенного транзита
      * 
      */
-    public boolean isEqualIndicator() {
+    public Boolean isEqualIndicator() {
         return equalIndicator;
     }
 
@@ -55,7 +55,7 @@ public class PITransitTransportMeansDetailsType {
      * Sets the value of the equalIndicator property.
      * 
      */
-    public void setEqualIndicator(boolean value) {
+    public void setEqualIndicator(Boolean value) {
         this.equalIndicator = value;
     }
 

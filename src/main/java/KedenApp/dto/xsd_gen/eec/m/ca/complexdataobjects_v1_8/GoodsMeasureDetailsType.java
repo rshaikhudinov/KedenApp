@@ -9,6 +9,8 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 /**
@@ -38,6 +40,8 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "goodsMeasure",
     "measureUnitAbbreviationCode"
 })
+@Data
+@Accessors(chain = true)
 public class GoodsMeasureDetailsType {
 
     @XmlElement(name = "GoodsMeasure", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1", required = true)
@@ -46,53 +50,4 @@ public class GoodsMeasureDetailsType {
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
     protected String measureUnitAbbreviationCode;
-
-    /**
-     * сведения о количестве товара с указанием единицы измерения
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnifiedPhysicalMeasureType }
-     *     
-     */
-    public UnifiedPhysicalMeasureType getGoodsMeasure() {
-        return goodsMeasure;
-    }
-
-    /**
-     * Sets the value of the goodsMeasure property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnifiedPhysicalMeasureType }
-     *     
-     */
-    public void setGoodsMeasure(UnifiedPhysicalMeasureType value) {
-        this.goodsMeasure = value;
-    }
-
-    /**
-     * Gets the value of the measureUnitAbbreviationCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMeasureUnitAbbreviationCode() {
-        return measureUnitAbbreviationCode;
-    }
-
-    /**
-     * Sets the value of the measureUnitAbbreviationCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMeasureUnitAbbreviationCode(String value) {
-        this.measureUnitAbbreviationCode = value;
-    }
-
 }

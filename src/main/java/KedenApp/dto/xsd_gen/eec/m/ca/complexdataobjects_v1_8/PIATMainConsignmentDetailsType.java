@@ -73,7 +73,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class PIATMainConsignmentDetailsType {
 
     @XmlElement(name = "TIRCarnetIndicator", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
-    protected boolean tirCarnetIndicator;
+    protected Boolean tirCarnetIndicator;
     @XmlElement(name = "TIRCarnetIdDetails")
     protected TIRCarnetIdDetailsType tirCarnetIdDetails;
     @XmlElement(name = "DeclarationKindCode", namespace = "urn:EEC:M:CA:SimpleDataObjects:v1.8.1")
@@ -115,7 +115,7 @@ public class PIATMainConsignmentDetailsType {
      * Gets the value of the tirCarnetIndicator property.
      * 
      */
-    public boolean isTIRCarnetIndicator() {
+    public Boolean isTIRCarnetIndicator() {
         return tirCarnetIndicator;
     }
 
@@ -123,7 +123,7 @@ public class PIATMainConsignmentDetailsType {
      * Sets the value of the tirCarnetIndicator property.
      * 
      */
-    public void setTIRCarnetIndicator(boolean value) {
+    public void setTIRCarnetIndicator(Boolean value) {
         this.tirCarnetIndicator = value;
     }
 
