@@ -86,11 +86,22 @@ public class KedenAppService {
     }
 
     public ECGoodsShipmentDetailsType getECGoodsShipmentDetailsType(){
+
+        UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
+        unifiedGrossMassMeasureEnd
+                .setValue(BigDecimal.valueOf(1.6));
+
+        PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
+        caValueAmount
+                .setValue(BigDecimal.valueOf(24912.02));
+
         ECGoodsShipmentDetailsType ecGoodsShipmentDetails = new ECGoodsShipmentDetailsType();
         ecGoodsShipmentDetails
                 .setConsignorDetails(getConsignorDetails(1))
                 .setConsigneeDetails(getConsigneeDetails(1))
-                .setEcHouseShipmentDetails(getEcHouseShipmentDetails());
+                .setEcHouseShipmentDetails(getEcHouseShipmentDetails())
+                .setUnifiedGrossMassMeasure(unifiedGrossMassMeasureEnd)
+                .setCaValueAmount(caValueAmount);
         return ecGoodsShipmentDetails;
     }
 
@@ -365,22 +376,20 @@ public class KedenAppService {
         ecGoodsItemDetailsType
                 .setUnifiedGrossMassMeasure(unifiedGrossMassMeasure);
 
-        List<PaymentAmountWithCurrencyType> caValueAmountUSD = new ArrayList<>();
+        List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
         PaymentAmountWithCurrencyType paymentAmountUSD = new PaymentAmountWithCurrencyType();
         paymentAmountUSD
                 .setCurrencyCode("USD")
                 .setValue(BigDecimal.valueOf(49.99));
-        caValueAmountUSD.add(paymentAmountUSD);
-        List<PaymentAmountWithCurrencyType> caValueAmountKZT = new ArrayList<>();
+        caValueAmountWithCurrencyTypeList.add(paymentAmountUSD);
         PaymentAmountWithCurrencyType paymentAmountKZT = new PaymentAmountWithCurrencyType();
         paymentAmountKZT
                 .setCurrencyCode("KZT")
                 .setValue(BigDecimal.valueOf(24912.02));
-        caValueAmountKZT.add(paymentAmountKZT);
+        caValueAmountWithCurrencyTypeList.add(paymentAmountKZT);
 
         ecGoodsItemDetailsType
-                .setCaValueAmount(caValueAmountUSD)
-                .setCaValueAmount(caValueAmountKZT);
+                .setCaValueAmount(caValueAmountWithCurrencyTypeList);
         ecGoodsItemDetails.add(ecGoodsItemDetailsType);
 
         UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <p th:text="|Hello, ${name}!|"></p>
+
+    <form id="myForm">
+        <label for="fullName">Полное имя:</label>
+        <input type="text" id="fullName" name="fullName" />  <br>
+
+        <label for="sender">Выберите отправителя:</label>
+        <select id="sender" name="sender">
+            <option value="1">OEC GMBH</option>
+            <option value="2">OST EXPRESS COURIER GMBH</option>
+            <option value="3">FTL GMBH</option>
+        </select>  <br>
+        <label for="recipientCompany">Выберите фирму получателя:</label>
+        <select id="recipientCompany" name="recipientCompany">
+            <option value="1">POSTAL EXPRESS</option>
+            <option value="2">ТОО "DISALES GROUP"</option>
+        </select>  <br>
+
+        <div id="recipientFields">
+            <div class="recipient">
+                <label>ФИО:</label>
+                <input type="text" name="recipients[0].fio" />
+
+                <label>ИИН:</label>
+                <input type="text" name="recipients[0].iin" />
+            </div>
+        </div>
+
+        <button type="button" id="addRecipient">Добавить получателя</button>
+
+        <button type="submit">Отправить</button>
+    </form>
+
+
+</body>
+<script th:inline="javascript">
+    $(document).ready(function() {
+  $("#myForm").submit(function(event) {
+    event.preventDefault();
+    var formData = $(this).serialize();
+
+    $.ajax({
+      url: "/test",
+      type: "POST",
+      data: formData,
+      success: function(response) {
+        // Обработка ответа сервера
+        console.log(response);
+      }
+    });
+  });
+});
+</script>
+
+<script>
+    document.getElementById('addRecipient').addEventListener('click', function() {
+        const recipientFields = document.getElementById('recipientFields');
+        const index = recipientFields.children.length;
+
+        const newRecipientDiv = document.createElement('div');
+        newRecipientDiv.className = 'recipient';
+
+        // Поле для ФИО
+        const fioLabel = document.createElement('label');
+        fioLabel.textContent = 'ФИО:';
+        const fioInput = document.createElement('input');
+        fioInput.type = 'text';
+        fioInput.name = `recipients[${index}].fio`;
+
+        // Поле для ИИН
+        const iinLabel = document.createElement('label');
+        iinLabel.textContent = 'ИИН:';
+        const iinInput = document.createElement('input');
+        iinInput.type = 'text';
+        iinInput.name = `recipients[${index}].iin`;
+
+        // Добавляем элементы в контейнер
+        newRecipientDiv.appendChild(fioLabel);
+        newRecipientDiv.appendChild(fioInput);
+        newRecipientDiv.appendChild(iinLabel);
+        newRecipientDiv.appendChild(iinInput);
+
+        recipientFields.appendChild(newRecipientDiv);
+    });
+
+</script>
+
+</html>
