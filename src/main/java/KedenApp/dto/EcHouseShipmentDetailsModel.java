@@ -9,7 +9,6 @@ import java.util.List;
 @Accessors(chain = true)
 public class EcHouseShipmentDetailsModel {
 
-    private String fullName;
     private int sender;
     private int recipientCompany;
     private List<Recipient> recipients;

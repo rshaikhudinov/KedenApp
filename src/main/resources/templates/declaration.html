@@ -4,14 +4,10 @@
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <p th:text="|Hello, ${name}!|"></p>
-
     <form id="myForm">
-        <label for="fullName">Полное имя:</label>
-        <input type="text" id="fullName" name="fullName" />  <br>
-
         <label for="sender">Выберите отправителя:</label>
         <select id="sender" name="sender">
             <option value="1">OEC GMBH</option>
@@ -26,20 +22,60 @@
 
         <div id="recipientFields">
             <div class="recipient">
-                <label>ФИО:</label>
-                <input type="text" name="recipients[0].fio" />
+                <div class="form-group">
+                    <label for="fio">ФИО:</label>
+                    <input type="text" id="fio" name="recipients[0].fio" required />
+                </div>
 
-                <label>ИИН:</label>
-                <input type="text" name="recipients[0].iin" />
+                <div class="form-group">
+                    <label for="iin">ИИН:</label>
+                    <input type="text" id="iin" name="recipients[0].iin" required pattern="\d{12}" title="Введите 12-значный ИИН" />
+                </div>
+
+                <div class="form-group">
+                    <label for="docId">Номер удостоверения:</label>
+                    <input type="text" id="docId" name="recipients[0].docId" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="docCreationDate">Дата выдачи документа:</label>
+                    <input type="date" id="docCreationDate" name="recipients[0].docCreationDate" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="regionName">Регион:</label>
+                    <input type="text" id="regionName" name="recipients[0].regionName" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="cityName">Город:</label>
+                    <input type="text" id="cityName" name="recipients[0].cityName" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="streetName">Улица:</label>
+                    <input type="text" id="streetName" name="recipients[0].streetName" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="buildingNumberId">Дом:</label>
+                    <input type="text" id="buildingNumberId" name="recipients[0].buildingNumberId" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="roomNumberId">Квартира:</label>
+                    <input type="text" id="roomNumberId" name="recipients[0].roomNumberId" />
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Телефон:</label>
+                    <input type="text" id="phone" name="recipients[0].phone" placeholder="+7 777 77777" required />
+                </div>
             </div>
         </div>
-
         <button type="button" id="addRecipient">Добавить получателя</button>
-
         <button type="submit">Отправить</button>
     </form>
-
-
 </body>
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -54,43 +90,11 @@
       success: function(response) {
         // Обработка ответа сервера
         console.log(response);
+        alert(response);
       }
     });
   });
 });
 </script>
-
-<script>
-    document.getElementById('addRecipient').addEventListener('click', function() {
-        const recipientFields = document.getElementById('recipientFields');
-        const index = recipientFields.children.length;
-
-        const newRecipientDiv = document.createElement('div');
-        newRecipientDiv.className = 'recipient';
-
-        // Поле для ФИО
-        const fioLabel = document.createElement('label');
-        fioLabel.textContent = 'ФИО:';
-        const fioInput = document.createElement('input');
-        fioInput.type = 'text';
-        fioInput.name = `recipients[${index}].fio`;
-
-        // Поле для ИИН
-        const iinLabel = document.createElement('label');
-        iinLabel.textContent = 'ИИН:';
-        const iinInput = document.createElement('input');
-        iinInput.type = 'text';
-        iinInput.name = `recipients[${index}].iin`;
-
-        // Добавляем элементы в контейнер
-        newRecipientDiv.appendChild(fioLabel);
-        newRecipientDiv.appendChild(fioInput);
-        newRecipientDiv.appendChild(iinLabel);
-        newRecipientDiv.appendChild(iinInput);
-
-        recipientFields.appendChild(newRecipientDiv);
-    });
-
-</script>
-
+<script src="/js/script.js"></script>
 </html>

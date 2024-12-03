@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -39,19 +36,26 @@ public class KedenAppController {
     }*/
 
     @PostMapping("/test")
-    public void submitShipmentDetails(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
+    @ResponseBody
+    public String submitShipmentDetails(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
         if (shipmentDetails.getRecipients() != null && !shipmentDetails.getRecipients().isEmpty()) {
             System.out.println("Recipients:");
             for (Recipient recipient : shipmentDetails.getRecipients()) {
                 System.out.println(" - FIO: " + recipient.getFio());
                 System.out.println(" - IIN: " + recipient.getIin());
+                System.out.println(" - Doc ID: " + recipient.getDocId());
+                System.out.println(" - Doc Creation Date: " + recipient.getDocCreationDate());
+                System.out.println(" - Region Name: " + recipient.getRegionName());
+                System.out.println(" - City Name: " + recipient.getCityName());
+                System.out.println(" - Street Name: " + recipient.getStreetName());
+                System.out.println(" - Building Number: " + recipient.getBuildingNumberId());
+                System.out.println(" - Room Number: " + recipient.getRoomNumberId());
+                System.out.println(" - Phone: " + recipient.getPhone());
             }
         } else {
             System.out.println("No recipients provided.");
         }
-
+        kedenAppService.genXml(shipmentDetails);
+        return "XML файл успешно сгенерирован";
     }
-        //kedenAppService.genXml();
-    /*model.addAttribute("name", fullName);*/  // Используйте fullName здесь
-    //return "redirect:/greeting";
 }

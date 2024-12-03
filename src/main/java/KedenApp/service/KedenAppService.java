@@ -1,5 +1,7 @@
 package KedenApp.service;
 
+import KedenApp.dto.EcHouseShipmentDetailsModel;
+import KedenApp.dto.Recipient;
 import KedenApp.dto.xsd_gen.eec.m.ca.complexdataobjects_v1_8.*;
 import KedenApp.dto.xsd_gen.eec.m.ca.simpledataobjects_v1_8.PaymentAmountWithCurrencyType;
 import KedenApp.dto.xsd_gen.eec.m.complexdataobjects_v0_4.*;
@@ -33,7 +35,7 @@ public class KedenAppService {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public void genXml(){
+    public void genXml(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
         try {
             ObjectFactory objectFactory = new ObjectFactory();
 
@@ -44,14 +46,15 @@ public class KedenAppService {
                     .setEDocIndicatorCode("ЭД")
                     .setRegisterDocumentIdDetails(getRegisterDocumentIdDetails())
                     .setExpressCargoDeclarationIdDetails(getExpressCargoDeclarationIdDetails())
-                    .setEcGoodsShipmentDetails(getECGoodsShipmentDetailsType())
+                    .setEcGoodsShipmentDetails(getECGoodsShipmentDetailsType(ecHouseShipmentDetailsModel))
                     .setSignatoryPersonV2Details(getSignatoryPersonDetailsV2Type());
 
             JAXBElement<ExpressCargoDeclarationType> element = objectFactory.createExpressCargoDeclaration(declaration);
             JAXBContext context = JAXBContext.newInstance(ExpressCargoDeclarationType.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(element, System.out);
+            //вывод xml в консоль
+            //marshaller.marshal(element, System.out);
 
             StringWriter writer = new StringWriter();
             marshaller.marshal(element, writer);
@@ -60,10 +63,10 @@ public class KedenAppService {
             try (FileWriter fileWriter = new FileWriter("express_cargo_declaration.xml")) {
                 fileWriter.write(xmlString);
             } catch (IOException e) {
-                System.out.println(e.getMessage());;
+                System.out.println(e.getMessage());
             }
         } catch (Exception e) {
-            log.error("e: ", e);;
+            log.error("e: ", e);
         }
     }
 
@@ -85,21 +88,22 @@ public class KedenAppService {
         return expressCargoDeclarationIdDetails;
     }
 
-    public ECGoodsShipmentDetailsType getECGoodsShipmentDetailsType(){
+    public ECGoodsShipmentDetailsType getECGoodsShipmentDetailsType(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
 
+        // итоговая масса по всем получателям
         UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
         unifiedGrossMassMeasureEnd
-                .setValue(BigDecimal.valueOf(1.6));
-
+                .setValue(BigDecimal.valueOf(1.6*ecHouseShipmentDetailsModel.getRecipients().size()));
+        // итоговая сумма по всем получателям в тенге
         PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
         caValueAmount
-                .setValue(BigDecimal.valueOf(24912.02));
+                .setValue(BigDecimal.valueOf(24912.02*ecHouseShipmentDetailsModel.getRecipients().size()));
 
         ECGoodsShipmentDetailsType ecGoodsShipmentDetails = new ECGoodsShipmentDetailsType();
         ecGoodsShipmentDetails
-                .setConsignorDetails(getConsignorDetails(1))
-                .setConsigneeDetails(getConsigneeDetails(1))
-                .setEcHouseShipmentDetails(getEcHouseShipmentDetails())
+                .setConsignorDetails(getConsignorDetails(ecHouseShipmentDetailsModel.getSender())) // отправитель
+                .setConsigneeDetails(getConsigneeDetails(ecHouseShipmentDetailsModel.getRecipientCompany())) // фирма получатель
+                .setEcHouseShipmentDetails(getEcHouseShipmentDetails(ecHouseShipmentDetailsModel)) // тут список получателей и посылок
                 .setUnifiedGrossMassMeasure(unifiedGrossMassMeasureEnd)
                 .setCaValueAmount(caValueAmount);
         return ecGoodsShipmentDetails;
@@ -287,130 +291,136 @@ public class KedenAppService {
     }
 
 
-    public List<ECHouseShipmentDetailsType> getEcHouseShipmentDetails(){
+    public List<ECHouseShipmentDetailsType> getEcHouseShipmentDetails(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
         List<ECHouseShipmentDetailsType> ecHouseShipmentDetails = new ArrayList<>();
+        List<Recipient> recipients = ecHouseShipmentDetailsModel.getRecipients();
+        for (int i = 0; i < recipients.size(); i++) {
+            Recipient recipient = recipients.get(i);
 
-        DocDetailsV4Type transportDocumentDetails = new DocDetailsV4Type();
-        transportDocumentDetails
-                .setDocId("TR")
-                .setDocCreationDate(LocalDate.now().format(formatter));
+            //данные по получателю
+            DocDetailsV4Type transportDocumentDetails = new DocDetailsV4Type();
+            transportDocumentDetails
+                    .setDocId("TR")
+                    .setDocCreationDate(LocalDate.now().format(formatter));
 
-        UnifiedCode20Type docKindCode = new UnifiedCode20Type();
-        docKindCode
-                .setValue("02021");
-        DocDetailsV4Type houseWaybillDetails = new DocDetailsV4Type();
-        houseWaybillDetails
-                .setDocKindCode(docKindCode)
-                .setDocName("Индивидуальная накладная при экспресс-доставке")
-                .setDocId("123") // сюда встявлять номер декларации с формы
-                .setDocCreationDate(LocalDate.now().format(formatter));
+            UnifiedCode20Type docKindCode = new UnifiedCode20Type();
+            docKindCode
+                    .setValue("02021");
+            DocDetailsV4Type houseWaybillDetails = new DocDetailsV4Type();
+            houseWaybillDetails
+                    .setDocKindCode(docKindCode)
+                    .setDocName("Индивидуальная накладная при экспресс-доставке")
+                    .setDocId("123") // сюда встявлять номер декларации с формы
+                    .setDocCreationDate(LocalDate.now().format(formatter));
 
-        UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
-        unifiedCountryCode
-                .setValue("KZ");
-        IdentityDocKindCodeType identityDocKindCode = new IdentityDocKindCodeType();
-        identityDocKindCode
-                .setValue("KZ02014");
-        IdentityDocDetailsV3Type identityDocV3Details = new IdentityDocDetailsV3Type();
-        identityDocV3Details
-                .setUnifiedCountryCode(unifiedCountryCode)
-                .setIdentityDocKindCode(identityDocKindCode)
-                .setDocKindName("Удостоверение")
-                .setDocId("044200387")
-                .setDocCreationDate(LocalDate.of(1988, 9, 12).format(formatter));
+            UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
+            unifiedCountryCode
+                    .setValue("KZ");
+            IdentityDocKindCodeType identityDocKindCode = new IdentityDocKindCodeType();
+            identityDocKindCode
+                    .setValue("KZ02014");
+            IdentityDocDetailsV3Type identityDocV3Details = new IdentityDocDetailsV3Type();
+            identityDocV3Details
+                    .setUnifiedCountryCode(unifiedCountryCode)
+                    .setIdentityDocKindCode(identityDocKindCode)
+                    .setDocKindName("Удостоверение")
+                    .setDocId(recipient.getDocId())
+                    .setDocCreationDate(recipient.getDocCreationDate());
 
-        List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
-        SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
-        subjectAddressDetailsType
-                .setAddressKindCode("1")
-                .setUnifiedCountryCode(unifiedCountryCode)
-                .setCityName("Алматы")
-                .setStreetName("Алмагуль 35")
-                .setRegionName("-")
-                .setBuildingNumberId("-")
-                .setRoomNumberId("19");
-        subjectAddressDetails.add(subjectAddressDetailsType);
+            List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
+            SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
+            subjectAddressDetailsType
+                    .setAddressKindCode("1")
+                    .setUnifiedCountryCode(unifiedCountryCode)
+                    .setCityName(recipient.getCityName())
+                    .setStreetName(recipient.getStreetName())
+                    .setRegionName(recipient.getRegionName())
+                    .setBuildingNumberId(recipient.getBuildingNumberId())
+                    .setRoomNumberId(recipient.getRoomNumberId());
+            subjectAddressDetails.add(subjectAddressDetailsType);
 
-        List<String> communicationChannelId = new ArrayList<>();
-        communicationChannelId.add("+7 707 5534567");
-        List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
-        CommunicationDetailsType communicationDetailsType = new CommunicationDetailsType();
-        communicationDetailsType
-                .setCommunicationChannelCode("TE")
-                .setCommunicationChannelId(communicationChannelId);
-        communicationDetails.add(communicationDetailsType);
+            List<String> communicationChannelId = new ArrayList<>();
+            communicationChannelId.add(recipient.getPhone());
+            List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
+            CommunicationDetailsType communicationDetailsType = new CommunicationDetailsType();
+            communicationDetailsType
+                    .setCommunicationChannelCode("TE")
+                    .setCommunicationChannelId(communicationChannelId);
+            communicationDetails.add(communicationDetailsType);
 
-        GoodsShipmentSubjectDetailsType consigneeDetails = new GoodsShipmentSubjectDetailsType();
-        consigneeDetails.setSubjectName("Шайхудинов Равиль");
-        consigneeDetails
-                .setPersonId("880912300763")
-                .setIdentityDocV3Details(identityDocV3Details)
-                .setSubjectAddressDetails(subjectAddressDetails)
-                .setCommunicationDetails(communicationDetails);
+            GoodsShipmentSubjectDetailsType consigneeDetails = new GoodsShipmentSubjectDetailsType();
+            consigneeDetails.setSubjectName(recipient.getFio());
+            consigneeDetails
+                    .setPersonId(recipient.getIin())
+                    .setIdentityDocV3Details(identityDocV3Details)
+                    .setSubjectAddressDetails(subjectAddressDetails)
+                    .setCommunicationDetails(communicationDetails);
+            //закончились данные по получателю
 
-        List<ECGoodsItemDetailsType> ecGoodsItemDetails = new ArrayList<>();
-        ECGoodsItemDetailsType ecGoodsItemDetailsType = new ECGoodsItemDetailsType();
-        ecGoodsItemDetailsType
-                .setConsignmentItemOrdinal(BigInteger.valueOf(1));
-        ecGoodsItemDetailsType
-                .setHmConsignmentItemNumber(BigDecimal.valueOf(1));
-        ecGoodsItemDetailsType
-                .setCommodityCode("950300");
-        List<String> goodsDescriptionText = new ArrayList<>();
-        goodsDescriptionText.add("Игрушки, Игры, реквизит запчасти");
-        ecGoodsItemDetailsType
-                .setGoodsDescriptionText(goodsDescriptionText);
+            List<ECGoodsItemDetailsType> ecGoodsItemDetails = new ArrayList<>();
+            ECGoodsItemDetailsType ecGoodsItemDetailsType = new ECGoodsItemDetailsType();
+            ecGoodsItemDetailsType
+                    .setConsignmentItemOrdinal(BigInteger.valueOf(1));
+            ecGoodsItemDetailsType
+                    .setHmConsignmentItemNumber(BigDecimal.valueOf(1));
+            ecGoodsItemDetailsType
+                    .setCommodityCode("950300");
+            List<String> goodsDescriptionText = new ArrayList<>();
+            goodsDescriptionText.add("Игрушки, Игры, реквизит запчасти");
+            ecGoodsItemDetailsType
+                    .setGoodsDescriptionText(goodsDescriptionText);
 
-        UnifiedPhysicalMeasureType goodsMeasure = new UnifiedPhysicalMeasureType();
-        goodsMeasure
-                .setMeasurementUnitCode("796")
-                .setValue(BigDecimal.valueOf(1));
-        GoodsMeasureDetailsType goodsMeasureDetails = new GoodsMeasureDetailsType();
-        goodsMeasureDetails
-                .setGoodsMeasure(goodsMeasure);
-        ecGoodsItemDetailsType
-                .setGoodsMeasureDetails(goodsMeasureDetails);
-        UnifiedPhysicalMeasureType unifiedGrossMassMeasure = new UnifiedPhysicalMeasureType();
-        unifiedGrossMassMeasure
-                .setValue(BigDecimal.valueOf(1.6));
-        ecGoodsItemDetailsType
-                .setUnifiedGrossMassMeasure(unifiedGrossMassMeasure);
+            UnifiedPhysicalMeasureType goodsMeasure = new UnifiedPhysicalMeasureType();
+            goodsMeasure
+                    .setMeasurementUnitCode("796")
+                    .setValue(BigDecimal.valueOf(1));
+            GoodsMeasureDetailsType goodsMeasureDetails = new GoodsMeasureDetailsType();
+            goodsMeasureDetails
+                    .setGoodsMeasure(goodsMeasure);
+            ecGoodsItemDetailsType
+                    .setGoodsMeasureDetails(goodsMeasureDetails);
+            UnifiedPhysicalMeasureType unifiedGrossMassMeasure = new UnifiedPhysicalMeasureType();
+            unifiedGrossMassMeasure
+                    .setValue(BigDecimal.valueOf(1.6));
+            ecGoodsItemDetailsType
+                    .setUnifiedGrossMassMeasure(unifiedGrossMassMeasure);
 
-        List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
-        PaymentAmountWithCurrencyType paymentAmountUSD = new PaymentAmountWithCurrencyType();
-        paymentAmountUSD
-                .setCurrencyCode("USD")
-                .setValue(BigDecimal.valueOf(49.99));
-        caValueAmountWithCurrencyTypeList.add(paymentAmountUSD);
-        PaymentAmountWithCurrencyType paymentAmountKZT = new PaymentAmountWithCurrencyType();
-        paymentAmountKZT
-                .setCurrencyCode("KZT")
-                .setValue(BigDecimal.valueOf(24912.02));
-        caValueAmountWithCurrencyTypeList.add(paymentAmountKZT);
+            List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
+            PaymentAmountWithCurrencyType paymentAmountUSD = new PaymentAmountWithCurrencyType();
+            paymentAmountUSD
+                    .setCurrencyCode("USD")
+                    .setValue(BigDecimal.valueOf(49.99));
+            caValueAmountWithCurrencyTypeList.add(paymentAmountUSD);
+            PaymentAmountWithCurrencyType paymentAmountKZT = new PaymentAmountWithCurrencyType();
+            paymentAmountKZT
+                    .setCurrencyCode("KZT")
+                    .setValue(BigDecimal.valueOf(24912.02));
+            caValueAmountWithCurrencyTypeList.add(paymentAmountKZT);
 
-        ecGoodsItemDetailsType
-                .setCaValueAmount(caValueAmountWithCurrencyTypeList);
-        ecGoodsItemDetails.add(ecGoodsItemDetailsType);
+            ecGoodsItemDetailsType
+                    .setCaValueAmount(caValueAmountWithCurrencyTypeList);
+            ecGoodsItemDetails.add(ecGoodsItemDetailsType);
 
-        UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
-        unifiedGrossMassMeasureEnd
-                .setValue(BigDecimal.valueOf(1.6));
+            UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
+            unifiedGrossMassMeasureEnd
+                    .setValue(BigDecimal.valueOf(1.6));
 
-        PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
-        caValueAmount
-                .setValue(BigDecimal.valueOf(24912.02));
+            PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
+            caValueAmount
+                    .setValue(BigDecimal.valueOf(24912.02));
 
-        ECHouseShipmentDetailsType ecHouseShipmentDetailsType = new ECHouseShipmentDetailsType();
-        ecHouseShipmentDetailsType
-                .setObjectOrdinal(BigInteger.valueOf(1))
-                .setTransportDocumentDetails(transportDocumentDetails)
-                .setHouseWaybillDetails(houseWaybillDetails)
-                .setConsignorDetails(getConsignorDetails(1)) // тут нужен правильный индекс с формы
-                .setConsigneeDetails(consigneeDetails)          // данные получателя физ лицо
-                .setEcGoodsItemDetails(ecGoodsItemDetails)        // данные о посыылке
-                .setUnifiedGrossMassMeasure(unifiedGrossMassMeasureEnd)   // итоговая масса
-                .setCaValueAmount(caValueAmount);            // итоговая сумма в тенге
-        ecHouseShipmentDetails.add(ecHouseShipmentDetailsType);
+            ECHouseShipmentDetailsType ecHouseShipmentDetailsType = new ECHouseShipmentDetailsType();
+            ecHouseShipmentDetailsType
+                    .setObjectOrdinal(BigInteger.valueOf(i+1))
+                    .setTransportDocumentDetails(transportDocumentDetails)
+                    .setHouseWaybillDetails(houseWaybillDetails)
+                    .setConsignorDetails(getConsignorDetails(ecHouseShipmentDetailsModel.getSender())) // тут нужен правильный индекс с формы
+                    .setConsigneeDetails(consigneeDetails)          // данные получателя физ лицо
+                    .setEcGoodsItemDetails(ecGoodsItemDetails)        // данные о посыылке
+                    .setUnifiedGrossMassMeasure(unifiedGrossMassMeasureEnd)   // итоговая масса
+                    .setCaValueAmount(caValueAmount);            // итоговая сумма в тенге
+            ecHouseShipmentDetails.add(ecHouseShipmentDetailsType);
+        }
         return ecHouseShipmentDetails;
     }
 
