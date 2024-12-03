@@ -1,7 +1,8 @@
 package KedenApp.service;
 
 import KedenApp.dto.EcHouseShipmentDetailsModel;
-import KedenApp.dto.Recipient;
+import KedenApp.dto.PackageKeden;
+import KedenApp.dto.RecipientKeden;
 import KedenApp.dto.xsd_gen.eec.m.ca.complexdataobjects_v1_8.*;
 import KedenApp.dto.xsd_gen.eec.m.ca.simpledataobjects_v1_8.PaymentAmountWithCurrencyType;
 import KedenApp.dto.xsd_gen.eec.m.complexdataobjects_v0_4.*;
@@ -23,10 +24,12 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -34,6 +37,8 @@ import java.util.List;
 public class KedenAppService {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    double massSumAll = 0.0;
+    double kztSumAll = 0.0;
 
     public void genXml(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
         try {
@@ -90,20 +95,22 @@ public class KedenAppService {
 
     public ECGoodsShipmentDetailsType getECGoodsShipmentDetailsType(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
 
-        // итоговая масса по всем получателям
-        UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
-        unifiedGrossMassMeasureEnd
-                .setValue(BigDecimal.valueOf(1.6*ecHouseShipmentDetailsModel.getRecipients().size()));
-        // итоговая сумма по всем получателям в тенге
-        PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
-        caValueAmount
-                .setValue(BigDecimal.valueOf(24912.02*ecHouseShipmentDetailsModel.getRecipients().size()));
-
         ECGoodsShipmentDetailsType ecGoodsShipmentDetails = new ECGoodsShipmentDetailsType();
         ecGoodsShipmentDetails
                 .setConsignorDetails(getConsignorDetails(ecHouseShipmentDetailsModel.getSender())) // отправитель
                 .setConsigneeDetails(getConsigneeDetails(ecHouseShipmentDetailsModel.getRecipientCompany())) // фирма получатель
-                .setEcHouseShipmentDetails(getEcHouseShipmentDetails(ecHouseShipmentDetailsModel)) // тут список получателей и посылок
+                .setEcHouseShipmentDetails(getEcHouseShipmentDetails(ecHouseShipmentDetailsModel)); // тут список получателей и посылок
+
+        // итоговая масса по всем получателям
+        UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
+        unifiedGrossMassMeasureEnd
+                .setValue(BigDecimal.valueOf(massSumAll).setScale(1, RoundingMode.HALF_UP));
+        // итоговая сумма по всем получателям в тенге
+        PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
+        caValueAmount
+                .setValue(BigDecimal.valueOf(kztSumAll).setScale(2, RoundingMode.HALF_UP));
+
+        ecGoodsShipmentDetails
                 .setUnifiedGrossMassMeasure(unifiedGrossMassMeasureEnd)
                 .setCaValueAmount(caValueAmount);
         return ecGoodsShipmentDetails;
@@ -290,14 +297,19 @@ public class KedenAppService {
         return consigneeDetails;
     }
 
-
+    /**
+     * Заполняем посылки по физ лицам
+     * @param ecHouseShipmentDetailsModel данные с формы
+     * @return данные по посылкам у физ лицам
+     */
     public List<ECHouseShipmentDetailsType> getEcHouseShipmentDetails(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
         List<ECHouseShipmentDetailsType> ecHouseShipmentDetails = new ArrayList<>();
-        List<Recipient> recipients = ecHouseShipmentDetailsModel.getRecipients();
+        List<RecipientKeden> recipients = ecHouseShipmentDetailsModel.getRecipients();
+        int consignmentItemOrdinalIndex = 1; // номер всех посылок в декларации
         for (int i = 0; i < recipients.size(); i++) {
-            Recipient recipient = recipients.get(i);
+            RecipientKeden recipient = recipients.get(i);
 
-            //данные по получателю
+            // данные по получателю
             DocDetailsV4Type transportDocumentDetails = new DocDetailsV4Type();
             transportDocumentDetails
                     .setDocId("TR")
@@ -310,7 +322,7 @@ public class KedenAppService {
             houseWaybillDetails
                     .setDocKindCode(docKindCode)
                     .setDocName("Индивидуальная накладная при экспресс-доставке")
-                    .setDocId("123") // сюда встявлять номер декларации с формы
+                    .setDocId(UUID.randomUUID().toString())
                     .setDocCreationDate(LocalDate.now().format(formatter));
 
             UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
@@ -355,60 +367,72 @@ public class KedenAppService {
                     .setIdentityDocV3Details(identityDocV3Details)
                     .setSubjectAddressDetails(subjectAddressDetails)
                     .setCommunicationDetails(communicationDetails);
-            //закончились данные по получателю
+            // закончились данные по получателю
 
+            // данные по посылкам
             List<ECGoodsItemDetailsType> ecGoodsItemDetails = new ArrayList<>();
-            ECGoodsItemDetailsType ecGoodsItemDetailsType = new ECGoodsItemDetailsType();
-            ecGoodsItemDetailsType
-                    .setConsignmentItemOrdinal(BigInteger.valueOf(1));
-            ecGoodsItemDetailsType
-                    .setHmConsignmentItemNumber(BigDecimal.valueOf(1));
-            ecGoodsItemDetailsType
-                    .setCommodityCode("950300");
-            List<String> goodsDescriptionText = new ArrayList<>();
-            goodsDescriptionText.add("Игрушки, Игры, реквизит запчасти");
-            ecGoodsItemDetailsType
-                    .setGoodsDescriptionText(goodsDescriptionText);
+            List<PackageKeden> packageList = recipient.getPackages();
+            double massSum = 0.0;
+            double kztSum = 0.0;
+            for (int j = 0; j < packageList.size(); j++) {
+                PackageKeden packageKeden = packageList.get(j);
+                ECGoodsItemDetailsType ecGoodsItemDetailsType = new ECGoodsItemDetailsType();
+                ecGoodsItemDetailsType
+                        .setConsignmentItemOrdinal(BigInteger.valueOf(consignmentItemOrdinalIndex));
+                consignmentItemOrdinalIndex++;
+                ecGoodsItemDetailsType
+                        .setHmConsignmentItemNumber(BigDecimal.valueOf(j+1));
+                ecGoodsItemDetailsType
+                        .setCommodityCode(packageKeden.getCommodityCode());
+                List<String> goodsDescriptionText = new ArrayList<>();
+                goodsDescriptionText.add(packageKeden.getGoodsDescriptionText());
+                ecGoodsItemDetailsType
+                        .setGoodsDescriptionText(goodsDescriptionText);
 
-            UnifiedPhysicalMeasureType goodsMeasure = new UnifiedPhysicalMeasureType();
-            goodsMeasure
-                    .setMeasurementUnitCode("796")
-                    .setValue(BigDecimal.valueOf(1));
-            GoodsMeasureDetailsType goodsMeasureDetails = new GoodsMeasureDetailsType();
-            goodsMeasureDetails
-                    .setGoodsMeasure(goodsMeasure);
-            ecGoodsItemDetailsType
-                    .setGoodsMeasureDetails(goodsMeasureDetails);
-            UnifiedPhysicalMeasureType unifiedGrossMassMeasure = new UnifiedPhysicalMeasureType();
-            unifiedGrossMassMeasure
-                    .setValue(BigDecimal.valueOf(1.6));
-            ecGoodsItemDetailsType
-                    .setUnifiedGrossMassMeasure(unifiedGrossMassMeasure);
+                UnifiedPhysicalMeasureType goodsMeasure = new UnifiedPhysicalMeasureType();
+                goodsMeasure
+                        .setMeasurementUnitCode("796")
+                        .setValue(BigDecimal.valueOf(1));
+                GoodsMeasureDetailsType goodsMeasureDetails = new GoodsMeasureDetailsType();
+                goodsMeasureDetails
+                        .setGoodsMeasure(goodsMeasure);
+                ecGoodsItemDetailsType
+                        .setGoodsMeasureDetails(goodsMeasureDetails);
+                UnifiedPhysicalMeasureType unifiedGrossMassMeasure = new UnifiedPhysicalMeasureType();
+                unifiedGrossMassMeasure
+                        .setValue(BigDecimal.valueOf(packageKeden.getUnifiedGrossMassMeasure()));
+                ecGoodsItemDetailsType
+                        .setUnifiedGrossMassMeasure(unifiedGrossMassMeasure);
+                massSum = massSum + packageKeden.getUnifiedGrossMassMeasure();
 
-            List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
-            PaymentAmountWithCurrencyType paymentAmountUSD = new PaymentAmountWithCurrencyType();
-            paymentAmountUSD
-                    .setCurrencyCode("USD")
-                    .setValue(BigDecimal.valueOf(49.99));
-            caValueAmountWithCurrencyTypeList.add(paymentAmountUSD);
-            PaymentAmountWithCurrencyType paymentAmountKZT = new PaymentAmountWithCurrencyType();
-            paymentAmountKZT
-                    .setCurrencyCode("KZT")
-                    .setValue(BigDecimal.valueOf(24912.02));
-            caValueAmountWithCurrencyTypeList.add(paymentAmountKZT);
+                        List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
+                PaymentAmountWithCurrencyType paymentAmountUSD = new PaymentAmountWithCurrencyType();
+                paymentAmountUSD
+                        .setCurrencyCode(ecHouseShipmentDetailsModel.getCurrencyName())
+                        .setValue(BigDecimal.valueOf(packageKeden.getCurrencyInAmount()));
+                caValueAmountWithCurrencyTypeList.add(paymentAmountUSD);
+                PaymentAmountWithCurrencyType paymentAmountKZT = new PaymentAmountWithCurrencyType();
+                paymentAmountKZT
+                        .setCurrencyCode("KZT")
+                        .setValue(BigDecimal.valueOf(packageKeden.getCurrencyInAmount() * ecHouseShipmentDetailsModel.getCurrency()).setScale(2, RoundingMode.HALF_UP));
+                caValueAmountWithCurrencyTypeList.add(paymentAmountKZT);
+                kztSum = kztSum + (packageKeden.getCurrencyInAmount() * ecHouseShipmentDetailsModel.getCurrency());
 
-            ecGoodsItemDetailsType
-                    .setCaValueAmount(caValueAmountWithCurrencyTypeList);
-            ecGoodsItemDetails.add(ecGoodsItemDetailsType);
 
+                ecGoodsItemDetailsType
+                        .setCaValueAmount(caValueAmountWithCurrencyTypeList);
+                ecGoodsItemDetails.add(ecGoodsItemDetailsType);
+            }
+
+            // итоговый вес и цена по получателю
             UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
             unifiedGrossMassMeasureEnd
-                    .setValue(BigDecimal.valueOf(1.6));
-
+                    .setValue(BigDecimal.valueOf(massSum));
+            massSumAll = massSumAll + massSum;
             PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
             caValueAmount
-                    .setValue(BigDecimal.valueOf(24912.02));
-
+                    .setValue(BigDecimal.valueOf(kztSum).setScale(1, RoundingMode.HALF_UP));
+            kztSumAll = kztSumAll + kztSum;
             ECHouseShipmentDetailsType ecHouseShipmentDetailsType = new ECHouseShipmentDetailsType();
             ecHouseShipmentDetailsType
                     .setObjectOrdinal(BigInteger.valueOf(i+1))
@@ -416,7 +440,7 @@ public class KedenAppService {
                     .setHouseWaybillDetails(houseWaybillDetails)
                     .setConsignorDetails(getConsignorDetails(ecHouseShipmentDetailsModel.getSender())) // тут нужен правильный индекс с формы
                     .setConsigneeDetails(consigneeDetails)          // данные получателя физ лицо
-                    .setEcGoodsItemDetails(ecGoodsItemDetails)        // данные о посыылке
+                    .setEcGoodsItemDetails(ecGoodsItemDetails)        // данные о посылке
                     .setUnifiedGrossMassMeasure(unifiedGrossMassMeasureEnd)   // итоговая масса
                     .setCaValueAmount(caValueAmount);            // итоговая сумма в тенге
             ecHouseShipmentDetails.add(ecHouseShipmentDetailsType);

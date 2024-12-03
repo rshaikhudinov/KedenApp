@@ -1,17 +1,14 @@
 package KedenApp.controller;
 
 import KedenApp.dto.EcHouseShipmentDetailsModel;
-import KedenApp.dto.Recipient;
+import KedenApp.dto.PackageKeden;
+import KedenApp.dto.RecipientKeden;
 import KedenApp.service.KedenAppService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.Enumeration;
 
 @Controller
 @Slf4j
@@ -40,7 +37,7 @@ public class KedenAppController {
     public String submitShipmentDetails(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
         if (shipmentDetails.getRecipients() != null && !shipmentDetails.getRecipients().isEmpty()) {
             System.out.println("Recipients:");
-            for (Recipient recipient : shipmentDetails.getRecipients()) {
+            for (RecipientKeden recipient : shipmentDetails.getRecipients()) {
                 System.out.println(" - FIO: " + recipient.getFio());
                 System.out.println(" - IIN: " + recipient.getIin());
                 System.out.println(" - Doc ID: " + recipient.getDocId());
@@ -51,6 +48,11 @@ public class KedenAppController {
                 System.out.println(" - Building Number: " + recipient.getBuildingNumberId());
                 System.out.println(" - Room Number: " + recipient.getRoomNumberId());
                 System.out.println(" - Phone: " + recipient.getPhone());
+                if (recipient.getPackages() != null && !recipient.getPackages().isEmpty()) {
+                    for (PackageKeden packageKeden : recipient.getPackages()) {
+                        System.out.println(" - вес посылки: " + packageKeden.getUnifiedGrossMassMeasure());
+                    }
+                }
             }
         } else {
             System.out.println("No recipients provided.");

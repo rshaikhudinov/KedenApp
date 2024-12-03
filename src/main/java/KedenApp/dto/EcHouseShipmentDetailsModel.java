@@ -9,7 +9,9 @@ import java.util.List;
 @Accessors(chain = true)
 public class EcHouseShipmentDetailsModel {
 
+    private String currencyName;
+    private Double currency;
     private int sender;
     private int recipientCompany;
-    private List<Recipient> recipients;
+    private List<RecipientKeden> recipients;
 }

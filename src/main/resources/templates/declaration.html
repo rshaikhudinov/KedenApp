@@ -8,6 +8,15 @@
 </head>
 <body>
     <form id="myForm">
+        <label for="currencyName">Выберите валюту:</label>
+        <select id="currencyName" name="currencyName">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+        </select>  <br>
+
+        <label for="currency">Курс валюты:</label>
+        <input type="text" id="currency" name="currency" required />
+
         <label for="sender">Выберите отправителя:</label>
         <select id="sender" name="sender">
             <option value="1">OEC GMBH</option>
@@ -69,8 +78,30 @@
 
                 <div class="form-group">
                     <label for="phone">Телефон:</label>
-                    <input type="text" id="phone" name="recipients[0].phone" placeholder="+7 777 77777" required />
+                    <input type="text" id="phone" name="recipients[0].phone" placeholder="+7 777 7777777" required />
                 </div>
+
+                <div id="packageFields-0">
+                    <div class="package">
+                        <div class="form-group">
+                            <label for="commodityCode">Код ТНВЭД:</label>
+                            <input type="text" id="commodityCode" name="recipients[0].packages[0].commodityCode" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="goodsDescriptionText">Описание:</label>
+                            <input type="text" id="goodsDescriptionText" name="recipients[0].packages[0].goodsDescriptionText" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="unifiedGrossMassMeasure">Вес:</label>
+                            <input type="text" id="unifiedGrossMassMeasure" name="recipients[0].packages[0].unifiedGrossMassMeasure" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="currencyInAmount">Сумма:</label>
+                            <input type="text" id="currencyInAmount" name="recipients[0].packages[0].currencyInAmount" required />
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="addPackageButton" data-recipient-index="0">Добавить посылку</button>
             </div>
         </div>
         <button type="button" id="addRecipient">Добавить получателя</button>

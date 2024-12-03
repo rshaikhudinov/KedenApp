@@ -1,53 +1,111 @@
-document.getElementById('addRecipient').addEventListener('click', function() {
+let recipientCount = 0;
+
+document.getElementById('addRecipient').addEventListener('click', function () {
     const recipientFields = document.getElementById('recipientFields');
-    const newRecipientIndex = recipientFields.children.length;
+
+    // Увеличиваем счетчик получателей
+    recipientCount++;
 
     const recipientTemplate = `
-        <div class="recipient">
+        <div class="recipient" data-recipient-index="${recipientCount}">
             <div class="form-group">
                 <label for="fio">ФИО:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].fio" required />
+                <input type="text" name="recipients[${recipientCount}].fio" required />
             </div>
             <div class="form-group">
                 <label for="iin">ИИН:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].iin" required pattern="\\d{12}" title="Введите 12-значный ИИН" />
+                <input type="text" name="recipients[${recipientCount}].iin" required pattern="\\d{12}" title="Введите 12-значный ИИН" />
             </div>
             <div class="form-group">
                 <label for="docId">Номер удостоверения:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].docId" required />
+                <input type="text" name="recipients[${recipientCount}].docId" required />
             </div>
             <div class="form-group">
                 <label for="docCreationDate">Дата выдачи документа:</label>
-                <input type="date" name="recipients[${newRecipientIndex}].docCreationDate" required />
+                <input type="date" name="recipients[${recipientCount}].docCreationDate" required />
             </div>
             <div class="form-group">
                 <label for="regionName">Регион:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].regionName" required />
+                <input type="text" name="recipients[${recipientCount}].regionName" required />
             </div>
             <div class="form-group">
                 <label for="cityName">Город:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].cityName" required />
+                <input type="text" name="recipients[${recipientCount}].cityName" required />
             </div>
             <div class="form-group">
                 <label for="streetName">Улица:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].streetName" required />
+                <input type="text" name="recipients[${recipientCount}].streetName" required />
             </div>
             <div class="form-group">
                 <label for="buildingNumberId">Дом:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].buildingNumberId" required />
+                <input type="text" name="recipients[${recipientCount}].buildingNumberId" required />
             </div>
             <div class="form-group">
                 <label for="roomNumberId">Квартира:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].roomNumberId" />
+                <input type="text" name="recipients[${recipientCount}].roomNumberId" />
             </div>
             <div class="form-group">
                 <label for="phone">Телефон:</label>
-                <input type="text" name="recipients[${newRecipientIndex}].phone" placeholder="+7 777 77777" required />
+                <input type="text" name="recipients[${recipientCount}].phone" placeholder="+7 777 7777777" required />
             </div>
+            <div id="packageFields-${recipientCount}">
+                <div class="package">
+                    <div class="form-group">
+                        <label for="commodityCode">Код ТНВЭД:</label>
+                        <input type="text" name="recipients[${recipientCount}].packages[0].commodityCode" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="goodsDescriptionText">Описание:</label>
+                        <input type="text" name="recipients[${recipientCount}].packages[0].goodsDescriptionText" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="unifiedGrossMassMeasure">Вес:</label>
+                        <input type="text" name="recipients[${recipientCount}].packages[0].unifiedGrossMassMeasure" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="currencyInAmount">Сумма:</label>
+                        <input type="text" name="recipients[${recipientCount}].packages[0].currencyInAmount" required />
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="addPackageButton" data-recipient-index="${recipientCount}">Добавить посылку</button>
         </div>
     `;
 
     const newRecipientDiv = document.createElement('div');
     newRecipientDiv.innerHTML = recipientTemplate;
     recipientFields.appendChild(newRecipientDiv);
+});
+
+document.getElementById('recipientFields').addEventListener('click', function (event) {
+    if (event.target.classList.contains('addPackageButton')) {
+        const recipientIndex = event.target.dataset.recipientIndex;
+        const packageFields = document.getElementById(`packageFields-${recipientIndex}`);
+        const newPackageIndex = packageFields.children.length;
+
+        const packageTemplate = `
+            <div class="package">
+                <div class="form-group">
+                    <label for="commodityCode">Код ТНВЭД:</label>
+                    <input type="text" name="recipients[${recipientIndex}].packages[${newPackageIndex}].commodityCode" required />
+                </div>
+                <div class="form-group">
+                    <label for="goodsDescriptionText">Описание:</label>
+                    <input type="text" name="recipients[${recipientIndex}].packages[${newPackageIndex}].goodsDescriptionText" required />
+                </div>
+                <div class="form-group">
+                    <label for="unifiedGrossMassMeasure">Вес:</label>
+                    <input type="text" name="recipients[${recipientIndex}].packages[${newPackageIndex}].unifiedGrossMassMeasure" required />
+                </div>
+                <div class="form-group">
+                    <label for="currencyInAmount">Сумма:</label>
+                    <input type="text" name="recipients[${recipientIndex}].packages[${newPackageIndex}].currencyInAmount" required />
+                </div>
+            </div>
+        `;
+
+        const newPackageDiv = document.createElement('div');
+        newPackageDiv.innerHTML = packageTemplate;
+        packageFields.appendChild(newPackageDiv);
+    }
 });
