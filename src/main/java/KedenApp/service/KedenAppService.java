@@ -431,7 +431,7 @@ public class KedenAppService {
             massSumAll = massSumAll + massSum;
             PaymentAmountWithCurrencyType caValueAmount = new PaymentAmountWithCurrencyType();
             caValueAmount
-                    .setValue(BigDecimal.valueOf(kztSum).setScale(1, RoundingMode.HALF_UP));
+                    .setValue(BigDecimal.valueOf(kztSum).setScale(2, RoundingMode.HALF_UP));
             kztSumAll = kztSumAll + kztSum;
             ECHouseShipmentDetailsType ecHouseShipmentDetailsType = new ECHouseShipmentDetailsType();
             ecHouseShipmentDetailsType
