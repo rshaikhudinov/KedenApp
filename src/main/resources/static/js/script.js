@@ -86,7 +86,7 @@ document.getElementById('recipientFields').addEventListener('click', function (e
         const newPackageIndex = packageFields.querySelectorAll('.package').length;
 
         const packageTemplate = `
-            <h3>Посылка ${newPackageIndex}</h3>
+            <h3>Посылка ${newPackageIndex+1}</h3>
             <div class="package">
                 <div class="form-group">
                     <label for="commodityCode">Код ТНВЭД:</label>
