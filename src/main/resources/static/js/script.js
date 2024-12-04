@@ -7,6 +7,7 @@ document.getElementById('addRecipient').addEventListener('click', function () {
     recipientCount++;
 
     const recipientTemplate = `
+        <h3>Получатель ${recipientCount+1}</h3>
         <div class="recipient" data-recipient-index="${recipientCount}">
             <div class="form-group">
                 <label for="fio">ФИО:</label>
@@ -49,6 +50,7 @@ document.getElementById('addRecipient').addEventListener('click', function () {
                 <input type="text" name="recipients[${recipientCount}].phone" placeholder="+7 777 7777777" required />
             </div>
             <div id="packageFields-${recipientCount}">
+                <h3>Посылка 1</h3>
                 <div class="package">
                     <div class="form-group">
                         <label for="commodityCode">Код ТНВЭД:</label>
@@ -84,6 +86,7 @@ document.getElementById('recipientFields').addEventListener('click', function (e
         const newPackageIndex = packageFields.children.length;
 
         const packageTemplate = `
+            <h3>Посылка ${newPackageIndex}</h3>
             <div class="package">
                 <div class="form-group">
                     <label for="commodityCode">Код ТНВЭД:</label>

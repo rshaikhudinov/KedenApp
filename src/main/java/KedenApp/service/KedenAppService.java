@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -64,8 +65,17 @@ public class KedenAppService {
             StringWriter writer = new StringWriter();
             marshaller.marshal(element, writer);
 
-            String xmlString = writer.toString();
-            try (FileWriter fileWriter = new FileWriter("express_cargo_declaration.xml")) {
+            int index = 0;
+            String fileName;
+            File file;
+            do {
+                index++;
+                fileName = "express_cargo_declaration_" + LocalDate.now().format(formatter) + "_" + index + ".xml";
+                file = new File(fileName);
+            } while (file.exists());
+
+            try (FileWriter fileWriter = new FileWriter(fileName)) {
+                String xmlString = writer.toString();
                 fileWriter.write(xmlString);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
