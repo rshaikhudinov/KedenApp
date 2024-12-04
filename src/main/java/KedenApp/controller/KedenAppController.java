@@ -51,6 +51,7 @@ public class KedenAppController {
                 if (recipient.getPackages() != null && !recipient.getPackages().isEmpty()) {
                     for (PackageKeden packageKeden : recipient.getPackages()) {
                         System.out.println(" - вес посылки: " + packageKeden.getUnifiedGrossMassMeasure());
+                        System.out.println(" - сумма посылки: " + packageKeden.getCurrencyInAmount());
                     }
                 }
             }

@@ -83,7 +83,7 @@ document.getElementById('recipientFields').addEventListener('click', function (e
     if (event.target.classList.contains('addPackageButton')) {
         const recipientIndex = event.target.dataset.recipientIndex;
         const packageFields = document.getElementById(`packageFields-${recipientIndex}`);
-        const newPackageIndex = packageFields.children.length;
+        const newPackageIndex = packageFields.querySelectorAll('.package').length;
 
         const packageTemplate = `
             <h3>Посылка ${newPackageIndex}</h3>
