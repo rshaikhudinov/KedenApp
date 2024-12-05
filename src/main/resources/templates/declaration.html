@@ -117,7 +117,7 @@
     var formData = $(this).serialize();
 
     $.ajax({
-      url: "/test",
+      url: "/submitShipmentDetails",
       type: "POST",
       data: formData,
       success: function(response) {

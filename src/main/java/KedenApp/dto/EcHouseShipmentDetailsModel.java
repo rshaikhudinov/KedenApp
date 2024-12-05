@@ -3,6 +3,7 @@ package KedenApp.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -10,7 +11,7 @@ import java.util.List;
 public class EcHouseShipmentDetailsModel {
 
     private String currencyName;
-    private Double currency;
+    private BigDecimal currency;
     private int sender;
     private int recipientCompany;
     private List<RecipientKeden> recipients;

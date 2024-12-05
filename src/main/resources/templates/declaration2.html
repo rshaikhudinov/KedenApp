@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таможенная декларация</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/styles2.css">
+</head>
+<body>
+    <h1>Таможенная декларация</h1>
+
+    <form id="declaration-form">
+        <label for="currencyName">Выберите валюту:</label>
+        <select id="currencyName" name="currencyName">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+        </select>  <br>
+
+        <label for="currency">Курс валюты:</label>
+        <input type="text" id="currency" name="currency" required />
+
+        <label for="sender">Выберите отправителя:</label>
+        <select id="sender" name="sender">
+            <option value="1">OEC GMBH</option>
+            <option value="2">OST EXPRESS COURIER GMBH</option>
+            <option value="3">FTL GMBH</option>
+        </select>  <br>
+        <label for="recipientCompany">Выберите фирму получателя:</label>
+        <select id="recipientCompany" name="recipientCompany">
+            <option value="1">POSTAL EXPRESS</option>
+            <option value="2">ТОО "DISALES GROUP"</option>
+        </select>  <br>
+
+        <h2>Получатели</h2>
+        <div id="recipients">
+        </div>
+
+        <button type="button" id="addRecipient">Добавить получателя</button>
+        <button type="submit">Отправить декларацию</button>
+    </form>
+
+</body>
+</html>
+<script th:inline="javascript">
+    $(document).ready(function() {
+  $("#myForm").submit(function(event) {
+    event.preventDefault();
+    var formData = $(this).serialize();
+
+    $.ajax({
+      url: "/submitDeclaration",
+      type: "POST",
+      data: formData,
+      success: function(response) {
+        // Обработка ответа сервера
+        console.log(response);
+        alert(response);
+      }
+    });
+  });
+});
+</script>
+<script src="/js/script2.js"></script>
+</html>

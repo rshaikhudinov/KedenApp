@@ -23,42 +23,53 @@ public class KedenAppController {
         return "declaration";
     }
 
-    /*@PostMapping("/test")
-    public void test(@RequestParam(name="fullName", required=false) String fullName,
-                     @RequestParam(name="sender", required=false) int sender,
-                     @RequestParam(name="recipient", required=false) int recipient) {
-        System.out.println("Полное имя: " + fullName);
-        System.out.println("Отправитель: " + sender);
-        System.out.println("Получатель: " + recipient);
-    }*/
-
-    @PostMapping("/test")
+    @PostMapping("/submitShipmentDetails")
     @ResponseBody
     public String submitShipmentDetails(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
         if (shipmentDetails.getRecipients() != null && !shipmentDetails.getRecipients().isEmpty()) {
-            System.out.println("Recipients:");
+            log.info("Текущий курс: " + shipmentDetails.getCurrency());
+            log.info("Recipients:");
             for (RecipientKeden recipient : shipmentDetails.getRecipients()) {
-                System.out.println(" - FIO: " + recipient.getFio());
-                System.out.println(" - IIN: " + recipient.getIin());
-                System.out.println(" - Doc ID: " + recipient.getDocId());
-                System.out.println(" - Doc Creation Date: " + recipient.getDocCreationDate());
-                System.out.println(" - Region Name: " + recipient.getRegionName());
-                System.out.println(" - City Name: " + recipient.getCityName());
-                System.out.println(" - Street Name: " + recipient.getStreetName());
-                System.out.println(" - Building Number: " + recipient.getBuildingNumberId());
-                System.out.println(" - Room Number: " + recipient.getRoomNumberId());
-                System.out.println(" - Phone: " + recipient.getPhone());
+                log.info(" - FIO: {}", recipient.getFio());
+                log.info(" - IIN: {}", recipient.getIin());
+                log.info(" - Doc ID: {}", recipient.getDocId());
+                log.info(" - Doc Creation Date: {}", recipient.getDocCreationDate());
+                log.info(" - Region Name: {}", recipient.getRegionName());
+                log.info(" - City Name: {}", recipient.getCityName());
+                log.info(" - Street Name: {}", recipient.getStreetName());
+                log.info(" - Building Number: {}", recipient.getBuildingNumberId());
+                log.info(" - Room Number: {}", recipient.getRoomNumberId());
+                log.info(" - Phone: {}", recipient.getPhone());
+
                 if (recipient.getPackages() != null && !recipient.getPackages().isEmpty()) {
                     for (PackageKeden packageKeden : recipient.getPackages()) {
-                        System.out.println(" - вес посылки: " + packageKeden.getUnifiedGrossMassMeasure());
-                        System.out.println(" - сумма посылки: " + packageKeden.getCurrencyInAmount());
+                        log.info("   - Вес посылки: {}", packageKeden.getUnifiedGrossMassMeasure());
+                        log.info("   - Сумма посылки: {}", packageKeden.getCurrencyInAmount());
                     }
                 }
             }
         } else {
-            System.out.println("No recipients provided.");
+            log.info("No recipients provided.");
         }
-        kedenAppService.genXml(shipmentDetails);
-        return "XML файл успешно сгенерирован";
+
+        return kedenAppService.genXml(shipmentDetails);
+    }
+
+
+    @GetMapping("/declaration2")
+    public String setDeclaration2(Model model) {
+        return "declaration2";
+    }
+
+    @GetMapping("/pdfTest")
+    public String pdfTest(Model model) {
+        return "pdfTest";
+    }
+
+    @PostMapping("/submitDeclaration")
+    @ResponseBody
+    public String submitDeclaration(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
+
+        return "декларация отправлена";
     }
 }
