@@ -1,11 +1,7 @@
 package KedenApp.controller;
 
 import KedenApp.core.KedenAppException;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
+import KedenApp.service.PDFService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +20,19 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class PdfController {
 
+    private final PDFService pdfService;
+
+
     @PostMapping("/generatePdf")
+    public ResponseEntity<byte[]> generatePdf(
+            @RequestParam("fullName") String fullName,
+            @RequestParam("photo") MultipartFile photo) {
+
+        return pdfService.generatePdf(fullName, photo);
+    }
+
+
+    /*@PostMapping("/generatePdf")
     public ResponseEntity<byte[]> generatePdf(
             @RequestParam("fullName") String fullName,
             @RequestParam("photo") MultipartFile photo) {
@@ -55,5 +63,5 @@ public class PdfController {
         headers.add("Content-Type", "application/pdf");
 
         return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
-    }
+    }*/
 }
