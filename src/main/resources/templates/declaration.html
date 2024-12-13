@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <form id="myForm">
+    <form id="myForm" enctype="multipart/form-data">
         <label for="currencyName">Выберите валюту:</label>
         <select id="currencyName" name="currencyName">
             <option value="EUR">EUR</option>
@@ -28,6 +28,12 @@
             <option value="1">POSTAL EXPRESS</option>
             <option value="2">ТОО "DISALES GROUP"</option>
         </select>  <br>
+
+        <label for="docIdDeclaration">Номер накладной:</label>
+        <input type="text" id="docIdDeclaration" name="docIdDeclaration" required />
+
+        <label for="docCreationDateDeclaration">Дата накладной:</label>
+        <input type="date" id="docCreationDateDeclaration" name="docCreationDateDeclaration" required />
 
         <div id="recipientFields">
             <h3>Получатель 1</h3>
@@ -82,6 +88,11 @@
                     <input type="text" id="phone" name="recipients[0].phone" placeholder="+7 777 7777777" required />
                 </div>
 
+                <div class="form-group">
+                    <label for="photo">Фото документа:</label>
+                    <input type="file" id="photo" name="recipients[0].photo" accept="image/*" required />
+                </div>
+
                 <div id="packageFields-0">
                     <h3>Посылка 1</h3>
                     <div class="package">
@@ -112,22 +123,35 @@
 </body>
 <script th:inline="javascript">
     $(document).ready(function() {
-  $("#myForm").submit(function(event) {
-    event.preventDefault();
-    var formData = $(this).serialize();
+     $("#myForm").submit(function(event) {
+       event.preventDefault();
 
-    $.ajax({
-      url: "/submitShipmentDetails",
-      type: "POST",
-      data: formData,
-      success: function(response) {
-        // Обработка ответа сервера
-        console.log(response);
-        alert(response);
-      }
-    });
-  });
-});
+       // Создаем объект FormData для отправки файлов
+       var formData = new FormData(this);
+
+        if (!$('#photo')[0].files.length) {
+                alert("Пожалуйста, загрузите файл.");
+                return;
+            }
+
+       $.ajax({
+         url: "/submitShipmentDetails",
+         type: "POST",
+         data: formData,
+         processData: false, // Отключаем обработку данных
+         contentType: false, // Отключаем автоматическую установку заголовка Content-Type
+         success: function(response) {
+           // Обработка ответа сервера
+           console.log(response);
+           alert(response);
+         },
+         error: function(xhr, status, error) {
+           console.error("Ошибка:", error);
+           alert("Произошла ошибка: " + error);
+         }
+       });
+     });
+   });
 </script>
 <script src="/js/script.js"></script>
 </html>

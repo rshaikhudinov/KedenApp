@@ -3,5 +3,8 @@ spring:
     banner-mode: off
   application:
     name: KedenApp
+  servlet:
+    multipart:
+      max-file-size: 100MB
 server:
   port: 9500

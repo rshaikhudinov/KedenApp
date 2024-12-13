@@ -20,14 +20,15 @@ import jakarta.xml.bind.Marshaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,11 +40,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KedenAppService {
 
+    private final PDFService pdfService;
+
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     BigDecimal massSumAll = BigDecimal.valueOf(0.0);
     BigDecimal kztSumAll = BigDecimal.valueOf(0.0);
 
-    public String genXml(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
+    public String createDeclaration(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
+        // создание папки для хранения
+        String folderName = createFolder();
+        // создание XML
+        genXml(ecHouseShipmentDetailsModel, folderName);
+        // создание PDF
+        pdfService.generatePdf(ecHouseShipmentDetailsModel, folderName);
+
+        return "Файлы для декларации успешно созданы";
+    }
+
+    public void genXml(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel, String folderName){
         try {
             ObjectFactory objectFactory = new ObjectFactory();
 
@@ -67,19 +81,11 @@ public class KedenAppService {
             StringWriter writer = new StringWriter();
             marshaller.marshal(element, writer);
 
-            int index = 0;
-            String fileName;
-            File file;
-            do {
-                index++;
-                fileName = "express_cargo_declaration_" + LocalDate.now().format(formatter) + "_" + index + ".xml";
-                file = new File(fileName);
-            } while (file.exists());
-
-            try (FileWriter fileWriter = new FileWriter(fileName)) {
+            String fileName = "express_cargo_declaration.xml";
+            try (FileWriter fileWriter = new FileWriter(folderName + "/" + fileName)) {
                 String xmlString = writer.toString();
                 fileWriter.write(xmlString);
-                return "XML файл "+ fileName + " успешно сгенерирован";
+                log.info("XML файл {} успешно сгенерирован", fileName);
             } catch (IOException e) {
                 log.error(e.getMessage());
                 throw new KedenAppException("Ошибка при сохранении файла декларации:  " + e.getMessage());
@@ -330,8 +336,8 @@ public class KedenAppService {
             // данные по получателю
             DocDetailsV4Type transportDocumentDetails = new DocDetailsV4Type();
             transportDocumentDetails
-                    .setDocId("TR")
-                    .setDocCreationDate(LocalDate.now().format(formatter));
+                    .setDocId(ecHouseShipmentDetailsModel.getDocIdDeclaration())
+                    .setDocCreationDate(ecHouseShipmentDetailsModel.getDocCreationDateDeclaration());
 
             UnifiedCode20Type docKindCode = new UnifiedCode20Type();
             docKindCode
@@ -524,5 +530,27 @@ public class KedenAppService {
                 .setIdentityDocV3Details(identityDocV3Details)
                 .setPowerOfAttorneyDetails(powerOfAttorneyDetails);
         return signatoryPersonV2Details;
+    }
+
+    public String createFolder() {
+        String baseName = "express_cargo_declaration_";
+        String dateString = LocalDate.now().format(formatter);
+        int index = 0;
+        Path folderPath;
+
+        do {
+            index++;
+            folderPath = Paths.get(baseName + dateString + "_" + index);
+        } while (Files.exists(folderPath));
+
+        try {
+            Files.createDirectory(folderPath);
+            log.info("Создана папка с именем {}", folderPath);
+        } catch (IOException e) {
+            log.error("Не удалось создать папку с именем {}", folderPath, e);
+            throw new KedenAppException("Не удалось создать папку: " + folderPath + " " + e.getMessage());
+        }
+
+        return folderPath.toString();
     }
 }

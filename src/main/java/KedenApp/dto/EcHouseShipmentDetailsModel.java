@@ -14,5 +14,7 @@ public class EcHouseShipmentDetailsModel {
     private BigDecimal currency;
     private int sender;
     private int recipientCompany;
+    private String docIdDeclaration;
+    private String docCreationDateDeclaration;
     private List<RecipientKeden> recipients;
 }

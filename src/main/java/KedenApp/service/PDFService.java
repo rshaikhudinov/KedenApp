@@ -1,11 +1,20 @@
 package KedenApp.service;
 
 import KedenApp.core.KedenAppException;
+import KedenApp.dto.EcHouseShipmentDetailsModel;
+import KedenApp.dto.PackageKeden;
+import KedenApp.dto.RecipientKeden;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -13,74 +22,278 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
-import org.springframework.http.HttpHeaders;
+
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class PDFService {
 
-
-    public ResponseEntity<byte[]> generatePdf(String fullName, MultipartFile photo) {
+    public void generatePdf(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel, String folderName) {
         try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));
-            Document document = new Document(pdfDoc);
+            List<RecipientKeden> recipients = ecHouseShipmentDetailsModel.getRecipients();
+            for (int i = 0; i < recipients.size(); i++) {
+                RecipientKeden recipientKeden = recipients.get(i);
 
-            // Создаем таблицу для основной части
-            Table table = new Table(UnitValue.createPercentArray(new float[]{1, 1}));
-            table.setWidth(UnitValue.createPercentValue(100));
+                // считаем количество посылок, вес и цену
+                List<PackageKeden> packages = recipientKeden.getPackages();
+                BigDecimal unifiedGrossMassMeasureAll = BigDecimal.valueOf(0.0);
+                BigDecimal currencyInAmountAll = BigDecimal.valueOf(0.0);
+                for (PackageKeden packageKeden : packages){
+                    unifiedGrossMassMeasureAll = unifiedGrossMassMeasureAll.add(packageKeden.getUnifiedGrossMassMeasure());
+                    currencyInAmountAll = currencyInAmountAll.add(packageKeden.getCurrencyInAmount());
+                }
 
-            // Первый столбец: информация в 4 блоках
-            String block1 = "Количество посылок\n2 шт";
-            String block2 = "Количество мест\n2";
-            String block3 = "Общий вес\n4 кг";
-            String block4 = "Общая стоимость\n45$";
-            String column1Content = String.join("\n", block1, block2, block3, block4);
-            table.addCell(new Paragraph(column1Content).setTextAlignment(TextAlignment.LEFT));
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));
+                Document document = new Document(pdfDoc);
 
-            // Второй столбец: два абзаца текста
-            String col2Text1 = "Я подтверждаю, что отправление не содержит предметы, запрещенные к пересылке. " +
-                    "С правилами пересылки ознакомлен.";
-            String col2Text2 = "Я подтверждаю, что мною прочитан договор оферты, подписан с помощью электронной " +
-                    "подписи посредством электронного кабинета, находящегося на сайте транспортной " +
-                    "компании, предоставившей услугу по доставке товара.";
-            table.addCell(new Paragraph(col2Text1 + "\n\n" + col2Text2).setTextAlignment(TextAlignment.LEFT));
+                // Загрузка шрифта из ресурсов
+                InputStream fontStream = getClass().getClassLoader().getResourceAsStream("static/fonts/Times New Roman.ttf");
+                if (fontStream == null) {
+                    throw new KedenAppException("Шрифт не найден в ресурсах");
+                }
 
-            // Добавляем таблицу в документ
-            document.add(table);
+                // Преобразование InputStream в массив байтов
+                byte[] fontBytes = fontStream.readAllBytes();
 
-            // Подписи в правом углу под таблицей
-            Table signaturesTable = new Table(UnitValue.createPercentArray(new float[]{1, 1}));
-            signaturesTable.setWidth(UnitValue.createPercentValue(100));
+                // Создание шрифта из массива байтов
+                PdfFont font = PdfFontFactory.createFont(fontBytes, "Cp1251");
+                document.setFont(font);
 
-            signaturesTable.addCell(new Paragraph("Фирма 1")
-                    .setTextAlignment(TextAlignment.RIGHT)
-                    .setMarginTop(20));
-            signaturesTable.addCell(new Paragraph("Подпись получателя")
-                    .setTextAlignment(TextAlignment.RIGHT)
-                    .setMarginTop(20));
+                // Создаем таблицу для основной части
+                Table tableHeader = new Table(UnitValue.createPercentArray(new float[]{1, 1}));
+                tableHeader.setWidth(UnitValue.createPercentValue(100));
 
-            document.add(signaturesTable);
+                // Первая строка: информация в 4 блоках
+                String block1 = "Количество посылок\n" + packages.size() + " шт";
+                String block2 = "Количество мест\n" + packages.size();
+                String block3 = "Общий вес\n" + unifiedGrossMassMeasureAll + "  кг";
+                String block4 = "Общая стоимость\n" + currencyInAmountAll + " " + ecHouseShipmentDetailsModel.getCurrencyName();
+                Table firstCellTable = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1, 1}));
+                firstCellTable
+                        .setWidth(UnitValue.createPercentValue(100))
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .addCell(
+                                new Cell()
+                                        .add(new Paragraph(block1))
+                                        .setBorder(Border.NO_BORDER)
+                        )
+                        .addCell(
+                                new Cell()
+                                        .add(new Paragraph(block2))
+                                        .setBorder(Border.NO_BORDER)
+                        )
+                        .addCell(
+                                new Cell()
+                                        .add(new Paragraph(block3))
+                                        .setBorder(Border.NO_BORDER)
+                        )
+                        .addCell(
+                                new Cell()
+                                        .add(new Paragraph(block4))
+                                        .setBorder(Border.NO_BORDER)
+                        );
+                tableHeader.addCell(
+                        new Cell(1, 2)
+                                .add(firstCellTable));
 
-            // Добавляем надпись в середине страницы
-            Paragraph subTitle = new Paragraph("Поднакладная")
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginTop(50);
-            document.add(subTitle);
+                // Вторая срока
+                tableHeader.addCell(
+                        new Cell()
+                                .add(new Paragraph("Я подтверждаю, что отправление не содержит предметы, запрещенные к пересылке. " +
+                                        "С правилами пересылки ознакомлен.")
+                                        .setTextAlignment(TextAlignment.LEFT))
+                                .add(new Paragraph("\n\nФирма")
+                                        .setTextAlignment(TextAlignment.RIGHT))
+                                .setFontSize(8)
+                );
+                tableHeader.addCell(
+                        new Cell()
+                                .add(new Paragraph("Я подтверждаю, что мною прочитан договор оферты, подписан с помощью электронной " +
+                                                "подписи посредством электронного кабинета, находящегося на сайте транспортной " +
+                                                "компании, предоставившей услугу по доставке товара.")
+                                        .setTextAlignment(TextAlignment.LEFT))
+                                .add(new Paragraph("подпись получателя")
+                                        .setTextAlignment(TextAlignment.RIGHT))
+                                .setFontSize(8)
+                );
+                document.add(tableHeader);
 
-            // Закрываем документ
-            document.close();
+                // Добавляем надпись в середине страницы
+                document.add(
+                        new Paragraph("Поднакладная")
+                                .setTextAlignment(TextAlignment.CENTER)
+                );
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=generated.pdf");
-            headers.add("Content-Type", "application/pdf");
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(outputStream.toByteArray());
+                // таблица с отправителем и получателем
+                Table tableSenderAndRecipient = new Table(UnitValue.createPercentArray(new float[]{1, 1}));
+                tableSenderAndRecipient
+                        .setWidth(UnitValue.createPercentValue(100))
+                        .setFontSize(8);
+                tableSenderAndRecipient.addCell(
+                        new Cell()
+                                .add(new Paragraph(getSender(ecHouseShipmentDetailsModel.getSender())))
+                                .setTextAlignment(TextAlignment.LEFT)
+                );
+                tableSenderAndRecipient.addCell(
+                        new Cell()
+                                .add(new Paragraph(
+                                        "Кому\n\n" +
+                                                recipientKeden.getFio() + "\n" +
+                                                recipientKeden.getStreetName() + ", " +
+                                                recipientKeden.getBuildingNumberId() + ", " +
+                                                recipientKeden.getRoomNumberId() + ", " +
+                                                recipientKeden.getCityName() + "\n" +
+                                                recipientKeden.getPhone() + "\n" +
+                                                "Казахстан"
+                                ))
+                                .setTextAlignment(TextAlignment.LEFT)
+                );
+                document.add(tableSenderAndRecipient);
+
+                // добавляем таблицу с посылками
+                Table tablePackages = new Table(UnitValue.createPercentArray(new float[]{5, 75, 9, 11}));
+                tablePackages.setWidth(UnitValue.createPercentValue(100));
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph("№"))
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.CENTER)
+                );
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph("Полное описание"))
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.CENTER)
+                );
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph("Вес"))
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.CENTER)
+                );
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph("Стоимость"))
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.CENTER)
+                );
+                for (int j = 0; j < packages.size(); j++){
+                    PackageKeden packageKeden = packages.get(j);
+                    tablePackages.addCell(
+                            new Cell().add(new Paragraph(String.valueOf(j+1)))
+                                    .setFontSize(9)
+                                    .setTextAlignment(TextAlignment.CENTER)
+                                    .setBorder(Border.NO_BORDER)
+                    );
+                    tablePackages.addCell(
+                            new Cell().add(new Paragraph(packageKeden.getGoodsDescriptionText()))
+                                    .setFontSize(7)
+                                    .setTextAlignment(TextAlignment.LEFT)
+                                    .setBorder(Border.NO_BORDER)
+                    );
+                    tablePackages.addCell(
+                            new Cell().add(new Paragraph(packageKeden.getUnifiedGrossMassMeasure() + " kg"))
+                                    .setFontSize(7)
+                                    .setTextAlignment(TextAlignment.CENTER)
+                                    .setBorder(Border.NO_BORDER)
+                    );
+                    tablePackages.addCell(
+                            new Cell().add(new Paragraph(packageKeden.getCurrencyInAmount() + " " + ecHouseShipmentDetailsModel.getCurrencyName()))
+                                    .setFontSize(7)
+                                    .setTextAlignment(TextAlignment.CENTER)
+                                    .setBorder(Border.NO_BORDER)
+                    );
+                }
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph())
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.CENTER)
+                                .setBorder(Border.NO_BORDER)
+                                .setBorderTop(new SolidBorder(0.5f) )
+                );
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph("Total:"))
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.RIGHT)
+                                .setBorder(Border.NO_BORDER)
+                                .setBorderTop(new SolidBorder(0.5f))
+                );
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph(String.valueOf(unifiedGrossMassMeasureAll)))
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.CENTER)
+                                .setBorder(Border.NO_BORDER)
+                                .setBorderTop(new SolidBorder(0.5f))
+                );
+                tablePackages.addCell(
+                        new Cell().add(new Paragraph(String.valueOf(currencyInAmountAll)))
+                                .setFontSize(10)
+                                .setTextAlignment(TextAlignment.CENTER)
+                                .setBorder(Border.NO_BORDER)
+                                .setBorderTop(new SolidBorder(0.5f))
+                );
+                document.add(tablePackages);
+
+                // добавляем фото документа
+                MultipartFile photo = recipientKeden.getPhoto();
+                if (!photo.isEmpty()) {
+                    byte[] photoBytes;
+                    try {
+                        photoBytes = photo.getBytes();
+                    } catch (IOException e) {
+                        throw new KedenAppException("Ошибка при чтении файла фото:  " + e.getMessage());
+                    }
+                    Image image = new Image(ImageDataFactory.create(photoBytes));
+                    image.scaleToFit(700, 350);
+                    document.add(image);
+                }
+                // Закрываем документ
+                document.close();
+
+                // сохраняем в файл
+                FileOutputStream fos = new FileOutputStream(folderName + "/" + (i+1)  + ".pdf");
+                outputStream.writeTo(fos);
+                fos.close();
+            }
         } catch (Exception e) {
-            throw new KedenAppException("Ошибка при генерации PDF :  " + e.getMessage());
+            throw new KedenAppException("Ошибка при генерации PDF:  " + e.getMessage());
         }
+    }
+
+    /**
+     *
+     * @param sender индекс отправителя
+     * @return Возвращает строку для поднакладной с данными фирмы отправителя
+     */
+    private String getSender(int sender) {
+        StringBuilder senderText = new StringBuilder();
+        switch (sender) {
+            case 1 -> {
+                senderText
+                        .append("От кого\n\n")
+                        .append("OEC GMBH\n")
+                        .append("Detmold FREILIGRATHSTRAßE 7\n")
+                        .append("Germany");
+            }
+            case 2 -> {
+                senderText
+                        .append("От кого\n\n")
+                        .append("OST EXPRESS COURIER GMBH\n")
+                        .append("Detmold DENKMAL STR. 11\n")
+                        .append("Germany");
+            }
+            case 3 -> {
+                senderText
+                        .append("От кого\n\n")
+                        .append("FTL GMBH\n")
+                        .append("SCHONECK KONRAD-ZUSE-RING 15A\n")
+                        .append("Germany");
+            }
+        }
+        return senderText.toString();
     }
 }

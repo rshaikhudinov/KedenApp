@@ -49,6 +49,10 @@ document.getElementById('addRecipient').addEventListener('click', function () {
                 <label for="phone">Телефон:</label>
                 <input type="text" name="recipients[${recipientCount}].phone" placeholder="+7 777 7777777" required />
             </div>
+            <div class="form-group">
+                <label for="photo">Фото документа:</label>
+                <input type="file" id="photo" name="recipients[${recipientCount}].photo" accept="image/*" required />
+            </div>
             <div id="packageFields-${recipientCount}">
                 <h3>Посылка 1</h3>
                 <div class="package">

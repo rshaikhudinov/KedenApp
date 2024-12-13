@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @Slf4j
@@ -40,7 +41,12 @@ public class KedenAppController {
                 log.info(" - Building Number: {}", recipient.getBuildingNumberId());
                 log.info(" - Room Number: {}", recipient.getRoomNumberId());
                 log.info(" - Phone: {}", recipient.getPhone());
-
+                MultipartFile photo = recipient.getPhoto();
+                if (photo != null && !photo.isEmpty()) {
+                    log.info("File received: {}", photo.getOriginalFilename());
+                }else {
+                    log.warn("Photo is null or empty");
+                }
                 if (recipient.getPackages() != null && !recipient.getPackages().isEmpty()) {
                     for (PackageKeden packageKeden : recipient.getPackages()) {
                         log.info("   - Вес посылки: {}", packageKeden.getUnifiedGrossMassMeasure());
@@ -52,7 +58,7 @@ public class KedenAppController {
             log.info("No recipients provided.");
         }
 
-        return kedenAppService.genXml(shipmentDetails);
+        return kedenAppService.createDeclaration(shipmentDetails);
     }
 
 

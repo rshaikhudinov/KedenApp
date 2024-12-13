@@ -2,6 +2,7 @@ package KedenApp.controller;
 
 import KedenApp.core.KedenAppException;
 import KedenApp.service.PDFService;
+import KedenApp.service.PDFService2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class PdfController {
 
-    private final PDFService pdfService;
+    private final PDFService2 pdfService;
 
 
     @PostMapping("/generatePdf")
