@@ -5,10 +5,12 @@ import KedenApp.dto.EcHouseShipmentDetailsModel;
 import KedenApp.dto.PackageKeden;
 import KedenApp.dto.RecipientKeden;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.kernel.font.PdfFont;
@@ -105,12 +107,18 @@ public class PDFService {
                                 .add(firstCellTable));
 
                 // Вторая срока
+                String company = "";
+                switch (ecHouseShipmentDetailsModel.getSender()) {
+                    case 1 -> company = "OEC GMBH";
+                    case 2 -> company = "OST EXPRESS COURIER GMBH";
+                    case 3 -> company = "FTL GMBH";
+                }
                 tableHeader.addCell(
                         new Cell()
                                 .add(new Paragraph("Я подтверждаю, что отправление не содержит предметы, запрещенные к пересылке. " +
                                         "С правилами пересылки ознакомлен.")
                                         .setTextAlignment(TextAlignment.LEFT))
-                                .add(new Paragraph("\n\nФирма")
+                                .add(new Paragraph("\n\n" + company)
                                         .setTextAlignment(TextAlignment.RIGHT))
                                 .setFontSize(8)
                 );
@@ -223,14 +231,14 @@ public class PDFService {
                                 .setBorderTop(new SolidBorder(0.5f))
                 );
                 tablePackages.addCell(
-                        new Cell().add(new Paragraph(String.valueOf(unifiedGrossMassMeasureAll)))
+                        new Cell().add(new Paragraph(unifiedGrossMassMeasureAll + " kg"))
                                 .setFontSize(10)
                                 .setTextAlignment(TextAlignment.CENTER)
                                 .setBorder(Border.NO_BORDER)
                                 .setBorderTop(new SolidBorder(0.5f))
                 );
                 tablePackages.addCell(
-                        new Cell().add(new Paragraph(String.valueOf(currencyInAmountAll)))
+                        new Cell().add(new Paragraph(currencyInAmountAll + " " + ecHouseShipmentDetailsModel.getCurrencyName()))
                                 .setFontSize(10)
                                 .setTextAlignment(TextAlignment.CENTER)
                                 .setBorder(Border.NO_BORDER)
@@ -241,6 +249,42 @@ public class PDFService {
                 // добавляем фото документа
                 MultipartFile photo = recipientKeden.getPhoto();
                 if (!photo.isEmpty()) {
+                    try {
+                        byte[] photoBytes = photo.getBytes();
+                        Image image = new Image(ImageDataFactory.create(photoBytes));
+
+                        // Получаем размеры страницы
+                        PdfDocument pdfDocument = document.getPdfDocument();
+                        Rectangle pageSize = pdfDocument.getDefaultPageSize();
+
+                        // Вычисляем доступную область (например, 70% от ширины и высоты страницы)
+                        float maxWidth = pageSize.getWidth() * 0.5f;
+                        float maxHeight = pageSize.getHeight() * 0.5f;
+
+                        // Получаем размеры изображения
+                        float imageWidth = image.getImageWidth();
+                        float imageHeight = image.getImageHeight();
+
+                        // Рассчитываем масштаб для сохранения пропорций
+                        float widthScale = maxWidth / imageWidth;
+                        float heightScale = maxHeight / imageHeight;
+                        float scale = Math.min(widthScale, heightScale);
+
+                        // Применяем масштабирование
+                        image.scaleAbsolute(imageWidth * scale, imageHeight * scale);
+
+                        // Устанавливаем выравнивание (опционально)
+                        //image.setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+                        // Добавляем изображение в документ
+                        document.add(image);
+                    } catch (IOException e) {
+                        throw new KedenAppException("Ошибка при чтении файла фото: " + e.getMessage());
+                    }
+                }
+
+
+                /*if (!photo.isEmpty()) {
                     byte[] photoBytes;
                     try {
                         photoBytes = photo.getBytes();
@@ -250,7 +294,7 @@ public class PDFService {
                     Image image = new Image(ImageDataFactory.create(photoBytes));
                     image.scaleToFit(700, 350);
                     document.add(image);
-                }
+                }*/
                 // Закрываем документ
                 document.close();
 
