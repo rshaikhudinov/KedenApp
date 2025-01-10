@@ -1,64 +1,101 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #f5f5f5;
-}
-
-h1, h2, h3, h4 {
-    color: #333;
+    background-color: #f4f4f4;
 }
 
 form {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: auto;
 }
 
 label {
+    font-weight: bold;
+    margin-bottom: 5px;
     display: block;
-    margin: 10px 0 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
 }
 
 input[type="text"],
-input[type="number"],
-input[type="file"],
+input[type="date"],
 select {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.recipient,
+.package {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
 }
 
 button {
-    display: block;
-    margin: 10px 0;
-    padding: 10px 15px;
+    display: inline-block;
     background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    padding: 10px 15px;
+    text-align: center;
+    border-radius: 5px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-.recipient, .parcels {
-    margin-bottom: 20px;
-    padding: 15px;
+#addRecipient {
+    background-color: #28a745;
+}
+
+#addRecipient:hover {
+    background-color: #218838;
+}
+
+.addPackageButton {
+    background-color: #ffc107;
+}
+
+.addPackageButton:hover {
+    background-color: #e0a800;
+}
+
+.recipient-header {
+    background-color: #f0f0f0; /* Светло-серый */
+    color: #333; /* Темно-серый текст для контраста */
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd; /* Добавим границу для лучшей видимости */
+}
+
+.recipient-header:hover {
+    background-color: #e0e0e0; /* Более темный оттенок при наведении */
+}
+
+.recipient-body {
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    margin-bottom: 10px;
     background-color: #f9f9f9;
 }
 
-.remove-recipient, .remove-parcel {
-    background-color: #dc3545;
-    margin-top: 5px;
-}
-
-.remove-recipient:hover, .remove-parcel:hover {
-    background-color: #c82333;
+.hidden {
+    display: none;
 }

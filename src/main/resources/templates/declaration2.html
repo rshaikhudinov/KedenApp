@@ -1,16 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таможенная декларация</title>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="/css/styles2.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Таможенная декларация</h1>
-
-    <form id="declaration-form">
+    <form id="myForm" enctype="multipart/form-data">
         <label for="currencyName">Выберите валюту:</label>
         <select id="currencyName" name="currencyName">
             <option value="EUR">EUR</option>
@@ -32,34 +29,129 @@
             <option value="2">ТОО "DISALES GROUP"</option>
         </select>  <br>
 
-        <h2>Получатели</h2>
-        <div id="recipients">
+        <label for="docIdDeclaration">Номер накладной:</label>
+        <input type="text" id="docIdDeclaration" name="docIdDeclaration" required />
+
+        <label for="docCreationDateDeclaration">Дата накладной:</label>
+        <input type="date" id="docCreationDateDeclaration" name="docCreationDateDeclaration" required />
+
+        <div id="recipientFields">
+            <h3>Получатель 1</h3>
+            <div class="recipient">
+                <div class="form-group">
+                    <label for="fio">ФИО:</label>
+                    <input type="text" id="fio" name="recipients[0].fio" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="iin">ИИН:</label>
+                    <input type="text" id="iin" name="recipients[0].iin" required pattern="\d{12}" title="Введите 12-значный ИИН" />
+                </div>
+
+                <div class="form-group">
+                    <label for="docId">Номер удостоверения:</label>
+                    <input type="text" id="docId" name="recipients[0].docId" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="docCreationDate">Дата выдачи документа:</label>
+                    <input type="date" id="docCreationDate" name="recipients[0].docCreationDate" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="regionName">Регион:</label>
+                    <input type="text" id="regionName" name="recipients[0].regionName" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="cityName">Город:</label>
+                    <input type="text" id="cityName" name="recipients[0].cityName" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="streetName">Улица:</label>
+                    <input type="text" id="streetName" name="recipients[0].streetName" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="buildingNumberId">Дом:</label>
+                    <input type="text" id="buildingNumberId" name="recipients[0].buildingNumberId" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="roomNumberId">Квартира:</label>
+                    <input type="text" id="roomNumberId" name="recipients[0].roomNumberId" />
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Телефон:</label>
+                    <input type="text" id="phone" name="recipients[0].phone" placeholder="+7 777 7777777" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">Фото документа:</label>
+                    <input type="file" id="photo" name="recipients[0].photo" accept="image/*" required />
+                </div>
+
+                <div id="packageFields-0">
+                    <h3>Посылка 1</h3>
+                    <div class="package">
+                        <div class="form-group">
+                            <label for="commodityCode">Код ТНВЭД:</label>
+                            <input type="text" id="commodityCode" name="recipients[0].packages[0].commodityCode" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="goodsDescriptionText">Описание:</label>
+                            <input type="text" id="goodsDescriptionText" name="recipients[0].packages[0].goodsDescriptionText" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="unifiedGrossMassMeasure">Вес:</label>
+                            <input type="text" id="unifiedGrossMassMeasure" name="recipients[0].packages[0].unifiedGrossMassMeasure" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="currencyInAmount">Сумма:</label>
+                            <input type="text" id="currencyInAmount" name="recipients[0].packages[0].currencyInAmount" required />
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="addPackageButton" data-recipient-index="0">Добавить посылку</button>
+            </div>
         </div>
-
         <button type="button" id="addRecipient">Добавить получателя</button>
-        <button type="submit">Отправить декларацию</button>
+        <button type="submit">Отправить</button>
     </form>
-
 </body>
-</html>
 <script th:inline="javascript">
     $(document).ready(function() {
-  $("#myForm").submit(function(event) {
-    event.preventDefault();
-    var formData = $(this).serialize();
+     $("#myForm").submit(function(event) {
+       event.preventDefault();
 
-    $.ajax({
-      url: "/submitDeclaration",
-      type: "POST",
-      data: formData,
-      success: function(response) {
-        // Обработка ответа сервера
-        console.log(response);
-        alert(response);
-      }
-    });
-  });
-});
+       // Создаем объект FormData для отправки файлов
+       var formData = new FormData(this);
+
+        if (!$('#photo')[0].files.length) {
+                alert("Пожалуйста, загрузите файл.");
+                return;
+            }
+
+       $.ajax({
+         url: "/submitShipmentDetails",
+         type: "POST",
+         data: formData,
+         processData: false, // Отключаем обработку данных
+         contentType: false, // Отключаем автоматическую установку заголовка Content-Type
+         success: function(response) {
+           // Обработка ответа сервера
+           console.log(response);
+           alert(response);
+         },
+         error: function(xhr, status, error) {
+           console.error("Ошибка:", error);
+           alert("Произошла ошибка: " + error);
+         }
+       });
+     });
+   });
 </script>
-<script src="/js/script2.js"></script>
+<script src="/js/script.js"></script>
 </html>

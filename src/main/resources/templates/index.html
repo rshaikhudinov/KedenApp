@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Главная страница</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .link-image {
+            display: inline-block; /* Чтобы картинки располагались рядом */
+            margin: 10px; /* Отступы между картинками */
+        }
+        .link-image img {
+            display: block; /* Убирает лишний отступ под картинкой */
+            max-width: 200px; /* Максимальная ширина картинки */
+            height: auto; /* Автоматическая высота для сохранения пропорций */
+            border: 1px solid #ccc; /* Рамка для наглядности (можно убрать) */
+        }
+        .currency {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>Добро пожаловать!</h1>
+
+<div class="link-image">
+    <a th:href="@{/declaration}">
+        <img src="/img/declaration.png" alt="Заполнить декларацию" />
+    </a>
+    <p>Заполнить декларацию</p>
+</div>
+
+<div class="link-image">
+    <a th:href="@{/suppliers}"> <img src="/img/suppliers.png" alt="Редактировать список поставщиков" />
+    </a>
+    <p>Редактировать список поставщиков</p>
+</div>
+
+<div class="currency">
+    <p>Курс доллара: <span th:text="${usdRate}"></span></p>
+    <p>Курс евро: <span th:text="${eurRate}"></span></p>
+</div>
+</body>
+</html>

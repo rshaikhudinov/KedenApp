@@ -60,22 +60,4 @@ public class KedenAppController {
 
         return kedenAppService.createDeclaration(shipmentDetails);
     }
-
-
-    @GetMapping("/declaration2")
-    public String setDeclaration2(Model model) {
-        return "declaration2";
-    }
-
-    @GetMapping("/pdfTest")
-    public String pdfTest(Model model) {
-        return "pdfTest";
-    }
-
-    @PostMapping("/submitDeclaration")
-    @ResponseBody
-    public String submitDeclaration(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
-
-        return "декларация отправлена";
-    }
 }
