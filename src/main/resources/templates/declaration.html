@@ -4,7 +4,7 @@
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" th:href="@{/css/styles2.css}">
+    <link rel="stylesheet" th:href="@{/css/declaration.css}">
 </head>
 <body>
 <form id="myForm" enctype="multipart/form-data">
@@ -15,8 +15,8 @@
         <option value="USD">USD</option>
     </select>  <br>
 
-    <label for="currency">Курс валюты:</label>
-    <input type="text" id="currency" name="currency" required />
+    <label for="currencyRate">Курс валюты:</label>
+    <input type="text" id="currencyRate" name="currencyRate" required />
 
     <label for="supplier">Выберите отправителя:</label>
     <select id="supplier" name="supplier" required>
@@ -100,29 +100,29 @@
                     <input type="file" id="photo" name="recipients[0].photo" accept="image/*" required />
                 </div>
 
-                <div id="packageFields-0">
-                    <div class="package" data-package-index="0">
+                <div id="parcelFields-0">
+                    <div class="parcel" data-parcel-index="0">
                         <h3>Посылка 1</h3>
                         <div class="form-group">
                             <label for="commodityCode">Код ТНВЭД:</label>
-                            <input type="text" id="commodityCode" name="recipients[0].packages[0].commodityCode" required />
+                            <input type="text" id="commodityCode" name="recipients[0].parcels[0].commodityCode" required />
                         </div>
                         <div class="form-group">
                             <label for="goodsDescriptionText">Описание:</label>
-                            <input type="text" id="goodsDescriptionText" name="recipients[0].packages[0].goodsDescriptionText" required />
+                            <input type="text" id="goodsDescriptionText" name="recipients[0].parcels[0].goodsDescriptionText" required />
                         </div>
                         <div class="form-group">
                             <label for="unifiedGrossMassMeasure">Вес:</label>
-                            <input type="text" id="unifiedGrossMassMeasure" name="recipients[0].packages[0].unifiedGrossMassMeasure" required />
+                            <input type="text" id="unifiedGrossMassMeasure" name="recipients[0].parcels[0].unifiedGrossMassMeasure" required />
                         </div>
                         <div class="form-group">
                             <label for="currencyInAmount">Сумма:</label>
-                            <input type="text" id="currencyInAmount" name="recipients[0].packages[0].currencyInAmount" required />
+                            <input type="text" id="currencyInAmount" name="recipients[0].parcels[0].currencyInAmount" required />
                         </div>
-                        <button type="button" class="deletePackageButton" data-recipient-index="0" data-package-index="0">Удалить посылку</button>
+                        <button type="button" class="deleteParcelButton" data-recipient-index="0" data-parcel-index="0">Удалить посылку</button>
                     </div>
                 </div>
-                <button type="button" class="addPackageButton" data-recipient-index="0">Добавить посылку</button>
+                <button type="button" class="addParcelButton" data-recipient-index="0">Добавить посылку</button>
             </div>
         </div>
     </div>
@@ -162,5 +162,5 @@
      });
    });
 </script>
-<script th:src="@{/js/script2.js}"></script>
+<script th:src="@{/js/declaration.js}"></script>
 </html>

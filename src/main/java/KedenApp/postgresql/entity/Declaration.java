@@ -18,21 +18,21 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Entity
-@Table(name = "ec_house_shipment_details")
-public class EcHouseShipmentDetailsModel {
+@Table(name = "declaration")
+public class Declaration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column(name = "currencyName")
     private String currencyName;
 
-    @Column(name = "currency")
-    private BigDecimal currency;
+    @Column(name = "currencyRate")
+    private BigDecimal currencyRate;
 
-    @Column(name = "supplier")
-    private int supplier;
+    @ManyToOne
+    @JoinColumn(name = "supplierId")
+    private Supplier supplier;
 
     @Column(name = "recipientCompany")
     private int recipientCompany;
@@ -43,6 +43,14 @@ public class EcHouseShipmentDetailsModel {
     @Column(name = "docCreationDateDeclaration")
     private String docCreationDateDeclaration;
 
-    @OneToMany(mappedBy = "declaration", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipientKeden> recipients;
+    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.ALL})
+    @JoinTable(
+            name = "declaration_recipient",
+            joinColumns = @JoinColumn(name = "declaration_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipient_iin")
+    )
+    private List<Recipient> recipients;
+
+    @OneToMany(mappedBy = "declaration", cascade = CascadeType.ALL)
+    private List<Parcel> parcels;
 }

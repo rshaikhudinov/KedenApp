@@ -1,8 +1,8 @@
 package KedenApp.controller;
 
-import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
-import KedenApp.postgresql.entity.PackageKeden;
-import KedenApp.postgresql.entity.RecipientKeden;
+import KedenApp.postgresql.entity.Declaration;
+import KedenApp.postgresql.entity.Parcel;
+import KedenApp.postgresql.entity.Recipient;
 import KedenApp.service.KedenAppService;
 import KedenApp.service.RatesService;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +37,11 @@ public class KedenAppController {
 
     @PostMapping("/submitShipmentDetails")
     @ResponseBody
-    public String submitShipmentDetails(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
+    public String submitShipmentDetails(@ModelAttribute Declaration shipmentDetails) {
         if (shipmentDetails.getRecipients() != null && !shipmentDetails.getRecipients().isEmpty()) {
-            log.info("Текущий курс: {}", shipmentDetails.getCurrency());
+            log.info("Текущий курс: {}", shipmentDetails.getCurrencyRate());
             log.info("Recipients:");
-            for (RecipientKeden recipient : shipmentDetails.getRecipients()) {
+            for (Recipient recipient : shipmentDetails.getRecipients()) {
                 log.info(" - FIO: {}", recipient.getFio());
                 log.info(" - IIN: {}", recipient.getIin());
                 log.info(" - Doc ID: {}", recipient.getDocId());
@@ -58,10 +58,10 @@ public class KedenAppController {
                 }else {
                     log.warn("Photo is null or empty");
                 }
-                if (recipient.getPackages() != null && !recipient.getPackages().isEmpty()) {
-                    for (PackageKeden packageKeden : recipient.getPackages()) {
-                        log.info("   - Вес посылки: {}", packageKeden.getUnifiedGrossMassMeasure());
-                        log.info("   - Сумма посылки: {}", packageKeden.getCurrencyInAmount());
+                if (recipient.getParcels() != null && !recipient.getParcels().isEmpty()) {
+                    for (Parcel parcel : recipient.getParcels()) {
+                        log.info("   - Вес посылки: {}", parcel.getUnifiedGrossMassMeasure());
+                        log.info("   - Сумма посылки: {}", parcel.getCurrencyInAmount());
                     }
                 }
             }

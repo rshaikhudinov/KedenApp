@@ -1,9 +1,9 @@
 package KedenApp.service;
 
 import KedenApp.core.KedenAppException;
-import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
-import KedenApp.postgresql.entity.PackageKeden;
-import KedenApp.postgresql.entity.RecipientKeden;
+import KedenApp.postgresql.entity.Declaration;
+import KedenApp.postgresql.entity.Parcel;
+import KedenApp.postgresql.entity.Recipient;
 import KedenApp.dto.xsd_gen.eec.m.ca.complexdataobjects_v1_8.*;
 import KedenApp.dto.xsd_gen.eec.m.ca.simpledataobjects_v1_8.PaymentAmountWithCurrencyType;
 import KedenApp.dto.xsd_gen.eec.m.complexdataobjects_v0_4.*;
@@ -46,18 +46,18 @@ public class KedenAppService {
     BigDecimal massSumAll = BigDecimal.valueOf(0.0);
     BigDecimal kztSumAll = BigDecimal.valueOf(0.0);
 
-    public String createDeclaration(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
+    public String createDeclaration(Declaration declaration){
         // создание папки для хранения
         String folderName = createFolder();
         // создание XML
-        genXml(ecHouseShipmentDetailsModel, folderName);
+        genXml(declaration, folderName);
         // создание PDF
-        pdfService.generatePdf(ecHouseShipmentDetailsModel, folderName);
+        pdfService.generatePdf(declaration, folderName);
 
         return "Файлы для декларации успешно созданы";
     }
 
-    public void genXml(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel, String folderName){
+    public void genXml(Declaration ecHouseShipmentDetailsModel, String folderName){
         try {
             ObjectFactory objectFactory = new ObjectFactory();
 
@@ -114,13 +114,13 @@ public class KedenAppService {
         return expressCargoDeclarationIdDetails;
     }
 
-    public ECGoodsShipmentDetailsType getECGoodsShipmentDetailsType(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
+    public ECGoodsShipmentDetailsType getECGoodsShipmentDetailsType(Declaration declaration){
 
         ECGoodsShipmentDetailsType ecGoodsShipmentDetails = new ECGoodsShipmentDetailsType();
         ecGoodsShipmentDetails
-                .setConsignorDetails(getConsignorDetails(ecHouseShipmentDetailsModel.getSupplier())) // отправитель
-                .setConsigneeDetails(getConsigneeDetails(ecHouseShipmentDetailsModel.getRecipientCompany())) // фирма получатель
-                .setEcHouseShipmentDetails(getEcHouseShipmentDetails(ecHouseShipmentDetailsModel)); // тут список получателей и посылок
+                .setConsignorDetails(getConsignorDetails(Math.toIntExact(declaration.getSupplier().getId()))) // отправитель
+                .setConsigneeDetails(getConsigneeDetails(declaration.getRecipientCompany())) // фирма получатель
+                .setEcHouseShipmentDetails(getEcHouseShipmentDetails(declaration)); // тут список получателей и посылок
 
         // итоговая масса по всем получателям
         UnifiedPhysicalMeasureType unifiedGrossMassMeasureEnd = new UnifiedPhysicalMeasureType();
@@ -323,21 +323,21 @@ public class KedenAppService {
 
     /**
      * Заполняем посылки по физ лицам
-     * @param ecHouseShipmentDetailsModel данные с формы
+     * @param declaration данные с формы
      * @return данные по посылкам у физ лицам
      */
-    public List<ECHouseShipmentDetailsType> getEcHouseShipmentDetails(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel){
+    public List<ECHouseShipmentDetailsType> getEcHouseShipmentDetails(Declaration declaration){
         List<ECHouseShipmentDetailsType> ecHouseShipmentDetails = new ArrayList<>();
-        List<RecipientKeden> recipients = ecHouseShipmentDetailsModel.getRecipients();
+        List<Recipient> recipients = declaration.getRecipients();
         int consignmentItemOrdinalIndex = 1; // номер всех посылок в декларации
         for (int i = 0; i < recipients.size(); i++) {
-            RecipientKeden recipient = recipients.get(i);
+            Recipient recipient = recipients.get(i);
 
             // данные по получателю
             DocDetailsV4Type transportDocumentDetails = new DocDetailsV4Type();
             transportDocumentDetails
-                    .setDocId(ecHouseShipmentDetailsModel.getDocIdDeclaration())
-                    .setDocCreationDate(ecHouseShipmentDetailsModel.getDocCreationDateDeclaration());
+                    .setDocId(declaration.getDocIdDeclaration())
+                    .setDocCreationDate(declaration.getDocCreationDateDeclaration());
 
             UnifiedCode20Type docKindCode = new UnifiedCode20Type();
             docKindCode
@@ -395,11 +395,11 @@ public class KedenAppService {
 
             // данные по посылкам
             List<ECGoodsItemDetailsType> ecGoodsItemDetails = new ArrayList<>();
-            List<PackageKeden> packageList = recipient.getPackages();
+            List<Parcel> parcels = recipient.getParcels();
             BigDecimal massSum = BigDecimal.valueOf(0.0);
             BigDecimal kztSum = BigDecimal.valueOf(0.0);
-            for (int j = 0; j < packageList.size(); j++) {
-                PackageKeden packageKeden = packageList.get(j);
+            for (int j = 0; j < parcels.size(); j++) {
+                Parcel parcel = parcels.get(j);
                 ECGoodsItemDetailsType ecGoodsItemDetailsType = new ECGoodsItemDetailsType();
                 ecGoodsItemDetailsType
                         .setConsignmentItemOrdinal(BigInteger.valueOf(consignmentItemOrdinalIndex));
@@ -407,9 +407,9 @@ public class KedenAppService {
                 ecGoodsItemDetailsType
                         .setHmConsignmentItemNumber(BigDecimal.valueOf(j+1));
                 ecGoodsItemDetailsType
-                        .setCommodityCode(packageKeden.getCommodityCode());
+                        .setCommodityCode(parcel.getCommodityCode());
                 List<String> goodsDescriptionText = new ArrayList<>();
-                goodsDescriptionText.add(packageKeden.getGoodsDescriptionText());
+                goodsDescriptionText.add(parcel.getGoodsDescriptionText());
                 ecGoodsItemDetailsType
                         .setGoodsDescriptionText(goodsDescriptionText);
 
@@ -424,21 +424,21 @@ public class KedenAppService {
                         .setGoodsMeasureDetails(goodsMeasureDetails);
                 UnifiedPhysicalMeasureType unifiedGrossMassMeasure = new UnifiedPhysicalMeasureType();
                 unifiedGrossMassMeasure
-                        .setValue(packageKeden.getUnifiedGrossMassMeasure());
+                        .setValue(parcel.getUnifiedGrossMassMeasure());
                 ecGoodsItemDetailsType
                         .setUnifiedGrossMassMeasure(unifiedGrossMassMeasure);
                 // считаем сумму веса посылок по физ лицу
-                massSum = massSum.add(packageKeden.getUnifiedGrossMassMeasure());
+                massSum = massSum.add(parcel.getUnifiedGrossMassMeasure());
 
                         List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
                 PaymentAmountWithCurrencyType paymentAmountUSD = new PaymentAmountWithCurrencyType();
                 paymentAmountUSD
-                        .setCurrencyCode(ecHouseShipmentDetailsModel.getCurrencyName())
-                        .setValue(packageKeden.getCurrencyInAmount());
+                        .setCurrencyCode(declaration.getCurrencyName())
+                        .setValue(parcel.getCurrencyInAmount());
                 caValueAmountWithCurrencyTypeList.add(paymentAmountUSD);
 
                 // сумма посылки в KZT округляя
-                BigDecimal sumKZT = packageKeden.getCurrencyInAmount().multiply(ecHouseShipmentDetailsModel.getCurrency()).setScale(2, RoundingMode.HALF_UP);
+                BigDecimal sumKZT = parcel.getCurrencyInAmount().multiply(declaration.getCurrencyRate()).setScale(2, RoundingMode.HALF_UP);
                 PaymentAmountWithCurrencyType paymentAmountKZT = new PaymentAmountWithCurrencyType();
                 paymentAmountKZT
                         .setCurrencyCode("KZT")
@@ -468,7 +468,7 @@ public class KedenAppService {
                     .setObjectOrdinal(BigInteger.valueOf(i+1))
                     .setTransportDocumentDetails(transportDocumentDetails)
                     .setHouseWaybillDetails(houseWaybillDetails)
-                    .setConsignorDetails(getConsignorDetails(ecHouseShipmentDetailsModel.getSupplier())) // тут нужен правильный индекс с формы
+                    .setConsignorDetails(getConsignorDetails(Math.toIntExact(declaration.getSupplier().getId()))) // тут нужен правильный индекс с формы
                     .setConsigneeDetails(consigneeDetails)          // данные получателя физ лицо
                     .setEcGoodsItemDetails(ecGoodsItemDetails)        // данные о посылке
                     .setUnifiedGrossMassMeasure(unifiedGrossMassMeasureEnd)   // итоговая масса

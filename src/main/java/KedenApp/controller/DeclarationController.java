@@ -1,6 +1,6 @@
 package KedenApp.controller;
 
-import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
+import KedenApp.postgresql.entity.Declaration;
 import KedenApp.postgresql.entity.Supplier;
 import KedenApp.postgresql.repository.SupplierRepository;
 import KedenApp.service.DeclarationService;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.List;
 
 @Controller
@@ -36,12 +35,12 @@ public class DeclarationController {
 
     /**
      * Метод сохраняет xml файл декларации и pdf файлы накладных получателей
-     * @param shipmentDetails данные с формы
+     * @param declaration данные с формы
      * @return сообщение о результате
      */
     @PostMapping("/createDeclaration")
     @ResponseBody
-    public String createDeclaration(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
-        return declarationService.createDeclaration(shipmentDetails);
+    public String createDeclaration(@ModelAttribute Declaration declaration) {
+        return declarationService.createDeclaration(declaration);
     }
 }

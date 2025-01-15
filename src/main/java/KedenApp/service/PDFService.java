@@ -1,9 +1,9 @@
 package KedenApp.service;
 
 import KedenApp.core.KedenAppException;
-import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
-import KedenApp.postgresql.entity.PackageKeden;
-import KedenApp.postgresql.entity.RecipientKeden;
+import KedenApp.postgresql.entity.Declaration;
+import KedenApp.postgresql.entity.Parcel;
+import KedenApp.postgresql.entity.Recipient;
 import KedenApp.postgresql.entity.Supplier;
 import KedenApp.postgresql.repository.SupplierRepository;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -42,22 +42,22 @@ public class PDFService {
 
     /**
      * Метод для генерации файла pdf
-     * @param ecHouseShipmentDetailsModel данные декларации
+     * @param declaration данные декларации
      * @param folderName название папки для сохранения файла
      */
-    public void generatePdf(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel, String folderName) {
+    public void generatePdf(Declaration declaration, String folderName) {
         try {
-            List<RecipientKeden> recipients = ecHouseShipmentDetailsModel.getRecipients();
+            List<Recipient> recipients = declaration.getRecipients();
             for (int i = 0; i < recipients.size(); i++) {
-                RecipientKeden recipientKeden = recipients.get(i);
+                Recipient recipient = recipients.get(i);
 
                 // считаем количество посылок, вес и цену
-                List<PackageKeden> packages = recipientKeden.getPackages();
+                List<Parcel> packages = recipient.getParcels();
                 BigDecimal unifiedGrossMassMeasureAll = BigDecimal.valueOf(0.0);
                 BigDecimal currencyInAmountAll = BigDecimal.valueOf(0.0);
-                for (PackageKeden packageKeden : packages){
-                    unifiedGrossMassMeasureAll = unifiedGrossMassMeasureAll.add(packageKeden.getUnifiedGrossMassMeasure());
-                    currencyInAmountAll = currencyInAmountAll.add(packageKeden.getCurrencyInAmount());
+                for (Parcel parcel : packages){
+                    unifiedGrossMassMeasureAll = unifiedGrossMassMeasureAll.add(parcel.getUnifiedGrossMassMeasure());
+                    currencyInAmountAll = currencyInAmountAll.add(parcel.getCurrencyInAmount());
                 }
 
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -85,7 +85,7 @@ public class PDFService {
                 String block1 = "Количество посылок\n" + packages.size() + " шт";
                 String block2 = "Количество мест\n" + packages.size();
                 String block3 = "Общий вес\n" + unifiedGrossMassMeasureAll + "  кг";
-                String block4 = "Общая стоимость\n" + currencyInAmountAll + " " + ecHouseShipmentDetailsModel.getCurrencyName();
+                String block4 = "Общая стоимость\n" + currencyInAmountAll + " " + declaration.getCurrencyName();
                 Table firstCellTable = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1, 1}));
                 firstCellTable
                         .setWidth(UnitValue.createPercentValue(100))
@@ -115,18 +115,12 @@ public class PDFService {
                                 .add(firstCellTable));
 
                 // Вторая срока
-                String company = "";
-                switch (ecHouseShipmentDetailsModel.getSupplier()) {
-                    case 1 -> company = "OEC GMBH";
-                    case 2 -> company = "OST EXPRESS COURIER GMBH";
-                    case 3 -> company = "FTL GMBH";
-                }
                 tableHeader.addCell(
                         new Cell()
                                 .add(new Paragraph("Я подтверждаю, что отправление не содержит предметы, запрещенные к пересылке. " +
                                         "С правилами пересылки ознакомлен.")
                                         .setTextAlignment(TextAlignment.LEFT))
-                                .add(new Paragraph("\n\n" + company)
+                                .add(new Paragraph("\n\n" + declaration.getSupplier().getCompanyName())
                                         .setTextAlignment(TextAlignment.RIGHT))
                                 .setFontSize(8)
                 );
@@ -155,19 +149,19 @@ public class PDFService {
                         .setFontSize(8);
                 tableSenderAndRecipient.addCell(
                         new Cell()
-                                .add(new Paragraph(getSender(ecHouseShipmentDetailsModel.getSupplier())))
+                                .add(new Paragraph(getSender(Math.toIntExact(declaration.getSupplier().getId()))))
                                 .setTextAlignment(TextAlignment.LEFT)
                 );
                 tableSenderAndRecipient.addCell(
                         new Cell()
                                 .add(new Paragraph(
                                         "Кому\n\n" +
-                                                recipientKeden.getFio() + "\n" +
-                                                recipientKeden.getStreetName() + ", " +
-                                                recipientKeden.getBuildingNumberId() + ", " +
-                                                recipientKeden.getRoomNumberId() + ", " +
-                                                recipientKeden.getCityName() + "\n" +
-                                                recipientKeden.getPhone() + "\n" +
+                                                recipient.getFio() + "\n" +
+                                                recipient.getStreetName() + ", " +
+                                                recipient.getBuildingNumberId() + ", " +
+                                                recipient.getRoomNumberId() + ", " +
+                                                recipient.getCityName() + "\n" +
+                                                recipient.getPhone() + "\n" +
                                                 "Казахстан"
                                 ))
                                 .setTextAlignment(TextAlignment.LEFT)
@@ -198,7 +192,7 @@ public class PDFService {
                                 .setTextAlignment(TextAlignment.CENTER)
                 );
                 for (int j = 0; j < packages.size(); j++){
-                    PackageKeden packageKeden = packages.get(j);
+                    Parcel parcel = packages.get(j);
                     tablePackages.addCell(
                             new Cell().add(new Paragraph(String.valueOf(j+1)))
                                     .setFontSize(9)
@@ -206,19 +200,19 @@ public class PDFService {
                                     .setBorder(Border.NO_BORDER)
                     );
                     tablePackages.addCell(
-                            new Cell().add(new Paragraph(packageKeden.getGoodsDescriptionText()))
+                            new Cell().add(new Paragraph(parcel.getGoodsDescriptionText()))
                                     .setFontSize(7)
                                     .setTextAlignment(TextAlignment.LEFT)
                                     .setBorder(Border.NO_BORDER)
                     );
                     tablePackages.addCell(
-                            new Cell().add(new Paragraph(packageKeden.getUnifiedGrossMassMeasure() + " kg"))
+                            new Cell().add(new Paragraph(parcel.getUnifiedGrossMassMeasure() + " kg"))
                                     .setFontSize(7)
                                     .setTextAlignment(TextAlignment.CENTER)
                                     .setBorder(Border.NO_BORDER)
                     );
                     tablePackages.addCell(
-                            new Cell().add(new Paragraph(packageKeden.getCurrencyInAmount() + " " + ecHouseShipmentDetailsModel.getCurrencyName()))
+                            new Cell().add(new Paragraph(parcel.getCurrencyInAmount() + " " + declaration.getCurrencyName()))
                                     .setFontSize(7)
                                     .setTextAlignment(TextAlignment.CENTER)
                                     .setBorder(Border.NO_BORDER)
@@ -246,7 +240,7 @@ public class PDFService {
                                 .setBorderTop(new SolidBorder(0.5f))
                 );
                 tablePackages.addCell(
-                        new Cell().add(new Paragraph(currencyInAmountAll + " " + ecHouseShipmentDetailsModel.getCurrencyName()))
+                        new Cell().add(new Paragraph(currencyInAmountAll + " " + declaration.getCurrencyName()))
                                 .setFontSize(10)
                                 .setTextAlignment(TextAlignment.CENTER)
                                 .setBorder(Border.NO_BORDER)
@@ -255,7 +249,7 @@ public class PDFService {
                 document.add(tablePackages);
 
                 // добавляем фото документа
-                MultipartFile photo = recipientKeden.getPhoto();
+                MultipartFile photo = recipient.getPhoto();
                 if (!photo.isEmpty()) {
                     try {
                         byte[] photoBytes = photo.getBytes();
@@ -318,11 +312,11 @@ public class PDFService {
 
     /**
      *
-     * @param index индекс отправителя
+     * @param supplierId индекс отправителя
      * @return Возвращает строку для накладной с данными фирмы отправителя
      */
-    private String getSender(int index) {
-        Supplier supplier = supplierRepository.findById(index);
+    private String getSender(int supplierId) {
+        Supplier supplier = supplierRepository.findById(supplierId);
         StringBuilder senderText = new StringBuilder();
         String address = "";
         if (supplier.getRegion() != null && !supplier.getRegion().isEmpty() && !supplier.getRegion().equals("-")) {

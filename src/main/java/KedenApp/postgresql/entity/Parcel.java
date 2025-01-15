@@ -17,30 +17,30 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Entity
-@Table(name = "package_keden")
-public class PackageKeden {
+@Table(name = "parcel")
+public class Parcel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "commodity_code")
+    @Column(name = "commodityCode")
     private String commodityCode;
 
-    @Column(name = "goods_description_text")
+    @Column(name = "goodsDescriptionText")
     private String goodsDescriptionText;
 
-    @Column(name = "unified_gross_mass_measure")
+    @Column(name = "unifiedGrossMassMeasure")
     private BigDecimal unifiedGrossMassMeasure;
 
-    @Column(name = "currency_in_Amount")
+    @Column(name = "currencyInAmount")
     private BigDecimal currencyInAmount;
 
     @ManyToOne
-    @JoinColumn(name = "recipient_id")
-    private RecipientKeden recipient;
+    @JoinColumn(name = "declaration_id")
+    private Declaration declaration;
 
     @ManyToOne
-    @JoinColumn(name = "declaration_id")
-    private EcHouseShipmentDetailsModel declaration;
+    @JoinColumn(name = "recipient_iin")
+    private Recipient recipient;
 }

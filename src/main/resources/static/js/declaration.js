@@ -15,9 +15,9 @@ document.getElementById('addRecipient').addEventListener('click', function () {
 document.getElementById('recipientFields').addEventListener('click', function (event) {
     const target = event.target;
     /* добавить посылку */
-    if (target.classList.contains('addPackageButton')) {
+    if (target.classList.contains('addParcelButton')) {
         const recipientIndex = target.dataset.recipientIndex;
-        addPackage(recipientIndex);
+        addParcel(recipientIndex);
     }
     /* скрыть/раскрыть поля получателя */
     if (target.classList.contains('recipient-header')) {
@@ -30,20 +30,20 @@ document.getElementById('recipientFields').addEventListener('click', function (e
         deleteRecipient(recipientIndex);
     }
     /* удалить посылку */
-    if (target.classList.contains('deletePackageButton')) {
+    if (target.classList.contains('deleteParcelButton')) {
         const recipientIndex = target.dataset.recipientIndex;
-        const packageIndex = target.dataset.packageIndex;
-        deletePackage(recipientIndex, packageIndex);
+        const parcelIndex = target.dataset.parcelIndex;
+        deleteParcel(recipientIndex, parcelIndex);
     }
 });
 
 /* функция добавления посылки */
-function addPackage(recipientIndex) {
-    const packageFields = document.getElementById(`packageFields-${recipientIndex}`);
-    const newPackageIndex = packageFields.querySelectorAll('.package').length;
-    const newPackage = document.createElement('div');
-    newPackage.innerHTML = createPackageTemplate(recipientIndex, newPackageIndex);
-    packageFields.appendChild(newPackage);
+function addParcel(recipientIndex) {
+    const parcelFields = document.getElementById(`parcelFields-${recipientIndex}`);
+    const newParcelIndex = parcelFields.querySelectorAll('.parcel').length;
+    const newParcel = document.createElement('div');
+    newParcel.innerHTML = createParcelTemplate(recipientIndex, newParcelIndex);
+    parcelFields.appendChild(newParcel);
 }
 
 /* функция удаления получателя */
@@ -56,13 +56,13 @@ function deleteRecipient(recipientIndex) {
 }
 
 /* функция удаления посылки */
-function deletePackage(recipientIndex, packageIndex) {
-    const packageElement = document.querySelector(
-        `#packageFields-${recipientIndex} .package[data-package-index="${packageIndex}"]`
+function deleteParcel(recipientIndex, parcelIndex) {
+    const parcelElement = document.querySelector(
+        `#parcelFields-${recipientIndex} .parcel[data-parcel-index="${parcelIndex}"]`
     );
-    if (packageElement) {
-        packageElement.remove();
-        updatePackageIndices(recipientIndex);
+    if (parcelElement) {
+        parcelElement.remove();
+        updateParcelIndices(recipientIndex);
     }
 }
 
@@ -82,10 +82,10 @@ function updateRecipientIndices() {
             }
         });
 
-        const packageFields = recipient.querySelector(`[id^="packageFields-"]`);
-        if (packageFields) {
-            packageFields.id = `packageFields-${newIndex}`;
-            updatePackageIndices(newIndex);
+        const parcelFields = recipient.querySelector(`[id^="parcelFields-"]`);
+        if (parcelFields) {
+            parcelFields.id = `parcelFields-${newIndex}`;
+            updateParcelIndices(newIndex);
         }
 
         const deleteButton = recipient.querySelector('.deleteRecipientButton');
@@ -98,10 +98,10 @@ function updateRecipientIndices() {
 }
 
 /* функция обновления индексов посылки */
-function updatePackageIndices(recipientIndex) {
-    const packages = document.querySelectorAll(`#packageFields-${recipientIndex} .package`);
-    packages.forEach((pkg, newIndex) => {
-        pkg.dataset.packageIndex = newIndex;
+function updateParcelIndices(recipientIndex) {
+    const parcels = document.querySelectorAll(`#parcelFields-${recipientIndex} .parcel`);
+    parcels.forEach((pkg, newIndex) => {
+        pkg.dataset.parcelIndex = newIndex;
 
         // Обновляем текст заголовка <h3>
         const header = pkg.querySelector('h3');
@@ -116,15 +116,15 @@ function updatePackageIndices(recipientIndex) {
             if (name) {
                 input.setAttribute(
                     'name',
-                    name.replace(/\.packages\[\d+\]/, `.packages[${newIndex}]`)
+                    name.replace(/\.parcels\[\d+\]/, `.parcels[${newIndex}]`)
                 );
             }
         });
 
         // Обновляем индекс кнопки удаления
-        const deleteButton = pkg.querySelector('.deletePackageButton');
+        const deleteButton = pkg.querySelector('.deleteParcelButton');
         if (deleteButton) {
-            deleteButton.dataset.packageIndex = newIndex;
+            deleteButton.dataset.parcelIndex = newIndex;
         }
     });
 }
@@ -180,55 +180,55 @@ function createRecipientTemplate(index) {
                     <label for="photo">Фото документа:</label>
                     <input type="file" id="photo" name="recipients[${index}].photo" accept="image/*" required />
                 </div>
-                <div id="packageFields-${index}">
+                <div id="parcelFields-${index}">
                     <h3>Посылка 1</h3>
-                    <div class="package">
+                    <div class="parcel">
                         <div class="form-group">
                             <label for="commodityCode">Код ТНВЭД:</label>
-                            <input type="text" name="recipients[${index}].packages[0].commodityCode" required />
+                            <input type="text" name="recipients[${index}].parcels[0].commodityCode" required />
                         </div>
                         <div class="form-group">
                             <label for="goodsDescriptionText">Описание:</label>
-                            <input type="text" name="recipients[${index}].packages[0].goodsDescriptionText" required />
+                            <input type="text" name="recipients[${index}].parcels[0].goodsDescriptionText" required />
                         </div>
                         <div class="form-group">
                             <label for="unifiedGrossMassMeasure">Вес:</label>
-                            <input type="text" name="recipients[${index}].packages[0].unifiedGrossMassMeasure" required />
+                            <input type="text" name="recipients[${index}].parcels[0].unifiedGrossMassMeasure" required />
                         </div>
                         <div class="form-group">
                             <label for="currencyInAmount">Сумма:</label>
-                            <input type="text" name="recipients[${index}].packages[0].currencyInAmount" required />
+                            <input type="text" name="recipients[${index}].parcels[0].currencyInAmount" required />
                         </div>
                     </div>
                 </div>
-                <button type="button" class="addPackageButton" data-recipient-index="${index}">Добавить посылку</button>
+                <button type="button" class="addParcelButton" data-recipient-index="${index}">Добавить посылку</button>
             </div>
         </div>
     `;
 }
 
 /* функция генерации html посылки */
-function createPackageTemplate(recipientIndex, packageIndex) {
+function createParcelTemplate(recipientIndex, parcelIndex) {
     return `
-        <div class="package" data-package-index="${packageIndex}">
-            <h3>Посылка ${packageIndex + 1}</h3>
+        <div class="parcel" data-parcel-index="${parcelIndex}">
+            <h3>Посылка ${parcelIndex + 1}</h3>
             <div class="form-group">
                 <label for="commodityCode">Код ТНВЭД:</label>
-                <input type="text" name="recipients[${recipientIndex}].packages[${packageIndex}].commodityCode" required />
+                <input type="text" name="recipients[${recipientIndex}].parcels[${parcelIndex}].commodityCode" required />
             </div>
             <div class="form-group">
                 <label for="goodsDescriptionText">Описание:</label>
-                <input type="text" name="recipients[${recipientIndex}].packages[${packageIndex}].goodsDescriptionText" required />
+                <input type="text" name="recipients[${recipientIndex}].parcels[${parcelIndex}].goodsDescriptionText" required />
             </div>
             <div class="form-group">
                 <label for="unifiedGrossMassMeasure">Вес:</label>
-                <input type="text" name="recipients[${recipientIndex}].packages[${packageIndex}].unifiedGrossMassMeasure" required />
+                <input type="text" name="recipients[${recipientIndex}].parcels[${parcelIndex}].unifiedGrossMassMeasure" required />
             </div>
             <div class="form-group">
                 <label for="currencyInAmount">Сумма:</label>
-                <input type="text" name="recipients[${recipientIndex}].packages[${packageIndex}].currencyInAmount" required />
+                <input type="text" name="recipients[${recipientIndex}].parcels[${parcelIndex}].currencyInAmount" required />
             </div>
-            <button type="button" class="deletePackageButton" data-recipient-index="${recipientIndex}" data-package-index="${packageIndex}">Удалить посылку</button>
+            <button type="button" class="deleteParcelButton" data-recipient-index="${recipientIndex}" data-parcel-index="${parcelIndex}">Удалить посылку</button>
         </div>
     `;
 }

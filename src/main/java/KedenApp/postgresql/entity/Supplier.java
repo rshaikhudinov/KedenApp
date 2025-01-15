@@ -18,17 +18,18 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "suppliers")
 public class Supplier {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "company_name", nullable = false)
+    @Column(name = "companyName", nullable = false)
     private String companyName;
 
-    @Column(name = "country_code")
+    @Column(name = "countryCode")
     private String countryCode;
 
-    @Column(name = "country_name")
+    @Column(name = "countryName")
     private String countryName;
 
     @Column(name = "region")
