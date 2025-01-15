@@ -6,5 +6,19 @@ spring:
   servlet:
     multipart:
       max-file-size: 100MB
+  datasource:
+    url: jdbc:postgresql://localhost:5432/keden_db
+    username: keden_admin
+    password: admin123
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 5
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
 server:
   port: 9500

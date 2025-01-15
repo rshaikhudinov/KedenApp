@@ -9,7 +9,8 @@
 <body>
 <form id="myForm" enctype="multipart/form-data">
     <label for="currencyName">Выберите валюту:</label>
-    <select id="currencyName" name="currencyName">
+    <select id="currencyName" name="currencyName" required>
+        <option value="">-- Выберите валюту --</option>
         <option value="EUR">EUR</option>
         <option value="USD">USD</option>
     </select>  <br>
@@ -17,12 +18,16 @@
     <label for="currency">Курс валюты:</label>
     <input type="text" id="currency" name="currency" required />
 
-    <label for="sender">Выберите отправителя:</label>
-    <select id="sender" name="sender">
-        <option value="1">OEC GMBH</option>
-        <option value="2">OST EXPRESS COURIER GMBH</option>
-        <option value="3">FTL GMBH</option>
-    </select>  <br>
+    <label for="supplier">Выберите отправителя:</label>
+    <select id="supplier" name="supplier" required>
+        <option value="">-- Выберите отправителя --</option> <div th:if="${suppliers != null and !suppliers.empty}">
+        <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.companyName}"></option>
+    </div>
+        <div th:unless="${suppliers != null and !suppliers.empty}">
+            <option value="">Отправители отсутствуют</option>
+        </div>
+    </select><br>
+
     <label for="recipientCompany">Выберите фирму получателя:</label>
     <select id="recipientCompany" name="recipientCompany">
         <option value="1">POSTAL EXPRESS</option>
@@ -139,7 +144,7 @@
             }
 
        $.ajax({
-         url: "/submitShipmentDetails",
+         url: "/createDeclaration",
          type: "POST",
          data: formData,
          processData: false, // Отключаем обработку данных

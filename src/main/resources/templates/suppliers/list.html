@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Список отправителей</title>
+    <link rel="stylesheet" th:href="@{/css/supplierList.css}">
+</head>
+<body>
+<h1>Список отправителей</h1>
+<a href="/" class="add-link">Главная страница</a>
+<a href="/suppliers/add" class="add-link">Добавить отправителя</a>
+<table>
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Email</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="supplier : ${suppliers}">
+        <td th:text="${supplier.companyName}"></td>
+        <td th:text="${supplier.email}"></td>
+        <td>
+            <a th:href="@{/suppliers/edit/{id}(id=${supplier.id})}">Редактировать</a>
+            <a th:href="@{/suppliers/delete/{id}(id=${supplier.id})}">Удалить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

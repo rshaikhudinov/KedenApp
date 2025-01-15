@@ -1,16 +1,17 @@
 package KedenApp.service;
 
 import KedenApp.core.KedenAppException;
-import KedenApp.dto.EcHouseShipmentDetailsModel;
-import KedenApp.dto.PackageKeden;
-import KedenApp.dto.RecipientKeden;
+import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
+import KedenApp.postgresql.entity.PackageKeden;
+import KedenApp.postgresql.entity.RecipientKeden;
+import KedenApp.postgresql.entity.Supplier;
+import KedenApp.postgresql.repository.SupplierRepository;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.kernel.font.PdfFont;
@@ -37,6 +38,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PDFService {
 
+    private final SupplierRepository supplierRepository;
+
+    /**
+     * Метод для генерации файла pdf
+     * @param ecHouseShipmentDetailsModel данные декларации
+     * @param folderName название папки для сохранения файла
+     */
     public void generatePdf(EcHouseShipmentDetailsModel ecHouseShipmentDetailsModel, String folderName) {
         try {
             List<RecipientKeden> recipients = ecHouseShipmentDetailsModel.getRecipients();
@@ -108,7 +116,7 @@ public class PDFService {
 
                 // Вторая срока
                 String company = "";
-                switch (ecHouseShipmentDetailsModel.getSender()) {
+                switch (ecHouseShipmentDetailsModel.getSupplier()) {
                     case 1 -> company = "OEC GMBH";
                     case 2 -> company = "OST EXPRESS COURIER GMBH";
                     case 3 -> company = "FTL GMBH";
@@ -147,7 +155,7 @@ public class PDFService {
                         .setFontSize(8);
                 tableSenderAndRecipient.addCell(
                         new Cell()
-                                .add(new Paragraph(getSender(ecHouseShipmentDetailsModel.getSender())))
+                                .add(new Paragraph(getSender(ecHouseShipmentDetailsModel.getSupplier())))
                                 .setTextAlignment(TextAlignment.LEFT)
                 );
                 tableSenderAndRecipient.addCell(
@@ -310,34 +318,36 @@ public class PDFService {
 
     /**
      *
-     * @param sender индекс отправителя
-     * @return Возвращает строку для поднакладной с данными фирмы отправителя
+     * @param index индекс отправителя
+     * @return Возвращает строку для накладной с данными фирмы отправителя
      */
-    private String getSender(int sender) {
+    private String getSender(int index) {
+        Supplier supplier = supplierRepository.findById(index);
         StringBuilder senderText = new StringBuilder();
-        switch (sender) {
-            case 1 -> {
-                senderText
-                        .append("От кого\n\n")
-                        .append("OEC GMBH\n")
-                        .append("Detmold FREILIGRATHSTRAßE 7\n")
-                        .append("Germany");
-            }
-            case 2 -> {
-                senderText
-                        .append("От кого\n\n")
-                        .append("OST EXPRESS COURIER GMBH\n")
-                        .append("Detmold DENKMAL STR. 11\n")
-                        .append("Germany");
-            }
-            case 3 -> {
-                senderText
-                        .append("От кого\n\n")
-                        .append("FTL GMBH\n")
-                        .append("SCHONECK KONRAD-ZUSE-RING 15A\n")
-                        .append("Germany");
-            }
+        String address = "";
+        if (supplier.getRegion() != null && !supplier.getRegion().isEmpty() && !supplier.getRegion().equals("-")) {
+            address += supplier.getRegion() + " ";
         }
+        if (supplier.getCity() != null && !supplier.getCity().isEmpty() && !supplier.getCity().equals("-")) {
+            address += supplier.getCity() + " ";
+        }
+        if (supplier.getStreet() != null && !supplier.getStreet().isEmpty() && !supplier.getStreet().equals("-")) {
+            address += supplier.getStreet() + " ";
+        }
+        if (supplier.getHouse() != null && !supplier.getHouse().isEmpty() && !supplier.getHouse().equals("-")) {
+            address += supplier.getHouse() + " ";
+        }
+        if (supplier.getApartment() != null && !supplier.getApartment().isEmpty() && !supplier.getApartment().equals("-")) {
+            address += supplier.getApartment() + " ";
+        }
+        if (!address.isEmpty()) {
+            address = address.trim();
+        }
+        senderText
+                .append("От кого\n\n")
+                .append(supplier.getCompanyName()).append("\n")
+                .append(address).append("\n")
+                .append(supplier.getCountryName());
         return senderText.toString();
     }
 }

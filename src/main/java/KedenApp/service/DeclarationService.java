@@ -1,9 +1,6 @@
 package KedenApp.service;
 
 import KedenApp.core.KedenAppException;
-import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
-import KedenApp.postgresql.entity.PackageKeden;
-import KedenApp.postgresql.entity.RecipientKeden;
 import KedenApp.dto.xsd_gen.eec.m.ca.complexdataobjects_v1_8.*;
 import KedenApp.dto.xsd_gen.eec.m.ca.simpledataobjects_v1_8.PaymentAmountWithCurrencyType;
 import KedenApp.dto.xsd_gen.eec.m.complexdataobjects_v0_4.*;
@@ -13,6 +10,11 @@ import KedenApp.dto.xsd_gen.eec.m.simpledataobjects_v0_4.UnifiedCountryCodeType;
 import KedenApp.dto.xsd_gen.eec.m.simpledataobjects_v0_4.UnifiedPhysicalMeasureType;
 import KedenApp.dto.xsd_gen.eec.r_043_expresscargodeclaration_v2_1.ExpressCargoDeclarationType;
 import KedenApp.dto.xsd_gen.eec.r_043_expresscargodeclaration_v2_1.ObjectFactory;
+import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
+import KedenApp.postgresql.entity.PackageKeden;
+import KedenApp.postgresql.entity.RecipientKeden;
+import KedenApp.postgresql.entity.Supplier;
+import KedenApp.postgresql.repository.SupplierRepository;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
@@ -20,6 +22,7 @@ import jakarta.xml.bind.Marshaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -38,9 +41,10 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class KedenAppService {
+public class DeclarationService {
 
     private final PDFService pdfService;
+    private final SupplierRepository supplierRepository;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     BigDecimal massSumAll = BigDecimal.valueOf(0.0);
@@ -142,102 +146,40 @@ public class KedenAppService {
 
     /**
      *
+     * @param index id отправителя из списка
      * @return Данные по отправителю
      */
     public GoodsShipmentSubjectDetailsType getConsignorDetails(int index){
         GoodsShipmentSubjectDetailsType consignorDetails = new GoodsShipmentSubjectDetailsType();
-        switch (index) {
-            case 1 -> {
-                consignorDetails
-                        .setSubjectName("OEC GMBH")
-                        .setSubjectBriefName("OEC GMBH");
-                List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
-                UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
-                unifiedCountryCode
-                        .setValue("DE");
-                SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
-                subjectAddressDetailsType
-                        .setAddressKindCode("1")
-                        .setUnifiedCountryCode(unifiedCountryCode)
-                        .setCityName("Detmold")
-                        .setStreetName("FREILIGRATHSTRAßE")
-                        .setBuildingNumberId("7")
-                        .setRoomNumberId("-")
-                        .setRegionName("-");
-                subjectAddressDetails.add(subjectAddressDetailsType);
-                List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
-                List<String> communicationEmail = new ArrayList<>();
-                communicationEmail.add(" expresscargo@t-online.de");
-                CommunicationDetailsType communicationDetailsEmail= new CommunicationDetailsType();
-                communicationDetailsEmail
-                        .setCommunicationChannelCode("EM")
-                        .setCommunicationChannelId(communicationEmail);
-                communicationDetails.add(communicationDetailsEmail);
-                consignorDetails
-                        .setSubjectAddressDetails(subjectAddressDetails)
-                        .setCommunicationDetails(communicationDetails);
-            }
-            case 2 -> {
-                consignorDetails
-                        .setSubjectName("OST EXPRESS COURIER GMBH")
-                        .setSubjectBriefName("OST EXPRESS COURIER GMBH");
-                List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
-                UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
-                unifiedCountryCode
-                        .setValue("DE");
-                SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
-                subjectAddressDetailsType
-                        .setAddressKindCode("1")
-                        .setUnifiedCountryCode(unifiedCountryCode)
-                        .setCityName("Detmold")
-                        .setStreetName("DENKMAL STR.")
-                        .setBuildingNumberId("11")
-                        .setRoomNumberId("-")
-                        .setRegionName("-");
-                subjectAddressDetails.add(subjectAddressDetailsType);
-                List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
-                List<String> communicationEmail = new ArrayList<>();
-                communicationEmail.add(" expresscargo@t-online.de");
-                CommunicationDetailsType communicationDetailsEmail= new CommunicationDetailsType();
-                communicationDetailsEmail
-                        .setCommunicationChannelCode("EM")
-                        .setCommunicationChannelId(communicationEmail);
-                communicationDetails.add(communicationDetailsEmail);
-                consignorDetails
-                        .setSubjectAddressDetails(subjectAddressDetails)
-                        .setCommunicationDetails(communicationDetails);
-            }
-            case 3 -> {
-                consignorDetails
-                        .setSubjectName("FTL GMBH")
-                        .setSubjectBriefName("FTL GMBH");
-                List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
-                UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
-                unifiedCountryCode
-                        .setValue("DE");
-                SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
-                subjectAddressDetailsType
-                        .setAddressKindCode("1")
-                        .setUnifiedCountryCode(unifiedCountryCode)
-                        .setCityName("SCHONECK")
-                        .setStreetName("KONRAD-ZUSE-RING")
-                        .setBuildingNumberId("15A")
-                        .setRoomNumberId("-")
-                        .setRegionName("-");
-                subjectAddressDetails.add(subjectAddressDetailsType);
-                List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
-                List<String> communicationEmail = new ArrayList<>();
-                communicationEmail.add(" expresscargo@t-online.de");
-                CommunicationDetailsType communicationDetailsEmail= new CommunicationDetailsType();
-                communicationDetailsEmail
-                        .setCommunicationChannelCode("EM")
-                        .setCommunicationChannelId(communicationEmail);
-                communicationDetails.add(communicationDetailsEmail);
-                consignorDetails
-                        .setSubjectAddressDetails(subjectAddressDetails)
-                        .setCommunicationDetails(communicationDetails);
-            }
-        }
+        Supplier supplier = supplierRepository.findById(index);
+        consignorDetails
+                .setSubjectName(supplier.getCompanyName())
+                .setSubjectBriefName(supplier.getCompanyName());
+        List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
+        UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
+        unifiedCountryCode
+                .setValue(supplier.getCountryCode());
+        SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
+        subjectAddressDetailsType
+                .setAddressKindCode("1")
+                .setUnifiedCountryCode(unifiedCountryCode)
+                .setCityName(supplier.getCity())
+                .setStreetName(supplier.getStreet())
+                .setBuildingNumberId(supplier.getHouse())
+                .setRoomNumberId(supplier.getApartment())
+                .setRegionName(supplier.getRegion());
+        subjectAddressDetails.add(subjectAddressDetailsType);
+        List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
+        List<String> communicationEmail = new ArrayList<>();
+        communicationEmail.add(supplier.getEmail());
+        CommunicationDetailsType communicationDetailsEmail= new CommunicationDetailsType();
+        communicationDetailsEmail
+                .setCommunicationChannelCode("EM")
+                .setCommunicationChannelId(communicationEmail);
+        communicationDetails.add(communicationDetailsEmail);
+        consignorDetails
+                .setSubjectAddressDetails(subjectAddressDetails)
+                .setCommunicationDetails(communicationDetails);
         return consignorDetails;
     }
 
@@ -247,77 +189,77 @@ public class KedenAppService {
      */
     public GoodsShipmentSubjectDetailsType getConsigneeDetails(int index){
         GoodsShipmentSubjectDetailsType consigneeDetails = new GoodsShipmentSubjectDetailsType();
-            switch (index) {
-                case 1 -> {
-                    consigneeDetails
-                            .setSubjectName("POSTAL EXPRESS")
-                            .setSubjectBriefName("POSTAL EXPRESS")
-                            .setTaxpayerId("050140011760");
-                    List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
-                    UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
-                    unifiedCountryCode
-                            .setValue("KZ");
-                    SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
-                    subjectAddressDetailsType
-                            .setAddressKindCode("1")
-                            .setUnifiedCountryCode(unifiedCountryCode)
-                            .setCityName("Алматы")
-                            .setStreetName("ул. Толи Би")
-                            .setBuildingNumberId("190")
-                            .setRoomNumberId("офис 54")
-                            .setRegionName("-");
-                    subjectAddressDetails.add(subjectAddressDetailsType);
-                    List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
-                    List<String> communicationPhone = new ArrayList<>();
-                    communicationPhone.add("+7 727 3790870");
-                    List<String> communicationFax = new ArrayList<>();
-                    communicationFax.add("+7 727 3790869");
-                    CommunicationDetailsType communicationDetailsPhone= new CommunicationDetailsType();
-                    communicationDetailsPhone
-                            .setCommunicationChannelCode("TE")
-                            .setCommunicationChannelId(communicationPhone);
-                    CommunicationDetailsType communicationDetailsFax= new CommunicationDetailsType();
-                    communicationDetailsFax
-                            .setCommunicationChannelCode("FX")
-                            .setCommunicationChannelId(communicationFax);
-                    communicationDetails.add(communicationDetailsPhone);
-                    communicationDetails.add(communicationDetailsFax);
-                    consigneeDetails
-                            .setSubjectAddressDetails(subjectAddressDetails)
-                            .setCommunicationDetails(communicationDetails);
-                }
-                case 2 -> {
-                    consigneeDetails
-                            .setSubjectName("ТОО \"DISALES GROUP\"")
-                            .setSubjectBriefName("ТОО \"DISALES GROUP\"")
-                            .setTaxpayerId("170340017672");
-                    List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
-                    UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
-                    unifiedCountryCode
-                            .setValue("KZ");
-                    SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
-                    subjectAddressDetailsType
-                            .setAddressKindCode("1")
-                            .setUnifiedCountryCode(unifiedCountryCode)
-                            .setCityName("Алматы")
-                            .setStreetName("улица Пчеловодная")
-                            .setBuildingNumberId("4")
-                            .setRoomNumberId("-")
-                            .setRegionName("-");
-                    subjectAddressDetails.add(subjectAddressDetailsType);
-                    List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
-                    List<String> communicationPhone = new ArrayList<>();
-                    communicationPhone.add("+7 727 3176009");
-                    CommunicationDetailsType communicationDetailsPhone= new CommunicationDetailsType();
-                    communicationDetailsPhone
-                            .setCommunicationChannelCode("TE")
-                            .setCommunicationChannelId(communicationPhone);
-                    communicationDetails.add(communicationDetailsPhone);
-                    consigneeDetails
-                            .setSubjectAddressDetails(subjectAddressDetails)
-                            .setCommunicationDetails(communicationDetails);
-                }
+        switch (index) {
+            case 1 -> {
+                consigneeDetails
+                        .setSubjectName("POSTAL EXPRESS")
+                        .setSubjectBriefName("POSTAL EXPRESS")
+                        .setTaxpayerId("050140011760");
+                List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
+                UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
+                unifiedCountryCode
+                        .setValue("KZ");
+                SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
+                subjectAddressDetailsType
+                        .setAddressKindCode("1")
+                        .setUnifiedCountryCode(unifiedCountryCode)
+                        .setCityName("Алматы")
+                        .setStreetName("ул. Толи Би")
+                        .setBuildingNumberId("190")
+                        .setRoomNumberId("офис 54")
+                        .setRegionName("-");
+                subjectAddressDetails.add(subjectAddressDetailsType);
+                List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
+                List<String> communicationPhone = new ArrayList<>();
+                communicationPhone.add("+7 727 3790870");
+                List<String> communicationFax = new ArrayList<>();
+                communicationFax.add("+7 727 3790869");
+                CommunicationDetailsType communicationDetailsPhone= new CommunicationDetailsType();
+                communicationDetailsPhone
+                        .setCommunicationChannelCode("TE")
+                        .setCommunicationChannelId(communicationPhone);
+                CommunicationDetailsType communicationDetailsFax= new CommunicationDetailsType();
+                communicationDetailsFax
+                        .setCommunicationChannelCode("FX")
+                        .setCommunicationChannelId(communicationFax);
+                communicationDetails.add(communicationDetailsPhone);
+                communicationDetails.add(communicationDetailsFax);
+                consigneeDetails
+                        .setSubjectAddressDetails(subjectAddressDetails)
+                        .setCommunicationDetails(communicationDetails);
             }
+            case 2 -> {
+                consigneeDetails
+                        .setSubjectName("ТОО \"DISALES GROUP\"")
+                        .setSubjectBriefName("ТОО \"DISALES GROUP\"")
+                        .setTaxpayerId("170340017672");
+                List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
+                UnifiedCountryCodeType unifiedCountryCode = new UnifiedCountryCodeType();
+                unifiedCountryCode
+                        .setValue("KZ");
+                SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();
+                subjectAddressDetailsType
+                        .setAddressKindCode("1")
+                        .setUnifiedCountryCode(unifiedCountryCode)
+                        .setCityName("Алматы")
+                        .setStreetName("улица Пчеловодная")
+                        .setBuildingNumberId("4")
+                        .setRoomNumberId("-")
+                        .setRegionName("-");
+                subjectAddressDetails.add(subjectAddressDetailsType);
+                List<CommunicationDetailsType> communicationDetails = new ArrayList<>();
+                List<String> communicationPhone = new ArrayList<>();
+                communicationPhone.add("+7 727 3176009");
+                CommunicationDetailsType communicationDetailsPhone= new CommunicationDetailsType();
+                communicationDetailsPhone
+                        .setCommunicationChannelCode("TE")
+                        .setCommunicationChannelId(communicationPhone);
+                communicationDetails.add(communicationDetailsPhone);
+                consigneeDetails
+                        .setSubjectAddressDetails(subjectAddressDetails)
+                        .setCommunicationDetails(communicationDetails);
+            }
+        }
         return consigneeDetails;
     }
 
@@ -430,7 +372,7 @@ public class KedenAppService {
                 // считаем сумму веса посылок по физ лицу
                 massSum = massSum.add(packageKeden.getUnifiedGrossMassMeasure());
 
-                        List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
+                List<PaymentAmountWithCurrencyType> caValueAmountWithCurrencyTypeList = new ArrayList<>();
                 PaymentAmountWithCurrencyType paymentAmountUSD = new PaymentAmountWithCurrencyType();
                 paymentAmountUSD
                         .setCurrencyCode(ecHouseShipmentDetailsModel.getCurrencyName())

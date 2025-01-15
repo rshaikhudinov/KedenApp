@@ -1,15 +1,18 @@
 package KedenApp.controller;
 
-import KedenApp.dto.EcHouseShipmentDetailsModel;
-import KedenApp.dto.PackageKeden;
-import KedenApp.dto.RecipientKeden;
+import KedenApp.postgresql.entity.EcHouseShipmentDetailsModel;
+import KedenApp.postgresql.entity.PackageKeden;
+import KedenApp.postgresql.entity.RecipientKeden;
 import KedenApp.service.KedenAppService;
+import KedenApp.service.RatesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.math.BigDecimal;
+import java.util.Objects;
 
 @Controller
 @Slf4j
@@ -17,18 +20,26 @@ import org.springframework.web.multipart.MultipartFile;
 public class KedenAppController {
 
     private final KedenAppService kedenAppService;
+    private final RatesService ratesService;
 
-    @GetMapping("/declaration")
-    public String setDeclaration(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
-        return "declaration";
+    /**
+     * Стартовая страница
+     * @return index.html
+     */
+    @GetMapping("/")
+    public String index(Model model) {
+        BigDecimal usdRate = ratesService.getUsdRate();
+        BigDecimal eurRate = ratesService.getEurRate();
+        model.addAttribute("usdRate", Objects.requireNonNullElse(usdRate, "Не удалось получить курс"));
+        model.addAttribute("eurRate", Objects.requireNonNullElse(eurRate, "Не удалось получить курс"));
+        return "index";
     }
 
     @PostMapping("/submitShipmentDetails")
     @ResponseBody
     public String submitShipmentDetails(@ModelAttribute EcHouseShipmentDetailsModel shipmentDetails) {
         if (shipmentDetails.getRecipients() != null && !shipmentDetails.getRecipients().isEmpty()) {
-            log.info("Текущий курс: " + shipmentDetails.getCurrency());
+            log.info("Текущий курс: {}", shipmentDetails.getCurrency());
             log.info("Recipients:");
             for (RecipientKeden recipient : shipmentDetails.getRecipients()) {
                 log.info(" - FIO: {}", recipient.getFio());
@@ -57,7 +68,6 @@ public class KedenAppController {
         } else {
             log.info("No recipients provided.");
         }
-
         return kedenAppService.createDeclaration(shipmentDetails);
     }
 }

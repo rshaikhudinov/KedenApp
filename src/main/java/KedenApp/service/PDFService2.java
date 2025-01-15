@@ -31,7 +31,12 @@ import java.io.InputStream;
 @RequiredArgsConstructor
 public class PDFService2 {
 
-
+    /**
+     * чтобы вернуть на страницу
+     * @param fullName
+     * @param photo
+     * @return
+     */
     public ResponseEntity<byte[]> generatePdf(String fullName, MultipartFile photo) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -91,7 +96,6 @@ public class PDFService2 {
             table.addCell(cellFirst);
 
             // Вторая срока
-
             Paragraph paragraph1 = new Paragraph( "Я подтверждаю, что отправление не содержит предметы, запрещенные к пересылке. " +
                     "С правилами пересылки ознакомлен.");
             paragraph1.setTextAlignment(TextAlignment.LEFT);
@@ -123,7 +127,6 @@ public class PDFService2 {
                     .setTextAlignment(TextAlignment.CENTER);
                     //.setMarginTop(50);
             document.add(subTitle);
-
 
             if (!photo.isEmpty()) {
                 byte[] photoBytes;
