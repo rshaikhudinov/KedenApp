@@ -67,7 +67,7 @@ public class DeclarationDocService {
                     parcelsID.add(parcel);
                 }
                 recipient.setParcels(parcelsID);
-                recipient.setPdfData(recipient.getPhoto().getBytes());
+                recipient.setImgData(recipient.getPhoto().getBytes());
                 List<Declaration> declarations = new ArrayList<>();
                 declarations.add(declaration);
                 recipient.setDeclarations(declarations);

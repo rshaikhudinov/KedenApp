@@ -16,7 +16,7 @@ public class RecipientController {
 
     private final RecipientService recipientService;
 
-    @GetMapping("/recipient/{id}")
+    @GetMapping("/recipient/{iin}")
     public ResponseEntity<Recipient> getDeclarationById(@PathVariable String iin) {
         return recipientService.getRecipientByIin(iin);
     }

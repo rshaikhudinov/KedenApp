@@ -55,14 +55,16 @@
             <h3 class="recipient-header">Получатель 1</h3>
             <div class="recipient hidden" data-recipient-index="0">
                 <button type="button" class="deleteRecipientButton" data-recipient-index="0">Удалить получателя</button>
-                <div class="form-group">
-                    <label for="fio">ФИО:</label>
-                    <input type="text" id="fio" name="recipients[0].fio" required />
-                </div>
 
                 <div class="form-group">
                     <label for="iin">ИИН:</label>
                     <input type="text" id="iin" name="recipients[0].iin" required pattern="\d{12}" title="Введите 12-значный ИИН" />
+                </div>
+                <button type="button" id="findRecipientByIIN">Заполнить данные по ИИН</button>
+
+                <div class="form-group">
+                    <label for="fio">ФИО:</label>
+                    <input type="text" id="fio" name="recipients[0].fio" required />
                 </div>
 
                 <div class="form-group">
@@ -172,5 +174,5 @@
      });
    });
 </script>
-<script th:src="@{/js/declaration.js}"></script>
+<script th:src="@{/js/declarationEdit.js}"></script>
 </html>

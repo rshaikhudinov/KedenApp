@@ -1,5 +1,6 @@
 package KedenApp.postgresql.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -56,9 +57,10 @@ public class Recipient {
     @Transient
     private MultipartFile photo;
 
+    @JsonIgnore
     @Lob
-    @Column(name = "pdfData")
-    private byte[] pdfData;
+    @Column(name = "imgData")
+    private byte[] imgData;
 
     @ManyToMany(mappedBy = "recipients")
     private List<Declaration> declarations;
