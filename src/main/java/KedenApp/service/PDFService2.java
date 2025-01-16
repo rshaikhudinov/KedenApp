@@ -33,11 +33,10 @@ public class PDFService2 {
 
     /**
      * чтобы вернуть на страницу
-     * @param fullName
      * @param photo
      * @return
      */
-    public ResponseEntity<byte[]> generatePdf(String fullName, MultipartFile photo) {
+    public ResponseEntity<byte[]> generatePdf(MultipartFile photo) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));

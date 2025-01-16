@@ -43,7 +43,7 @@ public class Declaration {
     @Column(name = "docCreationDateDeclaration")
     private String docCreationDateDeclaration;
 
-    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "declaration_recipient",
             joinColumns = @JoinColumn(name = "declaration_id"),
@@ -51,6 +51,6 @@ public class Declaration {
     )
     private List<Recipient> recipients;
 
-    @OneToMany(mappedBy = "declaration", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "declaration")
     private List<Parcel> parcels;
 }

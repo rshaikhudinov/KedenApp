@@ -4,40 +4,57 @@
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/declaration.css}">
 </head>
 <body>
-    <form id="myForm" enctype="multipart/form-data">
-        <label for="currencyName">Выберите валюту:</label>
-        <select id="currencyName" name="currencyName">
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
-        </select>  <br>
+<label for="declaration">Выберите декларацию:</label>
+<select id="declaration" name="declaration">
+    <option value="">-- Выберите декларацию --</option> <div th:if="${declarations != null and !declarations.empty}">
+    <option th:each="declaration : ${declarations}" th:value="${declaration.id}" th:text="${declaration.id}"></option>
+</div>
+    <div th:unless="${declarations != null and !declarations.empty}">
+        <option value="">Декларации отсутствуют</option>
+    </div>
+</select><br>
 
-        <label for="currency">Курс валюты:</label>
-        <input type="text" id="currency" name="currency" required />
+<form id="myForm" enctype="multipart/form-data">
+    <label for="currencyName">Выберите валюту:</label>
+    <select id="currencyName" name="currencyName" required>
+        <option value="">-- Выберите валюту --</option>
+        <option value="EUR">EUR</option>
+        <option value="USD">USD</option>
+    </select>  <br>
 
-        <label for="sender">Выберите отправителя:</label>
-        <select id="sender" name="sender">
-            <option value="1">OEC GMBH</option>
-            <option value="2">OST EXPRESS COURIER GMBH</option>
-            <option value="3">FTL GMBH</option>
-        </select>  <br>
-        <label for="recipientCompany">Выберите фирму получателя:</label>
-        <select id="recipientCompany" name="recipientCompany">
-            <option value="1">POSTAL EXPRESS</option>
-            <option value="2">ТОО "DISALES GROUP"</option>
-        </select>  <br>
+    <label for="currencyRate">Курс валюты:</label>
+    <input type="text" id="currencyRate" name="currencyRate" required />
 
-        <label for="docIdDeclaration">Номер накладной:</label>
-        <input type="text" id="docIdDeclaration" name="docIdDeclaration" required />
+    <label for="supplier">Выберите отправителя:</label>
+    <select id="supplier" name="supplier" required>
+        <option value="">-- Выберите отправителя --</option> <div th:if="${suppliers != null and !suppliers.empty}">
+        <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.companyName}"></option>
+    </div>
+        <div th:unless="${suppliers != null and !suppliers.empty}">
+            <option value="">Отправители отсутствуют</option>
+        </div>
+    </select><br>
 
-        <label for="docCreationDateDeclaration">Дата накладной:</label>
-        <input type="date" id="docCreationDateDeclaration" name="docCreationDateDeclaration" required />
+    <label for="recipientCompany">Выберите фирму получателя:</label>
+    <select id="recipientCompany" name="recipientCompany">
+        <option value="1">POSTAL EXPRESS</option>
+        <option value="2">ТОО "DISALES GROUP"</option>
+    </select>  <br>
 
-        <div id="recipientFields">
-            <h3>Получатель 1</h3>
-            <div class="recipient">
+    <label for="docIdDeclaration">Номер накладной:</label>
+    <input type="text" id="docIdDeclaration" name="docIdDeclaration" required />
+
+    <label for="docCreationDateDeclaration">Дата накладной:</label>
+    <input type="date" id="docCreationDateDeclaration" name="docCreationDateDeclaration" required />
+
+    <div id="recipientFields">
+        <div class="recipient-wrapper" data-recipient-index="0">
+            <h3 class="recipient-header">Получатель 1</h3>
+            <div class="recipient hidden" data-recipient-index="0">
+                <button type="button" class="deleteRecipientButton" data-recipient-index="0">Удалить получателя</button>
                 <div class="form-group">
                     <label for="fio">ФИО:</label>
                     <input type="text" id="fio" name="recipients[0].fio" required />
@@ -93,33 +110,35 @@
                     <input type="file" id="photo" name="recipients[0].photo" accept="image/*" required />
                 </div>
 
-                <div id="packageFields-0">
-                    <h3>Посылка 1</h3>
-                    <div class="package">
+                <div id="parcelFields-0">
+                    <div class="parcel" data-parcel-index="0">
+                        <h3>Посылка 1</h3>
                         <div class="form-group">
                             <label for="commodityCode">Код ТНВЭД:</label>
-                            <input type="text" id="commodityCode" name="recipients[0].packages[0].commodityCode" required />
+                            <input type="text" id="commodityCode" name="recipients[0].parcels[0].commodityCode" required />
                         </div>
                         <div class="form-group">
                             <label for="goodsDescriptionText">Описание:</label>
-                            <input type="text" id="goodsDescriptionText" name="recipients[0].packages[0].goodsDescriptionText" required />
+                            <input type="text" id="goodsDescriptionText" name="recipients[0].parcels[0].goodsDescriptionText" required />
                         </div>
                         <div class="form-group">
                             <label for="unifiedGrossMassMeasure">Вес:</label>
-                            <input type="text" id="unifiedGrossMassMeasure" name="recipients[0].packages[0].unifiedGrossMassMeasure" required />
+                            <input type="text" id="unifiedGrossMassMeasure" name="recipients[0].parcels[0].unifiedGrossMassMeasure" required />
                         </div>
                         <div class="form-group">
                             <label for="currencyInAmount">Сумма:</label>
-                            <input type="text" id="currencyInAmount" name="recipients[0].packages[0].currencyInAmount" required />
+                            <input type="text" id="currencyInAmount" name="recipients[0].parcels[0].currencyInAmount" required />
                         </div>
+                        <button type="button" class="deleteParcelButton" data-recipient-index="0" data-parcel-index="0">Удалить посылку</button>
                     </div>
                 </div>
-                <button type="button" class="addPackageButton" data-recipient-index="0">Добавить посылку</button>
+                <button type="button" class="addParcelButton" data-recipient-index="0">Добавить посылку</button>
             </div>
         </div>
-        <button type="button" id="addRecipient">Добавить получателя</button>
-        <button type="submit">Отправить</button>
-    </form>
+    </div>
+    <button type="button" id="addRecipient">Добавить получателя</button>
+    <button type="submit">Отправить</button>
+</form>
 </body>
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -135,7 +154,7 @@
             }
 
        $.ajax({
-         url: "/submitShipmentDetails",
+         url: "/createDeclaration",
          type: "POST",
          data: formData,
          processData: false, // Отключаем обработку данных
@@ -153,5 +172,5 @@
      });
    });
 </script>
-<script src="/js/script.js"></script>
+<script th:src="@{/js/declaration.js}"></script>
 </html>

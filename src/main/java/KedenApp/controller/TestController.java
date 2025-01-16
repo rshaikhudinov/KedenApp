@@ -11,14 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class TestController {
 
-    @GetMapping("/declaration2")
-    public String setDeclaration2(Model model) {
-        return "declaration2";
-    }
-
-
     @GetMapping("/pdfTest")
-    public String pdfTest(Model model) {
+    public String pdfTest() {
         return "pdfTest";
     }
 }

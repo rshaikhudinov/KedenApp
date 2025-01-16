@@ -284,19 +284,6 @@ public class PDFService {
                         throw new KedenAppException("Ошибка при чтении файла фото: " + e.getMessage());
                     }
                 }
-
-
-                /*if (!photo.isEmpty()) {
-                    byte[] photoBytes;
-                    try {
-                        photoBytes = photo.getBytes();
-                    } catch (IOException e) {
-                        throw new KedenAppException("Ошибка при чтении файла фото:  " + e.getMessage());
-                    }
-                    Image image = new Image(ImageDataFactory.create(photoBytes));
-                    image.scaleToFit(700, 350);
-                    document.add(image);
-                }*/
                 // Закрываем документ
                 document.close();
 

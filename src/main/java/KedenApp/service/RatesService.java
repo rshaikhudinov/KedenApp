@@ -5,6 +5,7 @@ import KedenApp.dto.rates.Rss;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.net.URL;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RatesService {
 
     private BigDecimal getRate(String currencyCode) {

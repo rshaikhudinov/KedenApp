@@ -14,12 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class PdfController {
 
-    private final PDFService2 pdfService;
+    private final PDFService2 pdfService2;
 
     @PostMapping("/generatePdf")
-    public ResponseEntity<byte[]> generatePdf(
-            @RequestParam("fullName") String fullName,
-            @RequestParam("photo") MultipartFile photo) {
-        return pdfService.generatePdf(fullName, photo);
+    public ResponseEntity<byte[]> generatePdf(@RequestParam("photo") MultipartFile photo) {
+        return pdfService2.generatePdf(photo);
     }
 }

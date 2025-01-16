@@ -2,16 +2,16 @@ package KedenApp.controller;
 
 import KedenApp.postgresql.entity.Declaration;
 import KedenApp.postgresql.entity.Supplier;
+import KedenApp.postgresql.repository.DeclarationRepository;
 import KedenApp.postgresql.repository.SupplierRepository;
 import KedenApp.service.DeclarationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -20,6 +20,7 @@ import java.util.List;
 public class DeclarationController {
 
     private final DeclarationService declarationService;
+    private final DeclarationRepository declarationRepository;
     private final SupplierRepository supplierRepository;
 
     /**
@@ -34,13 +35,24 @@ public class DeclarationController {
     }
 
     /**
-     * Метод сохраняет xml файл декларации и pdf файлы накладных получателей
-     * @param declaration данные с формы
-     * @return сообщение о результате
+     * Метод для страницы редактирования декларации
+     * @return declaration.html
      */
-    @PostMapping("/createDeclaration")
-    @ResponseBody
-    public String createDeclaration(@ModelAttribute Declaration declaration) {
-        return declarationService.createDeclaration(declaration);
+    @GetMapping("/declarationEdit")
+    public String editDeclarationHtml(Model model) {
+        List<Supplier> suppliers = supplierRepository.findAll();
+        model.addAttribute("suppliers", suppliers);
+        List<Declaration> declarations = declarationRepository.findAll();
+        model.addAttribute("declarations", declarations);
+        return "declarationEdit";
+    }
+
+    /**
+     * Метод для получения декларации по id
+     * @return declaration
+     */
+    @GetMapping("/declaration/{id}")
+    public ResponseEntity<Declaration> getDeclarationHtmlById(@PathVariable String id) {
+        return declarationService.getDeclarationHtmlById(id);
     }
 }
