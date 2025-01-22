@@ -16,6 +16,7 @@ import KedenApp.postgresql.entity.Recipient;
 import KedenApp.postgresql.entity.Supplier;
 import KedenApp.postgresql.repository.DeclarationRepository;
 import KedenApp.postgresql.repository.SupplierRepository;
+import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
@@ -52,38 +53,34 @@ public class DeclarationDocService {
     BigDecimal massSumAll = BigDecimal.valueOf(0.0);
     BigDecimal kztSumAll = BigDecimal.valueOf(0.0);
 
+    @Transactional
     public String createDeclaration(Declaration declaration){
         // добавляем массив байт вместо фото и проставляем id для связи в таблицах
         declaration.setId(UUID.randomUUID().toString());
         try {
-            List<Recipient> recipientsID = new ArrayList<>();
-            List<Recipient> recipients = declaration.getRecipients();
-            for (Recipient recipient : recipients) {
-                List<Parcel> parcelsID = new ArrayList<>();
-                List<Parcel> parcels = recipient.getParcels();
-                for(Parcel parcel : parcels){
-                    parcel.setDeclaration(declaration);
-                    parcel.setRecipient(recipient);
-                    parcelsID.add(parcel);
+            if (declaration.getRecipients() != null) {
+                for (Recipient recipient : declaration.getRecipients()) {
+                    if (recipient.getParcels() != null) {
+                        for (Parcel parcel : recipient.getParcels()) {
+                            parcel.setDeclaration(declaration); // Важно установить связь с декларацией
+                            parcel.setRecipient(recipient); // Важно установить связь с получателем
+                        }
+                    }
+                    if (recipient.getPhoto() != null){
+                        recipient.setImgData(recipient.getPhoto().getBytes());
+                    }
                 }
-                recipient.setParcels(parcelsID);
-                recipient.setImgData(recipient.getPhoto().getBytes());
-                List<Declaration> declarations = new ArrayList<>();
-                declarations.add(declaration);
-                recipient.setDeclarations(declarations);
-                recipientsID.add(recipient);
             }
-            declaration.setRecipients(recipientsID);
         } catch (IOException e){
             return "Ошибка обработки вложенного файла и проставления id";
         }
 
         // создание папки для хранения
-        String folderName = createFolder();
+        //String folderName = createFolder();
         // создание XML
-        genXml(declaration, folderName);
+        //genXml(declaration, folderName);
         // создание PDF
-        pdfService.generatePdf(declaration, folderName);
+        //pdfService.generatePdf(declaration, folderName);
 
         declarationRepository.save(declaration);
 

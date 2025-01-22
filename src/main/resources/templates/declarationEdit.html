@@ -7,29 +7,19 @@
     <link rel="stylesheet" th:href="@{/css/declaration.css}">
 </head>
 <body>
-<label for="declaration">Выберите декларацию:</label>
-<select id="declaration" name="declaration">
-    <option value="">-- Выберите декларацию --</option> <div th:if="${declarations != null and !declarations.empty}">
-    <option th:each="declaration : ${declarations}" th:value="${declaration.id}" th:text="${declaration.id}"></option>
-</div>
-    <div th:unless="${declarations != null and !declarations.empty}">
-        <option value="">Декларации отсутствуют</option>
-    </div>
-</select><br>
-
-<form id="myForm" enctype="multipart/form-data">
+<form id="myForm" th:object="${declaration}" enctype="multipart/form-data">
     <label for="currencyName">Выберите валюту:</label>
-    <select id="currencyName" name="currencyName" required>
+    <select id="currencyName" name="currencyName" th:field="*{currencyName}" required>
         <option value="">-- Выберите валюту --</option>
         <option value="EUR">EUR</option>
         <option value="USD">USD</option>
-    </select>  <br>
+    </select><br>
 
     <label for="currencyRate">Курс валюты:</label>
-    <input type="text" id="currencyRate" name="currencyRate" required />
+    <input type="text" id="currencyRate" name="currencyRate" th:field="*{currencyRate}" required />
 
     <label for="supplier">Выберите отправителя:</label>
-    <select id="supplier" name="supplier" required>
+    <select id="supplier" name="supplier" th:field="*{supplier.id}" required>
         <option value="">-- Выберите отправителя --</option> <div th:if="${suppliers != null and !suppliers.empty}">
         <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.companyName}"></option>
     </div>
@@ -39,102 +29,168 @@
     </select><br>
 
     <label for="recipientCompany">Выберите фирму получателя:</label>
-    <select id="recipientCompany" name="recipientCompany">
+    <select id="recipientCompany" name="recipientCompany" th:field="*{recipientCompany}" >
         <option value="1">POSTAL EXPRESS</option>
         <option value="2">ТОО "DISALES GROUP"</option>
     </select>  <br>
 
     <label for="docIdDeclaration">Номер накладной:</label>
-    <input type="text" id="docIdDeclaration" name="docIdDeclaration" required />
+    <input type="text" id="docIdDeclaration" name="docIdDeclaration" th:field="*{docIdDeclaration}" required />
 
     <label for="docCreationDateDeclaration">Дата накладной:</label>
-    <input type="date" id="docCreationDateDeclaration" name="docCreationDateDeclaration" required />
+    <input type="date" id="docCreationDateDeclaration" name="docCreationDateDeclaration" th:field="*{docCreationDateDeclaration}" required />
 
     <div id="recipientFields">
-        <div class="recipient-wrapper" data-recipient-index="0">
-            <h3 class="recipient-header">Получатель 1</h3>
-            <div class="recipient hidden" data-recipient-index="0">
-                <button type="button" class="deleteRecipientButton" data-recipient-index="0">Удалить получателя</button>
+        <div class="recipient-wrapper" th:each="recipient, recipientStat : *{recipients}" th:attr="data-recipient-index=${recipientStat.index}">
+            <h3 class="recipient-header" th:text="'Получатель ' + ${recipientStat.index + 1}">Получатель 1</h3>
+            <div class="recipient hidden" th:attr="data-recipient-index=${recipientStat.index}">
+                <button type="button" class="deleteRecipientButton" th:attr="data-recipient-index=${recipientStat.index}">Удалить получателя</button>
 
                 <div class="form-group">
                     <label for="iin">ИИН:</label>
-                    <input type="text" id="iin" name="recipients[0].iin" required pattern="\d{12}" title="Введите 12-значный ИИН" />
+                    <input type="text"
+                           id="iin"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].iin'"
+                           th:value="${recipient.iin}"
+                           required pattern="\d{12}" title="Введите 12-значный ИИН" />
                 </div>
                 <button type="button" id="findRecipientByIIN">Заполнить данные по ИИН</button>
 
                 <div class="form-group">
                     <label for="fio">ФИО:</label>
-                    <input type="text" id="fio" name="recipients[0].fio" required />
+                    <input type="text"
+                           id="fio"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].fio'"
+                           th:value="${recipient.fio}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="docId">Номер удостоверения:</label>
-                    <input type="text" id="docId" name="recipients[0].docId" required />
+                    <input type="text"
+                           id="docId"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].docId'"
+                           th:value="${recipient.docId}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="docCreationDate">Дата выдачи документа:</label>
-                    <input type="date" id="docCreationDate" name="recipients[0].docCreationDate" required />
+                    <input type="text"
+                           id="docCreationDate"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].docCreationDate'"
+                           th:value="${recipient.docCreationDate}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="regionName">Регион:</label>
-                    <input type="text" id="regionName" name="recipients[0].regionName" required />
+                    <input type="text"
+                           id="regionName"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].regionName'"
+                           th:value="${recipient.regionName}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="cityName">Город:</label>
-                    <input type="text" id="cityName" name="recipients[0].cityName" required />
+                    <input type="text"
+                           id="cityName"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].cityName'"
+                           th:value="${recipient.cityName}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="streetName">Улица:</label>
-                    <input type="text" id="streetName" name="recipients[0].streetName" required />
+                    <input type="text"
+                           id="streetName"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].streetName'"
+                           th:value="${recipient.streetName}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="buildingNumberId">Дом:</label>
-                    <input type="text" id="buildingNumberId" name="recipients[0].buildingNumberId" required />
+                    <input type="text"
+                           id="buildingNumberId"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].buildingNumberId'"
+                           th:value="${recipient.buildingNumberId}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="roomNumberId">Квартира:</label>
-                    <input type="text" id="roomNumberId" name="recipients[0].roomNumberId" />
+                    <input type="text"
+                           id="roomNumberId"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].roomNumberId'"
+                           th:value="${recipient.roomNumberId}"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="phone">Телефон:</label>
-                    <input type="text" id="phone" name="recipients[0].phone" placeholder="+7 777 7777777" required />
+                    <input type="text"
+                           id="phone"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].phone'"
+                           th:value="${recipient.phone}"
+                           placeholder="+7 777 7777777"
+                           required />
                 </div>
 
                 <div class="form-group">
                     <label for="photo">Фото документа:</label>
-                    <input type="file" id="photo" name="recipients[0].photo" accept="image/*" required />
+                    <input type="file"
+                           id="photo"
+                           th:attr="name='recipients[' + ${recipientStat.index} + '].photo'"
+                           th:value="${recipient.photo}"
+                           accept="image/*"
+                           required />
                 </div>
 
-                <div id="parcelFields-0">
-                    <div class="parcel" data-parcel-index="0">
-                        <h3>Посылка 1</h3>
+                <div th:attr="id='parcelFields-' + ${recipientStat.index}">
+                    <div class="parcel" th:each="parcel, parcelStat : ${recipient.parcels}" th:attr="data-parcel-index=${parcelStat.index}">
+                        <h3 th:text="'Посылка ' + (${parcelStat.index} + 1)">Посылка 1</h3>
+
                         <div class="form-group">
                             <label for="commodityCode">Код ТНВЭД:</label>
-                            <input type="text" id="commodityCode" name="recipients[0].parcels[0].commodityCode" required />
+                            <input type="text"
+                                   id="commodityCode"
+                                   th:attr="name='recipients[' + ${recipientStat.index} + '].parcels[' + ${parcelStat.index} + '].commodityCode'"
+                                   th:value="${parcel.commodityCode}" required />
                         </div>
+
                         <div class="form-group">
                             <label for="goodsDescriptionText">Описание:</label>
-                            <input type="text" id="goodsDescriptionText" name="recipients[0].parcels[0].goodsDescriptionText" required />
+                            <input type="text"
+                                   id="goodsDescriptionText"
+                                   th:attr="name='recipients[' + ${recipientStat.index} + '].parcels[' + ${parcelStat.index} + '].goodsDescriptionText'"
+                                   th:value="${parcel.goodsDescriptionText}" required />
                         </div>
+
                         <div class="form-group">
                             <label for="unifiedGrossMassMeasure">Вес:</label>
-                            <input type="text" id="unifiedGrossMassMeasure" name="recipients[0].parcels[0].unifiedGrossMassMeasure" required />
+                            <input type="text"
+                                   id="unifiedGrossMassMeasure"
+                                   th:attr="name='recipients[' + ${recipientStat.index} + '].parcels[' + ${parcelStat.index} + '].unifiedGrossMassMeasure'"
+                                   th:value="${parcel.unifiedGrossMassMeasure}" required />
                         </div>
+
                         <div class="form-group">
                             <label for="currencyInAmount">Сумма:</label>
-                            <input type="text" id="currencyInAmount" name="recipients[0].parcels[0].currencyInAmount" required />
+                            <input type="text"
+                                   id="currencyInAmount"
+                                   th:attr="name='recipients[' + ${recipientStat.index} + '].parcels[' + ${parcelStat.index} + '].currencyInAmount'"
+                                   th:value="${parcel.currencyInAmount}" required />
                         </div>
-                        <button type="button" class="deleteParcelButton" data-recipient-index="0" data-parcel-index="0">Удалить посылку</button>
+
+                        <button type="button" class="deleteParcelButton"
+                                th:attr="data-recipient-index=${recipientStat.index}, data-parcel-index=${parcelStat.index}">
+                            Удалить посылку
+                        </button>
                     </div>
                 </div>
-                <button type="button" class="addParcelButton" data-recipient-index="0">Добавить посылку</button>
+                <button type="button" class="addParcelButton" th:attr="data-recipient-index=${recipientStat.index}">Добавить посылку</button>
             </div>
         </div>
     </div>
@@ -149,11 +205,6 @@
 
        // Создаем объект FormData для отправки файлов
        var formData = new FormData(this);
-
-        if (!$('#photo')[0].files.length) {
-                alert("Пожалуйста, загрузите файл.");
-                return;
-            }
 
        $.ajax({
          url: "/createDeclaration",
@@ -174,5 +225,5 @@
      });
    });
 </script>
-<script th:src="@{/js/declarationEdit.js}"></script>
+<script th:src="@{/js/declaration.js}"></script>
 </html>

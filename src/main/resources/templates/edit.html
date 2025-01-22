@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование декларации</title>
+    <link rel="stylesheet" th:href="@{/css/edit.css}" />
+</head>
+<body>
+<h1>Выберите декларацию для редактирования</h1>
+
+<form th:action="@{/declarationEdit}" method="post">
+    <label for="declaration">Выберите декларацию:</label>
+    <select id="declaration" name="declarationId">
+        <option value="">-- Выберите декларацию --</option>
+        <option th:each="declaration : ${declarations}" th:value="${declaration.id}" th:text="${declaration.id}"></option>
+    </select><br><br>
+    <button type="submit">Редактировать</button>
+</form>
+<script th:src="@{/js/edit.js}"></script>
+</body>
+</html>

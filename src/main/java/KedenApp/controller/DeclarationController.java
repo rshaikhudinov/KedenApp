@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller
@@ -38,21 +37,24 @@ public class DeclarationController {
      * Метод для страницы редактирования декларации
      * @return declaration.html
      */
-    @GetMapping("/declarationEdit")
-    public String editDeclarationHtml(Model model) {
+    @PostMapping("/declarationEdit")
+    public String declarationEdit(@RequestParam("declarationId") String id, Model model) {
         List<Supplier> suppliers = supplierRepository.findAll();
         model.addAttribute("suppliers", suppliers);
-        List<Declaration> declarations = declarationRepository.findAll();
-        model.addAttribute("declarations", declarations);
+        Declaration declaration = declarationService.getDeclarationById(id);
+        model.addAttribute("declaration", declaration);
         return "declarationEdit";
     }
 
     /**
-     * Метод для получения декларации по id
-     * @return declaration
+     *
+     * Метод для страницы выбора декларации
+     * @return edit.html
      */
-    @GetMapping("/declaration/{id}")
-    public ResponseEntity<Declaration> getDeclarationHtmlById(@PathVariable String id) {
-        return declarationService.getDeclarationHtmlById(id);
+    @GetMapping("/edit")
+    public String edit(Model model) {
+        List<Declaration> declarations = declarationRepository.findAll();
+        model.addAttribute("declarations", declarations);
+        return "edit";
     }
 }
