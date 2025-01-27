@@ -9,6 +9,7 @@ document.getElementById('addRecipient').addEventListener('click', function () {
     const newRecipient = document.createElement('div');
     newRecipient.innerHTML = createRecipientTemplate(recipientIndex);
     recipientFields.appendChild(newRecipient);
+    initializePhotoInputs();
 });
 
 /* отработка событий у получателя */
@@ -177,8 +178,9 @@ function createRecipientTemplate(index) {
                     <input type="text" name="recipients[${index}].phone" placeholder="+7 777 7777777" required />
                 </div>
                 <div class="form-group">
-                    <label for="photo">Фото документа:</label>
-                    <input type="file" id="photo" name="recipients[${index}].photo" accept="image/*" required />
+                    <label for="photo-${index}">Фото документа:</label>
+                    <input type="file" id="photo-${index}" data-recipient-index="${index}" accept="image/*" required />
+                    <img src="#" id="previewImage-${index}" alt="Preview" style="max-width: 200px; max-height: 200px; display: none;">
                 </div>
                 <div id="parcelFields-${index}">
                     <h3>Посылка 1</h3>
@@ -233,3 +235,50 @@ function createParcelTemplate(recipientIndex, parcelIndex) {
     `;
 }
 
+// для работы с картинкой документа получателя
+function initializePhotoInputs() {
+    const photoInputs = document.querySelectorAll('[id^="photo-"]'); // Выбираем ВСЕ элементы, id которых начинается с "photo-"
+
+    photoInputs.forEach(photoInput => {
+        const recipientIndex = photoInput.dataset.recipientIndex;
+        const previewImage = document.getElementById(`previewImage-${recipientIndex}`);
+
+        photoInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+
+                    previewImage.src = base64Image;
+                    previewImage.style.display = 'block';
+
+                    let hiddenInput = document.querySelector(`input[name="recipients[${recipientIndex}].photoBase64"]`);
+                    if (!hiddenInput) {
+                        hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = `recipients[${recipientIndex}].photoBase64`;
+                        photoInput.parentNode.insertBefore(hiddenInput, photoInput.nextSibling);
+                    }
+                    hiddenInput.value = base64Image;
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.src = "#";
+                previewImage.style.display = 'none';
+                let hiddenInput = document.querySelector(`input[name="recipients[${recipientIndex}].photoBase64"]`);
+                if(hiddenInput){
+                    hiddenInput.remove();
+                }
+            }
+        });
+    });
+}
+
+
+$(document).ready(function() {
+    initializePhotoInputs();
+});

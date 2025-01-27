@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <form id="myForm" enctype="multipart/form-data">
+    <img id="previewImage" th:src="@{|data:image/jpeg;base64,${previewImage}|}" alt="Preview">
+      <button type="submit">Отправить</button>
+  </form>
+</body>
+<script th:inline="javascript">
+    $(document).ready(function() {
+     $("#myForm").submit(function(event) {
+       event.preventDefault();
+       let imgElement = document.getElementById("previewImage");
+       let base64Image = imgElement.src;
+
+       var formData = new FormData(this);
+
+       $.ajax({
+         url: "/testSend",
+         type: "POST",
+         data: formData,
+         processData: false, // Отключаем обработку данных
+         contentType: false, // Отключаем автоматическую установку заголовка Content-Type
+         success: function(response) {
+           // Обработка ответа сервера
+           console.log(response);
+           alert(response);
+         },
+         error: function(xhr, status, error) {
+           console.error("Ошибка:", error);
+           alert("Произошла ошибка: " + error);
+         }
+       });
+     });
+   });
+</script>
+</html>
