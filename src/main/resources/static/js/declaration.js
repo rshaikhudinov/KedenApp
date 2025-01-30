@@ -260,7 +260,8 @@ function initializePhotoInputs() {
                         hiddenInput = document.createElement('input');
                         hiddenInput.type = 'hidden';
                         hiddenInput.name = `recipients[${recipientIndex}].photoBase64`;
-                        photoInput.parentNode.insertBefore(hiddenInput, photoInput.nextSibling);
+                        const recipientWrapper = photoInput.closest('.recipient-wrapper');
+                        recipientWrapper.appendChild(hiddenInput);
                     }
                     hiddenInput.value = base64Image;
                 };

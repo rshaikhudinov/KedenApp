@@ -57,10 +57,8 @@ public class Recipient {
     @Transient
     private MultipartFile photo;
 
-    @JsonIgnore
-    @Lob
-    @Column(name = "imgData")
-    private byte[] imgData;
+    @Column(name = "photoBase64", columnDefinition = "TEXT")
+    private String photoBase64;
 
     @ManyToMany(mappedBy = "recipients")
     private List<Declaration> declarations;

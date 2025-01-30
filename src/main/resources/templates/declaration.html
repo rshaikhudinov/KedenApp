@@ -139,11 +139,6 @@
        // Создаем объект FormData для отправки файлов
        var formData = new FormData(this);
 
-        if (!$('#photo')[0].files.length) {
-                alert("Пожалуйста, загрузите файл.");
-                return;
-            }
-
        $.ajax({
          url: "/createDeclaration",
          type: "POST",

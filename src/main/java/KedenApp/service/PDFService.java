@@ -19,7 +19,6 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -28,9 +27,9 @@ import com.itextpdf.layout.element.Table;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -248,41 +247,37 @@ public class PDFService {
                 );
                 document.add(tablePackages);
 
-                // добавляем фото документа
-                MultipartFile photo = recipient.getPhoto();
+                // добавляем фото документа и очищаем от лишних символов для html
+                String photo = recipient.getPhotoBase64().replaceAll("^data:image/[a-z]+;base64,", "");
                 if (!photo.isEmpty()) {
-                    try {
-                        byte[] photoBytes = photo.getBytes();
-                        Image image = new Image(ImageDataFactory.create(photoBytes));
+                    byte[] photoBytes = Base64.getDecoder().decode(photo);
+                    Image image = new Image(ImageDataFactory.create(photoBytes));
 
-                        // Получаем размеры страницы
-                        PdfDocument pdfDocument = document.getPdfDocument();
-                        Rectangle pageSize = pdfDocument.getDefaultPageSize();
+                    // Получаем размеры страницы
+                    PdfDocument pdfDocument = document.getPdfDocument();
+                    Rectangle pageSize = pdfDocument.getDefaultPageSize();
 
-                        // Вычисляем доступную область (например, 70% от ширины и высоты страницы)
-                        float maxWidth = pageSize.getWidth() * 0.5f;
-                        float maxHeight = pageSize.getHeight() * 0.5f;
+                    // Вычисляем доступную область (например, 70% от ширины и высоты страницы)
+                    float maxWidth = pageSize.getWidth() * 0.5f;
+                    float maxHeight = pageSize.getHeight() * 0.5f;
 
-                        // Получаем размеры изображения
-                        float imageWidth = image.getImageWidth();
-                        float imageHeight = image.getImageHeight();
+                    // Получаем размеры изображения
+                    float imageWidth = image.getImageWidth();
+                    float imageHeight = image.getImageHeight();
 
-                        // Рассчитываем масштаб для сохранения пропорций
-                        float widthScale = maxWidth / imageWidth;
-                        float heightScale = maxHeight / imageHeight;
-                        float scale = Math.min(widthScale, heightScale);
+                    // Рассчитываем масштаб для сохранения пропорций
+                    float widthScale = maxWidth / imageWidth;
+                    float heightScale = maxHeight / imageHeight;
+                    float scale = Math.min(widthScale, heightScale);
 
-                        // Применяем масштабирование
-                        image.scaleAbsolute(imageWidth * scale, imageHeight * scale);
+                    // Применяем масштабирование
+                    image.scaleAbsolute(imageWidth * scale, imageHeight * scale);
 
-                        // Устанавливаем выравнивание (опционально)
-                        //image.setHorizontalAlignment(HorizontalAlignment.CENTER);
+                    // Устанавливаем выравнивание (опционально)
+                    //image.setHorizontalAlignment(HorizontalAlignment.CENTER);
 
-                        // Добавляем изображение в документ
-                        document.add(image);
-                    } catch (IOException e) {
-                        throw new KedenAppException("Ошибка при чтении файла фото: " + e.getMessage());
-                    }
+                    // Добавляем изображение в документ
+                    document.add(image);
                 }
                 // Закрываем документ
                 document.close();

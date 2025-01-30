@@ -44,7 +44,7 @@ public class DeclarationService {
                         fileName,
                         fileName,
                         contentType,
-                        recipient.getImgData()
+                        recipient.getPhotoBase64().getBytes()
                 );
                 recipient.setPhoto(multipartFile);
                 recipientsPhoto.add(recipient);
