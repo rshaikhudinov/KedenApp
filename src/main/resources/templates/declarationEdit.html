@@ -54,7 +54,7 @@
                            th:value="${recipient.iin}"
                            required pattern="\d{12}" title="Введите 12-значный ИИН" />
                 </div>
-                <button type="button" id="findRecipientByIIN">Заполнить данные по ИИН</button>
+                <button type="button" class="findRecipientByIIN" th:attr="data-recipient-index=${recipientStat.index}">Заполнить данные по ИИН</button>
 
                 <div class="form-group">
                     <label for="fio">ФИО:</label>
@@ -139,13 +139,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="photo">Фото документа:</label>
+                    <label th:attr="for='photo- + ${recipientStat.index}'">Фото документа:</label>
                     <input type="file"
-                           id="photo"
-                           th:attr="name='recipients[' + ${recipientStat.index} + '].photo'"
-                           th:value="${recipient.photo}"
-                           accept="image/*"
-                           required />
+                           th:id="'photo-' + ${recipientStat.index}"
+                           th:attr="data-recipient-index=${recipientStat.index}"
+                           accept="image/*"/>
+                    <img th:if="${recipient.photoBase64 != null}" th:src="${recipient.photoBase64}" alt="Фото" style="max-width: 200px; max-height: 200px;">
+                    <img th:unless="${recipient.photoBase64 != null}" src="#" alt="Фото отсутствует" style="max-width: 200px; max-height: 200px; display: block">
+                    <input type="hidden" th:attr="id='photoBase64-' + ${recipientStat.index}, name='recipients[' + ${recipientStat.index} + '].photoBase64'" th:value="${recipient.photoBase64}" />
                 </div>
 
                 <div th:attr="id='parcelFields-' + ${recipientStat.index}">

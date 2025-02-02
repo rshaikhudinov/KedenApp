@@ -46,13 +46,14 @@
             <div class="recipient hidden" data-recipient-index="0">
                 <button type="button" class="deleteRecipientButton" data-recipient-index="0">Удалить получателя</button>
                 <div class="form-group">
-                    <label for="fio">ФИО:</label>
-                    <input type="text" id="fio" name="recipients[0].fio" required />
-                </div>
-
-                <div class="form-group">
                     <label for="iin">ИИН:</label>
                     <input type="text" id="iin" name="recipients[0].iin" required pattern="\d{12}" title="Введите 12-значный ИИН" />
+                </div>
+                <button type="button" class="findRecipientByIIN" data-recipient-index="0">Заполнить данные по ИИН</button>
+
+                <div class="form-group">
+                    <label for="fio">ФИО:</label>
+                    <input type="text" id="fio" name="recipients[0].fio" required />
                 </div>
 
                 <div class="form-group">
@@ -97,8 +98,9 @@
 
                 <div class="form-group">
                     <label for="photo-0">Фото документа:</label>
-                    <input type="file" id="photo-0" data-recipient-index="0" accept="image/*" required />
+                    <input type="file" id="photo-0" data-recipient-index="0" accept="image/*" />
                     <img src="#" id="previewImage-0" alt="Preview" style="max-width: 200px; max-height: 200px; display: none;">
+                    <input type="hidden" id="photoBase64-0" name="recipients[0].photoBase64"/>
                 </div>
 
                 <div id="parcelFields-0">

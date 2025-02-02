@@ -138,12 +138,13 @@ function createRecipientTemplate(index) {
             <div class="recipient hidden" data-recipient-index="${index}">
                 <button type="button" class="deleteRecipientButton" data-recipient-index="${index}">Удалить получателя</button>
                 <div class="form-group">
-                    <label for="fio">ФИО:</label>
-                    <input type="text" name="recipients[${index}].fio" required />
-                </div>
-                <div class="form-group">
                     <label for="iin">ИИН:</label>
                     <input type="text" name="recipients[${index}].iin" required pattern="\\d{12}" title="Введите 12-значный ИИН" />
+                </div>
+                <button type="button" class="findRecipientByIIN" data-recipient-index="${index}">Заполнить данные по ИИН</button>
+                <div class="form-group">
+                    <label for="fio">ФИО:</label>
+                    <input type="text" name="recipients[${index}].fio" required />
                 </div>
                 <div class="form-group">
                     <label for="docId">Номер удостоверения:</label>
@@ -179,8 +180,9 @@ function createRecipientTemplate(index) {
                 </div>
                 <div class="form-group">
                     <label for="photo-${index}">Фото документа:</label>
-                    <input type="file" id="photo-${index}" data-recipient-index="${index}" accept="image/*" required />
+                    <input type="file" id="photo-${index}" data-recipient-index="${index}" accept="image/*" />
                     <img src="#" id="previewImage-${index}" alt="Preview" style="max-width: 200px; max-height: 200px; display: none;">
+                    <input type="hidden" id="photoBase64-${index}" name="recipients[${index}].photoBase64"/>
                 </div>
                 <div id="parcelFields-${index}">
                     <h3>Посылка 1</h3>
@@ -279,6 +281,62 @@ function initializePhotoInputs() {
     });
 }
 
+// Обработчик для "Заполнить данные по ИИН"
+document.getElementById('recipientFields').addEventListener('click', function(event) {
+    const target = event.target;
+    if (target.classList.contains('findRecipientByIIN')) {
+        const recipientIndex = target.dataset.recipientIndex;
+        const iinInput = target.previousElementSibling.querySelector('input'); // Получаем input с ИИН
+        const iin = iinInput.value;
+
+        if (!iin || iin.length !== 12 || !/^\d+$/.test(iin)) {
+            alert("Пожалуйста, введите корректный ИИН (12 цифр).");
+            return; // Прерываем выполнение, если ИИН некорректный
+        }
+
+        $.ajax({
+            url: "/recipient/" + iin,
+            type: 'GET',
+            dataType: 'json', // Ожидаем JSON ответ
+            success: function(recipient) {
+                if (!recipient) {
+                    alert("Получатель с таким ИИН не найден.");
+                    return;
+                }
+
+                // Заполняем поля формы полученными данными
+                const recipientDiv = target.closest('.recipient');
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].fio"]`).value = recipient.fio || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].docId"]`).value = recipient.docId || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].docCreationDate"]`).value = recipient.docCreationDate || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].regionName"]`).value = recipient.regionName || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].cityName"]`).value = recipient.cityName || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].streetName"]`).value = recipient.streetName || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].buildingNumberId"]`).value = recipient.buildingNumberId || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].roomNumberId"]`).value = recipient.roomNumberId || '';
+                recipientDiv.querySelector(`input[name="recipients[${recipientIndex}].phone"]`).value = recipient.phone || '';
+
+                //заполняем фото
+                const imgElement = recipientDiv.querySelector('img'); // Находим <img> внутри recipientDiv
+                const base64Input = recipientDiv.querySelector('input[type="hidden"]'); // Находим скрытый input
+
+                if (recipient.photoBase64) {
+                    imgElement.src = recipient.photoBase64; // Устанавливаем src для <img>
+                    imgElement.style.display = 'block'; // Показываем изображение
+                    base64Input.value = recipient.photoBase64; // Устанавливаем значение для скрытого input
+                } else {
+                    imgElement.src = "#"; // Устанавливаем src на заглушку
+                    imgElement.style.display = 'none'; // Скрываем изображение
+                    base64Input.value = ""; // Очищаем скрытый input
+                }
+            },
+            error: function(error) {
+                console.error("Ошибка запроса:", error);
+                alert("Ошибка получения данных по ИИН. Проверьте консоль.");
+            }
+        });
+    }
+});
 
 $(document).ready(function() {
     initializePhotoInputs();

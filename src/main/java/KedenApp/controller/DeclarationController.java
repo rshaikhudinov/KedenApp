@@ -37,7 +37,7 @@ public class DeclarationController {
      * Метод для страницы редактирования декларации
      * @return declaration.html
      */
-    @PostMapping("/declarationEdit")
+    @GetMapping("/declarationEdit")
     public String declarationEdit(@RequestParam("declarationId") String id, Model model) {
         List<Supplier> suppliers = supplierRepository.findAll();
         model.addAttribute("suppliers", suppliers);

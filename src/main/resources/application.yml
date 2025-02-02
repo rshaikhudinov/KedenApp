@@ -5,7 +5,8 @@ spring:
     name: KedenApp
   servlet:
     multipart:
-      max-file-size: 100MB
+      max-file-size: 500MB
+      max-request-size: 1000MB
   datasource:
     url: jdbc:postgresql://localhost:5432/keden_db
     username: keden_admin
@@ -22,3 +23,7 @@ spring:
       ddl-auto: update
 server:
   port: 9500
+  max-http-request-header-size: 100KB
+  tomcat:
+    max-swallow-size: 500MB
+    max-http-form-post-size: 500MB
