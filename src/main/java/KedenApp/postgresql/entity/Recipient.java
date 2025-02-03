@@ -1,6 +1,5 @@
 package KedenApp.postgresql.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,8 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -33,7 +34,8 @@ public class Recipient {
     private String docId;
 
     @Column(name = "docCreationDate")
-    private String docCreationDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate docCreationDate;
 
     @Column(name = "cityName")
     private String cityName;

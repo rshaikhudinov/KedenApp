@@ -1,6 +1,5 @@
 package KedenApp.controller;
 
-import KedenApp.service.KedenAppService;
 import KedenApp.service.RatesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class KedenAppController {
 
-    private final KedenAppService kedenAppService;
     private final RatesService ratesService;
 
     /**

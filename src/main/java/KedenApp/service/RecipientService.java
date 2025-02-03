@@ -2,6 +2,7 @@ package KedenApp.service;
 
 import KedenApp.postgresql.entity.Recipient;
 import KedenApp.postgresql.repository.RecipientRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ public class RecipientService {
 
     private final RecipientRepository recipientRepository;
 
+    @Transactional
     public ResponseEntity<Recipient> getRecipientByIin(String iin) {
         try {
             Recipient recipient = recipientRepository.findById(iin).orElse(null);

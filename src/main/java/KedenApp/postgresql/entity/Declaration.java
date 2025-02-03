@@ -7,8 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -20,9 +22,6 @@ import java.util.List;
 @Entity
 @Table(name = "declaration")
 public class Declaration {
-
-    @Id
-    private String id;
 
     @Column(name = "currencyName")
     private String currencyName;
@@ -37,11 +36,13 @@ public class Declaration {
     @Column(name = "recipientCompany")
     private int recipientCompany;
 
+    @Id
     @Column(name = "docIdDeclaration")
     private String docIdDeclaration;
 
     @Column(name = "docCreationDateDeclaration")
-    private String docCreationDateDeclaration;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate docCreationDateDeclaration;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
@@ -50,7 +51,4 @@ public class Declaration {
             inverseJoinColumns = @JoinColumn(name = "recipient_iin")
     )
     private List<Recipient> recipients;
-
-    @OneToMany(mappedBy = "declaration")
-    private List<Parcel> parcels;
 }

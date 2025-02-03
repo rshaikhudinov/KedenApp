@@ -55,13 +55,11 @@ public class DeclarationDocService {
 
     @Transactional
     public String createDeclaration(Declaration declaration){
-        //проставляем id для связи в таблицах
-        declaration.setId(UUID.randomUUID().toString());
         if (declaration.getRecipients() != null) {
             for (Recipient recipient : declaration.getRecipients()) {
                 if (recipient.getParcels() != null) {
                     for (Parcel parcel : recipient.getParcels()) {
-                        parcel.setDeclaration(declaration); // Важно установить связь с декларацией
+                        parcel.setDeclarationId(declaration.getDocIdDeclaration()); // Важно установить связь с декларацией
                         parcel.setRecipient(recipient); // Важно установить связь с получателем
                     }
                 }
@@ -298,7 +296,7 @@ public class DeclarationDocService {
             DocDetailsV4Type transportDocumentDetails = new DocDetailsV4Type();
             transportDocumentDetails
                     .setDocId(declaration.getDocIdDeclaration())
-                    .setDocCreationDate(declaration.getDocCreationDateDeclaration());
+                    .setDocCreationDate(String.valueOf(declaration.getDocCreationDateDeclaration()));
 
             UnifiedCode20Type docKindCode = new UnifiedCode20Type();
             docKindCode
@@ -322,7 +320,7 @@ public class DeclarationDocService {
                     .setIdentityDocKindCode(identityDocKindCode)
                     .setDocKindName("Удостоверение")
                     .setDocId(recipient.getDocId())
-                    .setDocCreationDate(recipient.getDocCreationDate());
+                    .setDocCreationDate(String.valueOf(recipient.getDocCreationDate()));
 
             List<SubjectAddressDetailsType> subjectAddressDetails = new ArrayList<>();
             SubjectAddressDetailsType subjectAddressDetailsType = new SubjectAddressDetailsType();

@@ -36,9 +36,8 @@ public class Parcel {
     @Column(name = "currencyInAmount")
     private BigDecimal currencyInAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "declaration_id")
-    private Declaration declaration;
+    @Column(name = "declarationId")
+    private String declarationId;
 
     @ManyToOne
     @JoinColumn(name = "recipient_iin")

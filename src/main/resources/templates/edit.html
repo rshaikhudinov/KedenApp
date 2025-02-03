@@ -11,7 +11,7 @@
     <label for="declaration">Выберите декларацию:</label>
     <select id="declaration" name="declarationId">
         <option value="">-- Выберите декларацию --</option>
-        <option th:each="declaration : ${declarations}" th:value="${declaration.id}" th:text="${declaration.id}"></option>
+        <option th:each="declaration : ${declarations}" th:value="${declaration.docIdDeclaration}" th:text="${declaration.docIdDeclaration}"></option>
     </select><br><br>
     <button type="submit">Редактировать</button>
 </form>

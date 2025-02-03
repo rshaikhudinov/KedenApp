@@ -76,7 +76,7 @@
 
                 <div class="form-group">
                     <label for="docCreationDate">Дата выдачи документа:</label>
-                    <input type="text"
+                    <input type="date"
                            id="docCreationDate"
                            th:attr="name='recipients[' + ${recipientStat.index} + '].docCreationDate'"
                            th:value="${recipient.docCreationDate}"

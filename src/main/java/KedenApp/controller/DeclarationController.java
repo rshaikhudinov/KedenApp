@@ -2,12 +2,10 @@ package KedenApp.controller;
 
 import KedenApp.postgresql.entity.Declaration;
 import KedenApp.postgresql.entity.Supplier;
-import KedenApp.postgresql.repository.DeclarationRepository;
-import KedenApp.postgresql.repository.SupplierRepository;
 import KedenApp.service.DeclarationService;
+import KedenApp.service.SupplierService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +17,7 @@ import java.util.List;
 public class DeclarationController {
 
     private final DeclarationService declarationService;
-    private final DeclarationRepository declarationRepository;
-    private final SupplierRepository supplierRepository;
+    private final SupplierService supplierService;
 
     /**
      * Метод для страницы заполнения декларации
@@ -28,7 +25,7 @@ public class DeclarationController {
      */
     @GetMapping("/declaration")
     public String getDeclarationHtml(Model model) {
-        List<Supplier> suppliers = supplierRepository.findAll();
+        List<Supplier> suppliers = supplierService.getAllSuppliers();
         model.addAttribute("suppliers", suppliers);
         return "declaration";
     }
@@ -39,7 +36,7 @@ public class DeclarationController {
      */
     @GetMapping("/declarationEdit")
     public String declarationEdit(@RequestParam("declarationId") String id, Model model) {
-        List<Supplier> suppliers = supplierRepository.findAll();
+        List<Supplier> suppliers = supplierService.getAllSuppliers();
         model.addAttribute("suppliers", suppliers);
         Declaration declaration = declarationService.getDeclarationById(id);
         model.addAttribute("declaration", declaration);
@@ -53,7 +50,7 @@ public class DeclarationController {
      */
     @GetMapping("/edit")
     public String edit(Model model) {
-        List<Declaration> declarations = declarationRepository.findAll();
+        List<Declaration> declarations = declarationService.getDeclarations();
         model.addAttribute("declarations", declarations);
         return "edit";
     }
